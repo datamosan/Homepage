@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard - Dhen's Kitchen</title>
+  <style>
+    :root {
+      --red: #D26464;
+      --light-green: #8EBB9D;
+      --dark-green: #234438;
+      --lavender: #B4ACEC;
+      --white: #FFFFFF;
+      --beige: #F1E4C4;
+      --cream: #F5F1E1;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cream);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--dark-green);
+      color: var(--white);
+      padding: 1em 2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    nav button {
+      background-color: var(--lavender);
+      color: #000;
+      border: none;
+      padding: 0.8em 1.2em;
+      margin-left: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    nav button:hover {
+      background-color: var(--light-green);
+    }
+
+    main {
+      padding: 3em 2em;
+      background-color: var(--white);
+      border-radius: 10px;
+      margin: 2em;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--dark-green);
+      margin-bottom: 1em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--beige);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2em;
+    }
+
+    th, td {
+      padding: 1em;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--lavender);
+      font-weight: bold;
+    }
+
+    .view-btn, .update-btn, .approve-btn, .reply-btn, .logout-btn {
+      background-color: var(--red);
+      color: var(--white);
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .view-btn:hover, .update-btn:hover, .approve-btn:hover, .reply-btn:hover, .logout-btn:hover {
+      background-color: var(--dark-green);
+    }
+
+    #details, #paymentDetails, #replyForm {
+      display: none;
+      background: var(--beige);
+      padding: 1.5em;
+      border-radius: 10px;
+      margin-top: 1em;
+    }
+
+    select, .save-btn, textarea, button {
+      padding: 0.5em;
+      margin-top: 0.8em;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .save-btn {
+      background-color: var(--light-green);
+      cursor: pointer;
+    }
+
+    .save-btn:hover {
+      background-color: var(--dark-green);
+      color: var(--white);
+    }
+
+    textarea {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Dhen's Kitchen Admin Panel</div>
+  <nav>
+    <button onclick="showSection('orders')">Orders</button>
+    <button onclick="showSection('payments')">Payments</button>
+    <button onclick="showSection('messages')">Messages</button>
+    <button onclick="showSection('customers')">Customers</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </nav>
+</header>
+
+<main>
+  <h1>Welcome Admin</h1>
+
+  <!-- ORDERS -->
+  <section id="ordersSection">
+    <h2>Orders</h2>
+    <table>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td>O001</td>
+        <td>Rhy Estrella</td>
+        <td id="statusO001">Pending</td>
+        <td><button class="view-btn" onclick="viewOrder('O001')">View</button></td>
+      </tr>
+      <tr>
+        <td>O002</td>
+        <td>Lyra Cunanan</td>
+        <td id="statusO002">Pending</td>
+        <td><button class="view-btn" onclick="viewOrder('O002')">View</button></td>
+      </tr>
+    </table>
+
+    <div id="details">
+      <h3>Order Details</h3>
+      <p id="orderDetails"></p>
+      <label>Update Status:</label>
+      <select id="statusSelect">
+        <option>Pending</option>
+        <option>Approved</option>
+        <option>Cancelled</option>
+      </select>
+      <button class="save-btn" onclick="updateStatus()">Save</button>
+    </div>
+  </section>
+
+  <!-- PAYMENTS -->
+  <section id="paymentsSection" style="display:none;">
+    <h2>Payments</h2>
+    <table>
+      <tr>
+        <th>Payment ID</th>
+        <th>Customer</th>
+        <th>Amount</th>
+        <th>Mode</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td>P001</td>
+        <td>Rhy Estrella</td>
+        <td>₱500</td>
+        <td>Gcash</td>
+        <td><button class="view-btn" onclick="viewPayment('P001')">View</button></td>
+      </tr>
+      <tr>
+        <td>P002</td>
+        <td>Lyra Cunanan</td>
+        <td>₱1200</td>
+        <td>Bank Transfer</td>
+        <td><button class="view-btn" onclick="viewPayment('P002')">View</button></td>
+      </tr>
+    </table>
+
+    <div id="paymentDetails">
+      <h3>Payment Details</h3>
+      <p id="paymentInfo"></p>
+      <label>Approve Payment:</label>
+      <select id="paymentStatus">
+        <option>Pending</option>
+        <option>Approved</option>
+        <option>Rejected</option>
+      </select>
+      <button class="save-btn" onclick="updatePaymentStatus()">Save</button>
+    </div>
+  </section>
+
+  <!-- MESSAGES -->
+  <section id="messagesSection" style="display:none;">
+    <h2>Messages</h2>
+    <table>
+      <tr>
+        <th>From</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td>Rhy Estrella</td>
+        <td>rhy@gmail.com</td>
+        <td>Can I change delivery date?</td>
+        <td><button class="reply-btn" onclick="replyMessage('Rhy Estrella')">Reply</button></td>
+      </tr>
+      <tr>
+        <td>Lyra Cunanan</td>
+        <td>lyra@gmail.com</td>
+        <td>Do you have sugar-free cakes?</td>
+        <td><button class="reply-btn" onclick="replyMessage('Lyra Cunanan')">Reply</button></td>
+      </tr>
+    </table>
+
+    <div id="replyForm">
+      <h3>Reply to <span id="replyTo"></span></h3>
+      <textarea id="replyMessageBox" rows="4"></textarea><br>
+      <button class="save-btn" onclick="sendReply()">Send Reply</button>
+    </div>
+  </section>
+
+  <!-- CUSTOMERS -->
+  <section id="customersSection" style="display:none;">
+    <h2>Customers</h2>
+    <table>
+      <tr>
+        <th>Customer ID</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+      <tr><td>C001</td><td>Rhy Estrella</td><td>rhy@gmail.com</td></tr>
+      <tr><td>C002</td><td>Lyra Cunanan</td><td>lyra@gmail.com</td></tr>
+    </table>
+  </section>
+
+</main>
+
+<script>
+  const orders = {
+    O001: { customer: 'Rhy Estrella', items: [{ name: 'Chocolate Cake', qty: 1 }] },
+    O002: { customer: 'Lyra Cunanan', items: [{ name: 'Strawberry Cake', qty: 2 }] }
+  };
+
+  const payments = {
+    P001: { customer: 'Rhy Estrella', amount: '₱500', mode: 'Gcash', proof: 'gcash_proof.jpg', sender: 'Rhy Estrella', bank: 'None' },
+    P002: { customer: 'Lyra Cunanan', amount: '₱1200', mode: 'Bank Transfer', proof: 'bank_receipt.jpg', sender: 'Lyra Cunanan', bank: 'BDO' }
+  };
+
+  let currentOrder = '';
+  let currentPayment = '';
+
+  function viewOrder(orderId) {
+    currentOrder = orderId;
+    const order = orders[orderId];
+    let detailText = `<strong>Customer:</strong> ${order.customer}<br><strong>Items:</strong><br>`;
+    order.items.forEach(item => detailText += `• ${item.name} - ${item.qty}<br>`);
+    document.getElementById('orderDetails').innerHTML = detailText;
+    document.getElementById('statusSelect').value = document.getElementById('status' + orderId).innerText;
+    document.getElementById('details').style.display = 'block';
+  }
+
+  function updateStatus() {
+    const newStatus = document.getElementById('statusSelect').value;
+    document.getElementById('status' + currentOrder).innerText = newStatus;
+    alert(`Order ${currentOrder} updated to ${newStatus}`);
+  }
+
+  function viewPayment(paymentId) {
+    currentPayment = paymentId;
+    const payment = payments[paymentId];
+    let info = `<strong>Customer:</strong> ${payment.customer}<br>
+                <strong>Amount:</strong> ${payment.amount}<br>
+                <strong>Mode:</strong> ${payment.mode}<br>
+                <strong>Sender:</strong> ${payment.sender}<br>
+                <strong>Bank:</strong> ${payment.bank}<br>
+                <strong>Proof of Payment:</strong> <a href="${payment.proof}" target="_blank">View Proof</a>`;
+    document.getElementById('paymentInfo').innerHTML = info;
+    document.getElementById('paymentStatus').value = 'Pending';
+    document.getElementById('paymentDetails').style.display = 'block';
+  }
+
+  function updatePaymentStatus() {
+    const status = document.getElementById('paymentStatus').value;
+    alert(`Payment ${currentPayment} marked as ${status}`);
+    document.getElementById('paymentDetails').style.display = 'none';
+  }
+
+  function replyMessage(customer) {
+    document.getElementById('replyForm').style.display = 'block';
+    document.getElementById('replyTo').innerText = customer;
+    document.getElementById('replyMessageBox').value = '';
+  }
+
+  function sendReply() {
+    const customer = document.getElementById('replyTo').innerText;
+    const message = document.getElementById('replyMessageBox').value;
+    if (message.trim() === '') {
+      alert('Please type a message before sending.');
+      return;
+    }
+    alert(`Reply sent to ${customer}: ${message}`);
+    document.getElementById('replyForm').style.display = 'none';
+  }
+
+  function showSection(section) {
+    document.getElementById('ordersSection').style.display = (section === 'orders') ? 'block' : 'none';
+    document.getElementById('paymentsSection').style.display = (section === 'payments') ? 'block' : 'none';
+    document.getElementById('messagesSection').style.display = (section === 'messages') ? 'block' : 'none';
+    document.getElementById('customersSection').style.display = (section === 'customers') ? 'block' : 'none';
+    document.getElementById('details').style.display = 'none';
+    document.getElementById('paymentDetails').style.display = 'none';
+    document.getElementById('replyForm').style.display = 'none';
+  }
+
+  function logout() {
+    alert('Logging out...');
+    window.location.href = 'login.html'; // replace with actual login page
+  }
+</script>
+
+</body>
+</html>
+
