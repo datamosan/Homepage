@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhen's Kitchen - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="auth-header">
+        <h1>Welcome Back</h1>
+    </header>
+
+    <main class="auth-main">
+        <h2 class="auth-subtitle">Login to Your Account</h2>
+
+        <div class="auth-form-container">
+            <h3 class="form-title">Login</h3>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember Me</label>
+                </div>
+                <button type="submit" class="auth-button">Login</button>
+                <div class="auth-links">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <p class="auth-redirect">
+                        Don't have an account? <a href="signup.html">Sign Up</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <div class="auth-benefits">
+            <h3>Benefits of Creating an Account</h3>
+            <ul>
+                <li>Track your orders and order history</li>
+                <li>Save your favorite items for quick reordering</li>
+                <li>Receive exclusive offers and promotions</li>
+                <li>Faster checkout process</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="auth-footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Culinary Street, Foodville</p>
+                <p>Phone: (123) 456-7890</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a> | 
+                <a href="menu.html">Menu</a> | 
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-brand">Dhen's Kitchen</div>
+        <div class="copyright">
+            <p>&copy; 2025 Dhen's Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

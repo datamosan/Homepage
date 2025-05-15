@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhen's Kitchen - Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="auth-header">
+        <h1>Create an Account</h1>
+    </header>
+
+    <main class="auth-main">
+        <div class="auth-form-container">
+            <h3 class="form-title">Sign Up</h3>
+            <form id="signupForm" class="auth-form">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                </div>
+                <div class="terms">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I Agree to the <a href="#">Terms and Conditions</a></label>
+                </div>
+                <div class="newsletter">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">Subscribe to our newsletter for special offers</label>
+                </div>
+                <button type="submit" class="auth-button">Create Account</button>
+                <p class="auth-redirect">
+                    Already have an account? <a href="login.html">Login</a>
+                </p>
+            </form>
+        </div>
+
+        <div class="auth-benefits">
+            <h3>Benefits of Creating an Account</h3>
+            <ul>
+                <li>Track your orders and order history</li>
+                <li>Save your favorite items for quick reordering</li>
+                <li>Receive exclusive offers and promotions</li>
+                <li>Faster checkout process</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="auth-footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Culinary Street, Foodville</p>
+                <p>Phone: (123) 456-7890</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a> | 
+                <a href="menu.html">Menu</a> | 
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-brand">Dhen's Kitchen</div>
+        <div class="copyright">
+            <p>&copy; 2025 Dhen's Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

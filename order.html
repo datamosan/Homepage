@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhen's Kitchen - Order Now</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="order-header">
+        <h1>Order Now</h1>
+    </header>
+
+    <main class="order-main">
+        <h2 class="order-subtitle">Select Your Products</h2>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Chocolate Cake</h3>
+                <p class="product-description">Rich chocolate layers with smooth ganache frosting. Available in 6", 8", and 10" sizes.</p>
+                <p class="product-price">From $35.00</p>
+                <button class="add-to-cart" data-id="product-1" data-name="Chocolate Cake" data-price="35.00">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Red Velvet Cake</h3>
+                <p class="product-description">Classic red velvet cake with cream cheese frosting. Available in 6", 8", and 10" sizes.</p>
+                <p class="product-price">From $38.00</p>
+                <button class="add-to-cart" data-id="product-2" data-name="Red Velvet Cake" data-price="38.00">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Fruit Tart</h3>
+                <p class="product-description">Buttery tart shell filled with vanilla custard and topped with fresh seasonal fruits.</p>
+                <p class="product-price">$5.50 each</p>
+                <button class="add-to-cart" data-id="product-3" data-name="Fruit Tart" data-price="5.50">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Pasta Meal</h3>
+                <p class="product-description">Homemade pasta with your choice of sauce: marinara, alfredo, or pesto. Serves 2.</p>
+                <p class="product-price">$18.95</p>
+                <button class="add-to-cart" data-id="product-4" data-name="Pasta Meal" data-price="18.95">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Herb Roasted Chicken</h3>
+                <p class="product-description">Whole chicken marinated with herbs and slow-roasted to perfection. Serves 3-4.</p>
+                <p class="product-price">$24.95</p>
+                <button class="add-to-cart" data-id="product-5" data-name="Herb Roasted Chicken" data-price="24.95">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Garden Salad</h3>
+                <p class="product-description">Fresh mixed greens with seasonal vegetables and house dressing. Available in small or large.</p>
+                <p class="product-price">From $8.95</p>
+                <button class="add-to-cart" data-id="product-6" data-name="Garden Salad" data-price="8.95">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Dessert Platter</h3>
+                <p class="product-description">Assortment of mini desserts including brownies, cookies, and fruit tarts. Serves 6-8.</p>
+                <p class="product-price">$32.00</p>
+                <button class="add-to-cart" data-id="product-7" data-name="Dessert Platter" data-price="32.00">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Beverage Package</h3>
+                <p class="product-description">Selection of fresh juices, iced tea, and sparkling water. Serves 6-8.</p>
+                <p class="product-price">$15.00</p>
+                <button class="add-to-cart" data-id="product-8" data-name="Beverage Package" data-price="15.00">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="cart-section">
+            <h2 class="cart-title">Your Cart</h2>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be added here dynamically -->
+                <p class="empty-cart">Your cart is empty</p>
+            </div>
+            <div class="cart-total">
+                <p>Total: <span id="cart-total-amount">$0.00</span></p>
+            </div>
+            <button id="checkout-button" class="checkout-button">Proceed to Checkout</button>
+        </div>
+    </main>
+
+    <footer class="order-footer">
+        <div class="footer-brand">Dhen's Kitchen</div>
+        <div class="footer-links">
+            <a href="index.html">Home</a> | 
+            <a href="menu.html">Menu</a> | 
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Dhen's Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
