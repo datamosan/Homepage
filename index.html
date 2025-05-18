@@ -3,153 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhen's Kitchen - Homemade Delights</title>
+    <title>Dhen's Kitchen - Home</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <div class="page-title">Homepage</div>
-        <div class="header-bar"></div>
+        <div class="header-bar">
+            <div class="page-title">Home</div>
+        </div>
         <nav class="main-nav">
             <div class="nav-links">
                 <a href="index.html" class="nav-item active">Home</a>
-                <a href="about.html" class="nav-item">About</a>
+                <a href="about.html" class="nav-item">About Us</a>
                 <a href="menu.html" class="nav-item">Menu</a>
+                <a href="order.html" class="nav-item">Order Now</a>
             </div>
-            <div class="logo-container">
-                <a href="index.html">
-                    <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
-                </a>
-            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
             <div class="nav-links">
-                <a href="order.html" class="nav-item">Order</a>
-                <a href="faqs.html" class="nav-item">FAQs</a>
-                <a href="contact.html" class="nav-item">Contact</a>
+                <a href="faq.html" class="nav-item">FAQs</a>
+                <a href="contact.html" class="nav-item">Contact Us</a>
+                <a href="auth.html" class="nav-item">Login/Register</a>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">Welcome to Dhen's Kitchen</h1>
-                <h2 class="hero-subtitle">Homemade Delights Made With Love</h2>
-                <a href="order.html" class="cta-button">Order Now</a>
-            </div>
-        </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Dhen's Kitchen</h1>
+            <h2 class="hero-subtitle">Authentic Filipino Cuisine</h2>
+            <p>Experience the rich flavors of Filipino cooking with our homemade specialties.</p>
+            <a href="order.html" class="cta-button">Order Now</a>
+        </div>
+    </section>
 
-        <section class="features">
-            <div class="feature-box">
-                <div class="feature-content">
-                    <h2 class="feature-title">Our Specialties</h2>
-                    <div class="feature-text">
-                        <p>At Dhen's Kitchen, we pride ourselves on creating delicious homemade dishes using only the freshest ingredients and traditional recipes passed down through generations.</p>
-                        <p>Our signature cakes and pastries are baked fresh daily, with special attention to flavor and presentation that will delight your taste buds.</p>
-                        <p>We also offer catering services for special events, bringing our culinary expertise to your celebrations.</p>
-                    </div>
-                    <a href="menu.html" class="feature-button">View Our Menu</a>
-                </div>
-                <div class="feature-image">
-                    <img src="images/specialty-dishes.jpg" alt="Specialty Dishes from Dhen's Kitchen">
-                </div>
-            </div>
-        </section>
+    <!-- Announcement Section -->
+    <section class="announcement">
+        <div class="announcement-content">
+            <h2>Special Offers!</h2>
+            <a href="menu.html" class="announcement-button">View Special Menu</a>
+        </div>
+    </section>
 
-        <section class="announcement">
-            <div class="announcement-content">
-                <h2>Special Offer This Week</h2>
-                <p>Get 15% off on all cake orders placed before Friday. Use code <strong>SWEETWEEK</strong> at checkout!</p>
-                <a href="order.html" class="announcement-button">Order Now</a>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-box">
+            <div class="feature-content">
+                <h2 class="feature-title">Our Specialties</h2>
+                <div class="feature-text">
+                    <p>At Dhen's Kitchen, we take pride in our authentic Filipino recipes passed down through generations. Each dish is prepared with love and the finest ingredients.</p>
+                    <p>From our famous Bicol Express to our mouthwatering desserts, we bring the taste of the Philippines to your table.</p>
+                    <a href="menu.html" class="feature-button">Explore Our Menu</a>
+                </div>
             </div>
-        </section>
+            <div class="feature-image">
+                <img src="images/specialty.jpg" alt="Dhen's Kitchen Specialty Dish">
+            </div>
+        </div>
+    </section>
 
-        <section class="gallery">
-            <h2 class="section-title">Popular Dishes</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="images/chocolate-cake.jpg" alt="Chocolate Cake">
-                    <div class="gallery-caption">Chocolate Cake</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/fruit-tart.jpg" alt="Fruit Tart">
-                    <div class="gallery-caption">Fruit Tart</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/pasta-dish.jpg" alt="Signature Pasta">
-                    <div class="gallery-caption">Signature Pasta</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/chicken-meal.jpg" alt="Herb Roasted Chicken">
-                    <div class="gallery-caption">Herb Roasted Chicken</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/salad-bowl.jpg" alt="Fresh Garden Salad">
-                    <div class="gallery-caption">Fresh Garden Salad</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/dessert-platter.jpg" alt="Dessert Platter">
-                    <div class="gallery-caption">Dessert Platter</div>
-                </div>
+    <section class="instagram-grid">
+        <h2 class="section-title">Popular Dishes</h2>
+        <div class="instagram-grid-container">
+            <div class="instagram-item">
+                <img src="images/food1.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 124</div>
+                <div class="instagram-caption">Our bestselling Bicol Express! Spicy, creamy, and absolutely delicious. #FilipinoCuisine #BicolExpress</div>
             </div>
-            <div class="gallery-divider"></div>
-            <div class="testimonials">
-                <h2 class="section-title">What Our Customers Say</h2>
-                <div class="testimonial-slider">
-                    <div class="testimonial">
-                        <p>"The cakes from Dhen's Kitchen are absolutely divine! They catered my daughter's wedding and everyone was impressed."</p>
-                        <p class="testimonial-author">- Maria J.</p>
-                    </div>
-                </div>
+            <div class="instagram-item">
+                <img src="images/food2.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 98</div>
+                <div class="instagram-caption">Freshly baked Ube Pandesal! Perfect with your morning coffee. #UbePandesal #FilipinoBreakfast</div>
             </div>
-        </section>
-    </main>
+            <div class="instagram-item">
+                <img src="images/food3.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 156</div>
+                <div class="instagram-caption">Crispy Pata for your weekend feast! #CrispyPata #FilipinoCuisine</div>
+            </div>
+            <div class="instagram-item">
+                <img src="images/food4.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 87</div>
+                <div class="instagram-caption">Sweet and creamy Leche Flan! A perfect ending to any meal. #LecheFlan #FilipinoSweets</div>
+            </div>
+            <div class="instagram-item">
+                <img src="images/food5.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 112</div>
+                <div class="instagram-caption">Our special Kare-Kare with homemade bagoong! #KareKare #FilipinoCuisine</div>
+            </div>
+            <div class="instagram-item">
+                <img src="images/food6.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 143</div>
+                <div class="instagram-caption">Freshly made Lumpiang Shanghai! Perfect for any occasion. #LumpiangShanghai #FilipinoAppetizer</div>
+            </div>
+        </div>
+        <div class="instagram-follow">
+            <a href="https://instagram.com/dhenskitchen" class="instagram-follow-button" target="_blank">
+                <i class="fab fa-instagram"></i> Follow us on Instagram
+            </a>
+        </div>
+    </section>
 
+
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-info">
                 <h3>Dhen's Kitchen</h3>
-                <p>123 Culinary Street, Foodville</p>
-                <p>Phone: (123) 456-7890</p>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
                 <p>Email: info@dhenskitchen.com</p>
             </div>
             <div class="footer-hours">
                 <h3>Opening Hours</h3>
-                <p>Monday - Friday: 9am - 8pm</p>
-                <p>Saturday: 10am - 9pm</p>
-                <p>Sunday: 10am - 6pm</p>
+                <p>Monday - Friday: 10:00 AM - 9:00 PM</p>
+                <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
+                <p>Holidays: 10:00 AM - 8:00 PM</p>
             </div>
             <div class="footer-social">
                 <h3>Follow Us</h3>
                 <div class="social-icons">
-                    <a href="#" class="social-icon">FB</a>
-                    <a href="#" class="social-icon">IG</a>
-                    <a href="#" class="social-icon">TW</a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-links">
+                    <p><a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
                 </div>
             </div>
         </div>
         <div class="footer-nav">
             <div class="footer-menu">
                 <a href="menu.html">
-                    <span class="menu-icon"></span>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
                     <span>Menu</span>
                 </a>
             </div>
             <div class="footer-home">
                 <a href="index.html">
-                    <span class="home-icon"></span>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
                     <span>Home</span>
                 </a>
             </div>
             <div class="footer-account">
                 <a href="auth.html">
-                    <span class="account-icon"></span>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
                     <span>Account</span>
                 </a>
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 Dhen's Kitchen. All rights reserved.</p>
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
         </div>
     </footer>
 

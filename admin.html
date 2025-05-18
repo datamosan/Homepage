@@ -1,363 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard - Dhen's Kitchen</title>
-  <style>
-    :root {
-      --red: #D26464;
-      --light-green: #8EBB9D;
-      --dark-green: #234438;
-      --lavender: #B4ACEC;
-      --white: #FFFFFF;
-      --beige: #F1E4C4;
-      --cream: #F5F1E1;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--cream);
-      color: #333;
-      line-height: 1.6;
-    }
-
-    header {
-      background-color: var(--dark-green);
-      color: var(--white);
-      padding: 1em 2em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.8em;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    nav button {
-      background-color: var(--lavender);
-      color: #000;
-      border: none;
-      padding: 0.8em 1.2em;
-      margin-left: 1em;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    nav button:hover {
-      background-color: var(--light-green);
-    }
-
-    main {
-      padding: 3em 2em;
-      background-color: var(--white);
-      border-radius: 10px;
-      margin: 2em;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-      color: var(--dark-green);
-      margin-bottom: 1em;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: var(--beige);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-bottom: 2em;
-    }
-
-    th, td {
-      padding: 1em;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    th {
-      background-color: var(--lavender);
-      font-weight: bold;
-    }
-
-    .view-btn, .update-btn, .approve-btn, .reply-btn, .logout-btn {
-      background-color: var(--red);
-      color: var(--white);
-      border: none;
-      padding: 0.5em 1em;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .view-btn:hover, .update-btn:hover, .approve-btn:hover, .reply-btn:hover, .logout-btn:hover {
-      background-color: var(--dark-green);
-    }
-
-    #details, #paymentDetails, #replyForm {
-      display: none;
-      background: var(--beige);
-      padding: 1.5em;
-      border-radius: 10px;
-      margin-top: 1em;
-    }
-
-    select, .save-btn, textarea, button {
-      padding: 0.5em;
-      margin-top: 0.8em;
-      border-radius: 5px;
-      border: none;
-    }
-
-    .save-btn {
-      background-color: var(--light-green);
-      cursor: pointer;
-    }
-
-    .save-btn:hover {
-      background-color: var(--dark-green);
-      color: var(--white);
-    }
-
-    textarea {
-      width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Dhen's Kitchen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-logo">Dhen's Kitchen Admin</div>
+        <div class="admin-nav">
+            <button data-section="orders">Orders</button>
+            <button data-section="payments">Payments</button>
+            <button data-section="messages">Messages</button>
+            <button class="admin-logout-btn">Logout</button>
+        </div>
+    </header>
 
-<header>
-  <div class="logo">Dhen's Kitchen Admin Panel</div>
-  <nav>
-    <button onclick="showSection('orders')">Orders</button>
-    <button onclick="showSection('payments')">Payments</button>
-    <button onclick="showSection('messages')">Messages</button>
-    <button onclick="showSection('customers')">Customers</button>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </nav>
-</header>
+    <!-- Admin Main Content -->
+    <main class="admin-main">
+        <!-- Orders Section -->
+        <section id="ordersSection">
+            <h1>Order Management</h1>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>O001</td>
+                        <td>Rhy Estrella</td>
+                        <td>2023-05-15</td>
+                        <td>₱500</td>
+                        <td id="statusO001">Pending</td>
+                        <td><button class="admin-view-btn" data-type="order" data-id="O001">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>O002</td>
+                        <td>Lyra Cunanan</td>
+                        <td>2023-05-14</td>
+                        <td>₱1,200</td>
+                        <td id="statusO002">Processing</td>
+                        <td><button class="admin-view-btn" data-type="order" data-id="O002">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
 
-<main>
-  <h1>Welcome Admin</h1>
+            <!-- Order Details Panel -->
+            <div id="details" class="admin-details">
+                <h3>Order Details</h3>
+                <div id="orderDetails"></div>
+                <select id="statusSelect" class="admin-select">
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <button class="admin-save-btn" data-action="update-status">Update Status</button>
+            </div>
+        </section>
 
-  <!-- ORDERS -->
-  <section id="ordersSection">
-    <h2>Orders</h2>
-    <table>
-      <tr>
-        <th>Order ID</th>
-        <th>Customer</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-      <tr>
-        <td>O001</td>
-        <td>Rhy Estrella</td>
-        <td id="statusO001">Pending</td>
-        <td><button class="view-btn" onclick="viewOrder('O001')">View</button></td>
-      </tr>
-      <tr>
-        <td>O002</td>
-        <td>Lyra Cunanan</td>
-        <td id="statusO002">Pending</td>
-        <td><button class="view-btn" onclick="viewOrder('O002')">View</button></td>
-      </tr>
-    </table>
+        <!-- Payments Section -->
+        <section id="paymentsSection" style="display: none;">
+            <h1>Payment Management</h1>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>P001</td>
+                        <td>O001</td>
+                        <td>Rhy Estrella</td>
+                        <td>₱500</td>
+                        <td>Gcash</td>
+                        <td><button class="admin-view-btn" data-type="payment" data-id="P001">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>P002</td>
+                        <td>O002</td>
+                        <td>Lyra Cunanan</td>
+                        <td>₱1,200</td>
+                        <td>Bank Transfer</td>
+                        <td><button class="admin-view-btn" data-type="payment" data-id="P002">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <div id="details">
-      <h3>Order Details</h3>
-      <p id="orderDetails"></p>
-      <label>Update Status:</label>
-      <select id="statusSelect">
-        <option>Pending</option>
-        <option>Approved</option>
-        <option>Cancelled</option>
-      </select>
-      <button class="save-btn" onclick="updateStatus()">Save</button>
-    </div>
-  </section>
+            <!-- Payment Details Panel -->
+            <div id="paymentDetails" class="admin-payment-details">
+                <h3>Payment Details</h3>
+                <div id="paymentInfo"></div>
+                <select id="paymentStatus" class="admin-select">
+                    <option value="Pending">Pending</option>
+                    <option value="Verified">Verified</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+                <button class="admin-save-btn" data-action="update-payment">Update Status</button>
+            </div>
 
-  <!-- PAYMENTS -->
-  <section id="paymentsSection" style="display:none;">
-    <h2>Payments</h2>
-    <table>
-      <tr>
-        <th>Payment ID</th>
-        <th>Customer</th>
-        <th>Amount</th>
-        <th>Mode</th>
-        <th>Action</th>
-      </tr>
-      <tr>
-        <td>P001</td>
-        <td>Rhy Estrella</td>
-        <td>₱500</td>
-        <td>Gcash</td>
-        <td><button class="view-btn" onclick="viewPayment('P001')">View</button></td>
-      </tr>
-      <tr>
-        <td>P002</td>
-        <td>Lyra Cunanan</td>
-        <td>₱1200</td>
-        <td>Bank Transfer</td>
-        <td><button class="view-btn" onclick="viewPayment('P002')">View</button></td>
-      </tr>
-    </table>
+            <!-- Payment Methods Section -->
+            <h2 style="margin-top: 40px; text-align: center; color: var(--teal);">Payment Methods</h2>
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <h3>GCash</h3>
+                    <img src="images/gcash-logo.png" alt="GCash Logo">
+                    <p>Account Name: Dhen's Kitchen</p>
+                    <p>Number: 0917-123-4567</p>
+                    <button class="payment-method-button">Update Details</button>
+                </div>
+                <div class="payment-method">
+                    <h3>Bank Transfer</h3>
+                    <img src="images/bank-logo.png" alt="Bank Logo">
+                    <p>Bank: BDO</p>
+                    <p>Account: 1234-5678-9012</p>
+                    <button class="payment-method-button">Update Details</button>
+                </div>
+                <div class="payment-method">
+                    <h3>PayMaya</h3>
+                    <img src="images/paymaya-logo.png" alt="PayMaya Logo">
+                    <p>Account: Dhen's Kitchen</p>
+                    <p>Number: 0918-765-4321</p>
+                    <button class="payment-method-button">Update Details</button>
+                </div>
+            </div>
+        </section>
 
-    <div id="paymentDetails">
-      <h3>Payment Details</h3>
-      <p id="paymentInfo"></p>
-      <label>Approve Payment:</label>
-      <select id="paymentStatus">
-        <option>Pending</option>
-        <option>Approved</option>
-        <option>Rejected</option>
-      </select>
-      <button class="save-btn" onclick="updatePaymentStatus()">Save</button>
-    </div>
-  </section>
+        <!-- Messages Section -->
+        <section id="messagesSection" style="display: none;">
+            <h1>Customer Messages</h1>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>M001</td>
+                        <td>John Smith</td>
+                        <td>Custom Order</td>
+                        <td>2023-05-15</td>
+                        <td>New</td>
+                        <td><button class="admin-reply-btn" data-customer="John Smith">Reply</button></td>
+                    </tr>
+                    <tr>
+                        <td>M002</td>
+                        <td>Maria Garcia</td>
+                        <td>Feedback</td>
+                        <td>2023-05-14</td>
+                        <td>Replied</td>
+                        <td><button class="admin-reply-btn" data-customer="Maria Garcia">Reply</button></td>
+                    </tr>
+                </tbody>
+            </table>
 
-  <!-- MESSAGES -->
-  <section id="messagesSection" style="display:none;">
-    <h2>Messages</h2>
-    <table>
-      <tr>
-        <th>From</th>
-        <th>Email</th>
-        <th>Message</th>
-        <th>Action</th>
-      </tr>
-      <tr>
-        <td>Rhy Estrella</td>
-        <td>rhy@gmail.com</td>
-        <td>Can I change delivery date?</td>
-        <td><button class="reply-btn" onclick="replyMessage('Rhy Estrella')">Reply</button></td>
-      </tr>
-      <tr>
-        <td>Lyra Cunanan</td>
-        <td>lyra@gmail.com</td>
-        <td>Do you have sugar-free cakes?</td>
-        <td><button class="reply-btn" onclick="replyMessage('Lyra Cunanan')">Reply</button></td>
-      </tr>
-    </table>
+            <!-- Reply Form -->
+            <div id="replyForm" class="admin-reply-form">
+                <h3>Reply to <span id="replyTo"></span></h3>
+                <textarea id="replyMessageBox" class="admin-textarea" rows="5" placeholder="Type your reply here..."></textarea>
+                <button class="admin-save-btn" data-action="send-reply">Send Reply</button>
+            </div>
+        </section>
+    </main>
 
-    <div id="replyForm">
-      <h3>Reply to <span id="replyTo"></span></h3>
-      <textarea id="replyMessageBox" rows="4"></textarea><br>
-      <button class="save-btn" onclick="sendReply()">Send Reply</button>
-    </div>
-  </section>
-
-  <!-- CUSTOMERS -->
-  <section id="customersSection" style="display:none;">
-    <h2>Customers</h2>
-    <table>
-      <tr>
-        <th>Customer ID</th>
-        <th>Name</th>
-        <th>Email</th>
-      </tr>
-      <tr><td>C001</td><td>Rhy Estrella</td><td>rhy@gmail.com</td></tr>
-      <tr><td>C002</td><td>Lyra Cunanan</td><td>lyra@gmail.com</td></tr>
-    </table>
-  </section>
-
-</main>
-
-<script>
-  const orders = {
-    O001: { customer: 'Rhy Estrella', items: [{ name: 'Chocolate Cake', qty: 1 }] },
-    O002: { customer: 'Lyra Cunanan', items: [{ name: 'Strawberry Cake', qty: 2 }] }
-  };
-
-  const payments = {
-    P001: { customer: 'Rhy Estrella', amount: '₱500', mode: 'Gcash', proof: 'gcash_proof.jpg', sender: 'Rhy Estrella', bank: 'None' },
-    P002: { customer: 'Lyra Cunanan', amount: '₱1200', mode: 'Bank Transfer', proof: 'bank_receipt.jpg', sender: 'Lyra Cunanan', bank: 'BDO' }
-  };
-
-  let currentOrder = '';
-  let currentPayment = '';
-
-  function viewOrder(orderId) {
-    currentOrder = orderId;
-    const order = orders[orderId];
-    let detailText = `<strong>Customer:</strong> ${order.customer}<br><strong>Items:</strong><br>`;
-    order.items.forEach(item => detailText += `• ${item.name} - ${item.qty}<br>`);
-    document.getElementById('orderDetails').innerHTML = detailText;
-    document.getElementById('statusSelect').value = document.getElementById('status' + orderId).innerText;
-    document.getElementById('details').style.display = 'block';
-  }
-
-  function updateStatus() {
-    const newStatus = document.getElementById('statusSelect').value;
-    document.getElementById('status' + currentOrder).innerText = newStatus;
-    alert(`Order ${currentOrder} updated to ${newStatus}`);
-  }
-
-  function viewPayment(paymentId) {
-    currentPayment = paymentId;
-    const payment = payments[paymentId];
-    let info = `<strong>Customer:</strong> ${payment.customer}<br>
-                <strong>Amount:</strong> ${payment.amount}<br>
-                <strong>Mode:</strong> ${payment.mode}<br>
-                <strong>Sender:</strong> ${payment.sender}<br>
-                <strong>Bank:</strong> ${payment.bank}<br>
-                <strong>Proof of Payment:</strong> <a href="${payment.proof}" target="_blank">View Proof</a>`;
-    document.getElementById('paymentInfo').innerHTML = info;
-    document.getElementById('paymentStatus').value = 'Pending';
-    document.getElementById('paymentDetails').style.display = 'block';
-  }
-
-  function updatePaymentStatus() {
-    const status = document.getElementById('paymentStatus').value;
-    alert(`Payment ${currentPayment} marked as ${status}`);
-    document.getElementById('paymentDetails').style.display = 'none';
-  }
-
-  function replyMessage(customer) {
-    document.getElementById('replyForm').style.display = 'block';
-    document.getElementById('replyTo').innerText = customer;
-    document.getElementById('replyMessageBox').value = '';
-  }
-
-  function sendReply() {
-    const customer = document.getElementById('replyTo').innerText;
-    const message = document.getElementById('replyMessageBox').value;
-    if (message.trim() === '') {
-      alert('Please type a message before sending.');
-      return;
-    }
-    alert(`Reply sent to ${customer}: ${message}`);
-    document.getElementById('replyForm').style.display = 'none';
-  }
-
-  function showSection(section) {
-    document.getElementById('ordersSection').style.display = (section === 'orders') ? 'block' : 'none';
-    document.getElementById('paymentsSection').style.display = (section === 'payments') ? 'block' : 'none';
-    document.getElementById('messagesSection').style.display = (section === 'messages') ? 'block' : 'none';
-    document.getElementById('customersSection').style.display = (section === 'customers') ? 'block' : 'none';
-    document.getElementById('details').style.display = 'none';
-    document.getElementById('paymentDetails').style.display = 'none';
-    document.getElementById('replyForm').style.display = 'none';
-  }
-
-  function logout() {
-    alert('Logging out...');
-    window.location.href = 'login.html'; // replace with actual login page
-  }
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
-

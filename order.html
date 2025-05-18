@@ -3,99 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhen's Kitchen - Order Now</title>
+    <title>Order Now - Dhen's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="order-header">
-        <h1>Order Now</h1>
+    <!-- Header -->
+    <header>
+        <div class="header-bar">
+            <div class="page-title">Order Now</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="about.html" class="nav-item">About Us</a>
+                <a href="menu.html" class="nav-item">Menu</a>
+                <a href="order.html" class="nav-item active">Order Now</a>
+            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.html" class="nav-item">FAQs</a>
+                <a href="contact.html" class="nav-item">Contact Us</a>
+                <a href="auth.html" class="nav-item">Login/Register</a>
+            </div>
+        </nav>
     </header>
 
-    <main class="order-main">
-        <h2 class="order-subtitle">Select Your Products</h2>
+    <!-- Order Header -->
+    <div class="order-header">
+        <h1>Order Online</h1>
+    </div>
 
+    <!-- Order Main -->
+    <div class="order-main">
+        <h2 class="order-subtitle">Select Your Items</h2>
+
+        <!-- Products Grid -->
         <div class="products-grid">
+            <!-- Bicol Express -->
+            <div class="product-card">
+                <div class="product-color"></div>
+                <h3 class="product-title">Bicol Express</h3>
+                <p class="product-description">Spicy pork cooked in coconut milk with chili peppers.</p>
+                <p class="product-price">₱750.00</p>
+                <div class="product-options">
+                    <select data-id="bicol-express">
+                        <option value="small">Small (4-6 pax)</option>
+                        <option value="medium">Medium (8-10 pax)</option>
+                        <option value="large">Large (12-15 pax)</option>
+                    </select>
+                </div>
+                <button class="add-to-cart" data-id="bicol-express" data-name="Bicol Express" data-price="750">Add to Cart</button>
+            </div>
+
+            <!-- Chocolate Cake -->
             <div class="product-card">
                 <div class="product-color"></div>
                 <h3 class="product-title">Chocolate Cake</h3>
-                <p class="product-description">Rich chocolate layers with smooth ganache frosting. Available in 6", 8", and 10" sizes.</p>
-                <p class="product-price">From $35.00</p>
-                <button class="add-to-cart" data-id="product-1" data-name="Chocolate Cake" data-price="35.00">Add to Cart</button>
+                <p class="product-description">Rich chocolate layers with smooth ganache frosting.</p>
+                <p class="product-price">₱550.00</p>
+                <div class="product-options">
+                    <select data-id="chocolate-cake">
+                        <option value="8-inch">8-inch (6-8 pax)</option>
+                        <option value="10-inch">10-inch (10-12 pax)</option>
+                        <option value="12-inch">12-inch (15-20 pax)</option>
+                    </select>
+                </div>
+                <button class="add-to-cart" data-id="chocolate-cake" data-name="Chocolate Cake" data-price="550">Add to Cart</button>
             </div>
+
+            <!-- Red Velvet Cake -->
             <div class="product-card">
                 <div class="product-color"></div>
                 <h3 class="product-title">Red Velvet Cake</h3>
-                <p class="product-description">Classic red velvet cake with cream cheese frosting. Available in 6", 8", and 10" sizes.</p>
-                <p class="product-price">From $38.00</p>
-                <button class="add-to-cart" data-id="product-2" data-name="Red Velvet Cake" data-price="38.00">Add to Cart</button>
+                <p class="product-description">Classic red velvet cake with cream cheese frosting.</p>
+                <p class="product-price">₱650.00</p>
+                <div class="product-options">
+                    <select data-id="red-velvet">
+                        <option value="8-inch">8-inch (6-8 pax)</option>
+                        <option value="10-inch">10-inch (10-12 pax)</option>
+                        <option value="12-inch">12-inch (15-20 pax)</option>
+                    </select>
+                </div>
+                <button class="add-to-cart" data-id="red-velvet" data-name="Red Velvet Cake" data-price="650">Add to Cart</button>
             </div>
+
+            <!-- Pork Adobo -->
             <div class="product-card">
                 <div class="product-color"></div>
-                <h3 class="product-title">Fruit Tart</h3>
-                <p class="product-description">Buttery tart shell filled with vanilla custard and topped with fresh seasonal fruits.</p>
-                <p class="product-price">$5.50 each</p>
-                <button class="add-to-cart" data-id="product-3" data-name="Fruit Tart" data-price="5.50">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <div class="product-color"></div>
-                <h3 class="product-title">Pasta Meal</h3>
-                <p class="product-description">Homemade pasta with your choice of sauce: marinara, alfredo, or pesto. Serves 2.</p>
-                <p class="product-price">$18.95</p>
-                <button class="add-to-cart" data-id="product-4" data-name="Pasta Meal" data-price="18.95">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <div class="product-color"></div>
-                <h3 class="product-title">Herb Roasted Chicken</h3>
-                <p class="product-description">Whole chicken marinated with herbs and slow-roasted to perfection. Serves 3-4.</p>
-                <p class="product-price">$24.95</p>
-                <button class="add-to-cart" data-id="product-5" data-name="Herb Roasted Chicken" data-price="24.95">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <div class="product-color"></div>
-                <h3 class="product-title">Garden Salad</h3>
-                <p class="product-description">Fresh mixed greens with seasonal vegetables and house dressing. Available in small or large.</p>
-                <p class="product-price">From $8.95</p>
-                <button class="add-to-cart" data-id="product-6" data-name="Garden Salad" data-price="8.95">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <div class="product-color"></div>
-                <h3 class="product-title">Dessert Platter</h3>
-                <p class="product-description">Assortment of mini desserts including brownies, cookies, and fruit tarts. Serves 6-8.</p>
-                <p class="product-price">$32.00</p>
-                <button class="add-to-cart" data-id="product-7" data-name="Dessert Platter" data-price="32.00">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <div class="product-color"></div>
-                <h3 class="product-title">Beverage Package</h3>
-                <p class="product-description">Selection of fresh juices, iced tea, and sparkling water. Serves 6-8.</p>
-                <p class="product-price">$15.00</p>
-                <button class="add-to-cart" data-id="product-8" data-name="Beverage Package" data-price="15.00">Add to Cart</button>
+                <h3 class="product-title">Pork Adobo</h3>
+                <p class="product-description">Pork marinated and simmered in soy sauce, vinegar, and spices.</p>
+                <p class="product-price">₱650.00</p>
+                <div class="product-options">
+                    <select data-id="adobo">
+                        <option value="small">Small (4-6 pax)</option>
+                        <option value="medium">Medium (8-10 pax)</option>
+                        <option value="large">Large (12-15 pax)</option>
+                    </select>
+                </div>
+                <button class="add-to-cart" data-id="adobo" data-name="Pork Adobo" data-price="650">Add to Cart</button>
             </div>
         </div>
 
+        <!-- Cart Section -->
         <div class="cart-section">
-            <h2 class="cart-title">Your Cart</h2>
+            <h3 class="cart-title">Your Cart</h3>
             <div id="cart-items" class="cart-items">
-                <!-- Cart items will be added here dynamically -->
                 <p class="empty-cart">Your cart is empty</p>
             </div>
             <div class="cart-total">
-                <p>Total: <span id="cart-total-amount">$0.00</span></p>
+                Total: <span id="cart-total-amount">₱0.00</span>
             </div>
             <button id="checkout-button" class="checkout-button">Proceed to Checkout</button>
         </div>
-    </main>
 
-    <footer class="order-footer">
-        <div class="footer-brand">Dhen's Kitchen</div>
-        <div class="footer-links">
-            <a href="index.html">Home</a> | 
-            <a href="menu.html">Menu</a> | 
-            <a href="contact.html">Contact</a>
+        <!-- Custom Order Section -->
+        <div class="custom-order-section">
+            <h3 class="custom-order-title">Need a Customized Cake?</h3>
+            <p class="custom-order-description">We offer customized cakes for birthdays, weddings, and special occasions. Contact us to discuss your requirements and get a personalized quote.</p>
+            <a href="contact.html?subject=custom-order" class="custom-order-button">Contact for Custom Order</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-hours">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 10:00 AM - 9:00 PM</p>
+                <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
+                <p>Holidays: 10:00 AM - 8:00 PM</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-links">
+                    <p><a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <div class="footer-menu">
+                <a href="menu.html">
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <span>Menu</span>
+                </a>
+            </div>
+            <div class="footer-home">
+                <a href="index.html">
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <span>Home</span>
+                </a>
+            </div>
+            <div class="footer-account">
+                <a href="auth.html">
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <span>Account</span>
+                </a>
+            </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 Dhen's Kitchen. All rights reserved.</p>
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
         </div>
     </footer>
 

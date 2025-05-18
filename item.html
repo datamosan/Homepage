@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Details - Dhen's Kitchen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-bar">
+            <div class="page-title">Item Details</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="about.html" class="nav-item">About Us</a>
+                <a href="menu.html" class="nav-item active">Menu</a>
+                <a href="order.html" class="nav-item">Order Now</a>
+            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.html" class="nav-item">FAQs</a>
+                <a href="contact.html" class="nav-item">Contact Us</a>
+                <a href="auth.html" class="nav-item">Login/Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Item Detail -->
+    <div class="item-detail-container">
+        <div class="item-detail">
+            <div class="item-detail-image">
+                <img src="images/chocolate-cake.jpg" alt="Chocolate Cake">
+            </div>
+            <div class="item-detail-info">
+                <h1 class="item-detail-title">Chocolate Cake</h1>
+                <div class="item-detail-price">₱550.00</div>
+                <div class="item-detail-description">
+                    Rich chocolate layers with smooth ganache frosting. Perfect for birthdays and special occasions. Made with premium cocoa and fresh ingredients.
+                </div>
+                <div class="item-detail-specs">
+                    <h3>Specifications</h3>
+                    <ul>
+                        <li><span>Serving Size</span><span>6-8 pax</span></li>
+                        <li><span>Size</span><span>8 inches</span></li>
+                        <li><span>Allergens</span><span>Contains dairy, eggs, wheat</span></li>
+                        <li><span>Storage</span><span>Refrigerate up to 3 days</span></li>
+                        <li><span>Lead Time</span><span>24-48 hours</span></li>
+                    </ul>
+                </div>
+                <div class="item-detail-actions">
+                    <a href="order.html" class="item-detail-button order-button">Order Now</a>
+                    <a href="menu.html" class="item-detail-button back-button">Back to Menu</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Items -->
+        <div class="item-detail-related">
+            <h2>You May Also Like</h2>
+            <div class="related-items">
+                <div class="menu-item" data-id="red-velvet">
+                    <div class="item-color"></div>
+                    <div class="item-image">
+                        <img src="images/red-velvet.jpg" alt="Red Velvet Cake">
+                    </div>
+                    <div class="item-details">
+                        <h3>Red Velvet Cake</h3>
+                        <p>Classic red velvet cake with cream cheese frosting.</p>
+                        <p class="item-price">₱650.00</p>
+                        <div class="item-button">View Details</div>
+                    </div>
+                </div>
+                <div class="menu-item" data-id="ube-cake">
+                    <div class="item-color"></div>
+                    <div class="item-image">
+                        <img src="images/ube-cake.jpg" alt="Ube Cake">
+                    </div>
+                    <div class="item-details">
+                        <h3>Ube Cake</h3>
+                        <p>Purple yam cake with cream cheese frosting.</p>
+                        <p class="item-price">₱600.00</p>
+                        <div class="item-button">View Details</div>
+                    </div>
+                </div>
+                <div class="menu-item" data-id="sans-rival">
+                    <div class="item-color"></div>
+                    <div class="item-image">
+                        <img src="images/sans-rival.jpg" alt="Sans Rival">
+                    </div>
+                    <div class="item-details">
+                        <h3>Sans Rival</h3>
+                        <p>Layered buttercream cake with cashews.</p>
+                        <p class="item-price">₱700.00</p>
+                        <div class="item-button">View Details</div>
+                    </div>
+                </div>
+                <div class="menu-item" data-id="brazo-de-mercedes">
+                    <div class="item-color"></div>
+                    <div class="item-image">
+                        <img src="images/brazo-de-mercedes.jpg" alt="Brazo de Mercedes">
+                    </div>
+                    <div class="item-details">
+                        <h3>Brazo de Mercedes</h3>
+                        <p>Soft meringue roll with custard filling.</p>
+                        <p class="item-price">₱450.00</p>
+                        <div class="item-button">View Details</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-hours">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 10:00 AM - 9:00 PM</p>
+                <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
+                <p>Holidays: 10:00 AM - 8:00 PM</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-links">
+                    <p><a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <div class="footer-menu">
+                <a href="menu.html">
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <span>Menu</span>
+                </a>
+            </div>
+            <div class="footer-home">
+                <a href="index.html">
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <span>Home</span>
+                </a>
+            </div>
+            <div class="footer-account">
+                <a href="auth.html">
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <span>Account</span>
+                </a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
