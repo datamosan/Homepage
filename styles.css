@@ -22,6 +22,7 @@ body {
     background-color: var(--white);
     color: var(--teal);
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 a {
@@ -68,20 +69,28 @@ header {
     box-shadow: var(--box-shadow);
 }
 
+@keyframes moveText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
 .page-title {
     position: absolute;
     top: 0;
     left: 10px;
+    width: 100vw;
     color: var(--white);
     padding: 5px;
-    font-size: 18px;
+    font-size: 16px;
     z-index: 10;
+    animation: moveText 20s linear infinite
 }
 
 .header-bar {
     height: 40px;
     background-color: var(--teal);
     width: 100%;
+    overflow:hidden
 }
 
 .main-nav {
@@ -95,6 +104,7 @@ header {
 .nav-links {
     display: flex;
     gap: 20px;
+    ;
 }
 
 .nav-item {
