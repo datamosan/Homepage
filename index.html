@@ -1,225 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Hub - DecaDhen: Dhen's Kitchen</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  <style>
-    :root {
-      --bg-start: #FFFEF2;
-      --bg-end: #FFF4E6;
-      --card: #F6E7C1;
-      --accent: #294C3B;
-      --highlight: #CF5C5C;
-      --text-dark: #2f2f2f;
-      --text-light: #ffffff;
-      --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-      --radius: 1.25rem;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(120deg, var(--bg-start), var(--bg-end));
-      color: var(--text-dark);
-      display: flex;
-    }
-
-    .sidebar {
-      width: 240px;
-      background-color: var(--accent);
-      height: 100vh;
-      padding: 2rem 1rem;
-      color: var(--text-light);
-      position: fixed;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      box-shadow: var(--shadow);
-    }
-
-    .sidebar .logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.7rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .sidebar nav {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .sidebar nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      text-decoration: none;
-      color: var(--text-light);
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      transition: background 0.3s;
-    }
-
-    .sidebar nav a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .main-content {
-      margin-left: 240px;
-      width: calc(100% - 240px);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    header {
-      background-color: var(--accent);
-      color: var(--text-light);
-      padding: 1.2rem 2rem;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      box-shadow: var(--shadow);
-    }
-
-    .icons {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    .icons i {
-      font-size: 1.3rem;
-      cursor: pointer;
-    }
-
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
-    }
-
-    .card {
-      background-color: var(--card);
-      padding: 2rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-    }
-
-    .card h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.3rem;
-      color: var(--accent);
-      margin-bottom: 0.3rem;
-    }
-
-    .card p {
-      font-size: 0.95rem;
-      color: #4a4a4a;
-    }
-
-    .card i {
-      font-size: 1.8rem;
-      color: var(--highlight);
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: var(--card);
-      font-size: 0.9rem;
-      color: #555;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhen's Kitchen - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
-  <aside class="sidebar">
-    <div class="logo">DecaDhen</div>
-    <nav>
-      <a href="#"><i class="fas fa-home"></i> Home</a>
-      <a href="view-orders.html"><i class="fas fa-receipt"></i> Orders</a>
-      <a href="menu-management.html"><i class="fas fa-utensils"></i> Menu</a>
-      <a href="order-management.html"><i class="fas fa-box"></i> Manage Orders</a>
-      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="customers.html"><i class="fas fa-users"></i> Customers</a>
-    </nav>
-  </aside>
-
-  <div class="main-content">
+    <!-- Header -->
     <header>
-      <div class="icons">
-        <i class="fas fa-bell"></i>
-        <i class="fas fa-user-circle"></i>
-      </div>
+        <div class="header-bar">
+            <div class="page-title">Home</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="index.html" class="nav-item active">Home</a>
+                <a href="about.html" class="nav-item">About Us</a>
+                <a href="menu.html" class="nav-item">Menu</a>
+                <a href="order.html" class="nav-item">Order Now</a>
+            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.html" class="nav-item">FAQs</a>
+                <a href="contact.html" class="nav-item">Contact Us</a>
+                <a href="auth.html" class="nav-item">Login/Register</a>
+            </div>
+        </nav>
     </header>
 
-    <section class="dashboard">
-      <div class="card" onclick="location.href='view-orders.html'">
-        <div>
-          <h3>View Order Submissions</h3>
-          <p>Manage and track all orders submitted by customers.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Dhen's Kitchen</h1>
+            <h2 class="hero-subtitle">Authentic Filipino Cuisine</h2>
+            <p>Experience the rich flavors of Filipino cooking with our homemade specialties.</p>
+            <a href="order.html" class="cta-button">Order Now</a>
         </div>
-        <i class="fas fa-receipt"></i>
-      </div>
-
-      <div class="card" onclick="location.href='menu-management.html'">
-        <div>
-          <h3>Menu Management</h3>
-          <p>Update, add or remove products on the website menu.</p>
-        </div>
-        <i class="fas fa-utensils"></i>
-      </div>
-
-      <div class="card" onclick="location.href='order-management.html'">
-        <div>
-          <h3>Order Management</h3>
-          <p>Track, edit and filter existing customer orders.</p>
-        </div>
-        <i class="fas fa-box"></i>
-      </div>
-
-      <div class="card" onclick="location.href='messages.html'">
-        <div>
-          <h3>Messages</h3>
-          <p>Check and respond to customer inquiries.</p>
-        </div>
-        <i class="fas fa-envelope"></i>
-      </div>
-
-      <div class="card" onclick="location.href='customers.html'">
-        <div>
-          <h3>Customer Data</h3>
-          <p>View registered customer details.</p>
-        </div>
-        <i class="fas fa-users"></i>
-      </div>
     </section>
 
+    <!-- Announcement Section -->
+    <section class="announcement">
+        <div class="announcement-content">
+            <h2>Special Offers!</h2>
+            <a href="menu.html" class="announcement-button">View Special Menu</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-box">
+            <div class="feature-content">
+                <h2 class="feature-title">Our Specialties</h2>
+                <div class="feature-text">
+                    <p>At Dhen's Kitchen, we take pride in our authentic Filipino recipes passed down through generations. Each dish is prepared with love and the finest ingredients.</p>
+                    <p>From our famous Bicol Express to our mouthwatering desserts, we bring the taste of the Philippines to your table.</p>
+                    <a href="menu.html" class="feature-button">Explore Our Menu</a>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="images/specialty.jpg" alt="Dhen's Kitchen Specialty Dish">
+            </div>
+        </div>
+    </section>
+
+    <section class="instagram-grid">
+        <h2 class="section-title">Popular Dishes</h2>
+        <div class="instagram-grid-container">
+            <a href="https://instagram.com/dhenskitchene" target="_blank">
+            <div class="instagram-item">
+                <img src="images/food1.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 124</div>
+                <div class="instagram-caption">Our bestselling Bicol Express! Spicy, creamy, and absolutely delicious. #FilipinoCuisine #BicolExpress</div>
+            </div>
+            </a>
+             <a href="https://instagram.com/dhenskitchene" target="_blank">
+            <div class="instagram-item">
+                <img src="images/food2.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 98</div>
+                <div class="instagram-caption">Freshly baked Ube Pandesal! Perfect with your morning coffee. #UbePandesal #FilipinoBreakfast</div>
+            </div>
+            </a>
+             <a href="https://instagram.com/dhenskitchene" target="_blank">
+            <div class="instagram-item">
+                <img src="images/food3.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 156</div>
+                <div class="instagram-caption">Crispy Pata for your weekend feast! #CrispyPata #FilipinoCuisine</div>
+            </div>
+            </a>
+             <a href="https://instagram.com/dhenskitchene" target="_blank">
+            <div class="instagram-item">
+                <img src="images/food4.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 87</div>
+                <div class="instagram-caption">Sweet and creamy Leche Flan! A perfect ending to any meal. #LecheFlan #FilipinoSweets</div>
+            </div>
+            </a>
+            <a href="https://instagram.com/dhenskitchene" target="_blank">
+            <div class="instagram-item">
+                <img src="images/food5.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 112</div>
+                <div class="instagram-caption">Our special Kare-Kare with homemade bagoong! #KareKare #FilipinoCuisine</div>
+            </div>
+            </a>
+            <a href="https://instagram.com/dhenskitchene" target="_blank">
+            <div class="instagram-item">
+                <img src="images/food6.jpg" alt="Delicious Filipino Food">
+                <div class="instagram-username">@dhenskitchen</div>
+                <div class="instagram-likes">❤️ 143</div>
+                <div class="instagram-caption">Freshly made Lumpiang Shanghai! Perfect for any occasion. #LumpiangShanghai #FilipinoAppetizer</div>
+            </div>
+          
+        </div>
+          </a>
+        <div class="instagram-follow">
+            <a href="https://instagram.com/dhenskitchen" class="instagram-follow-button" target="_blank">
+                <i class="fab fa-instagram"></i> Follow us on Instagram
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
     <footer>
-      &copy; 2025 DecaDhen: Dhen's Kitchen. Sparkle up your day with goodness.
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-hours">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 10:00 AM - 9:00 PM</p>
+                <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
+                <p>Holidays: 10:00 AM - 8:00 PM</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-links">
+                    <p><a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <div class="footer-menu">
+                <a href="menu.html">
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <span>Menu</span>
+                </a>
+            </div>
+            <div class="footer-home">
+                <a href="index.html">
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <span>Home</span>
+                </a>
+            </div>
+            <div class="footer-account">
+                <a href="auth.html">
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <span>Account</span>
+                </a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+        </div>
     </footer>
-  </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
-
