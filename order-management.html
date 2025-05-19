@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Management - DecaDhen</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-start: #FFFEF2;
+      --bg-end: #FFF4E6;
+      --card: #F6E7C1;
+      --accent: #294C3B;
+      --highlight: #CF5C5C;
+      --text-dark: #2f2f2f;
+      --text-light: #ffffff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      --radius: 1.25rem;
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(120deg, var(--bg-start), var(--bg-end));
+      min-height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: var(--accent);
+      color: var(--text-light);
+      padding: 2rem 1rem;
+      position: fixed;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      box-shadow: var(--shadow);
+    }
+    .sidebar .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      text-align: center;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+      color: var(--text-light);
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: background 0.3s;
+    }
+    .sidebar nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .main-content {
+      margin-left: 240px;
+      width: calc(100% - 240px);
+      padding: 2rem;
+    }
+    header {
+      background-color: var(--accent);
+      color: var(--text-light);
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+    header .icons i {
+      font-size: 1.3rem;
+      margin-left: 1.5rem;
+      cursor: pointer;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .controls input,
+    .controls select,
+    .controls button {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .controls button {
+      background-color: var(--accent);
+      color: var(--text-light);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .controls button:hover {
+      background-color: #1d3c2e;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #fff8e6;
+      color: var(--accent);
+      cursor: pointer;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .preparing { background: #ff9800; }
+    .out-for-delivery { background: #2196f3; }
+    .delivered { background: #4caf50; }
+    button.delete-btn {
+      background-color: var(--highlight);
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button.delete-btn:hover {
+      background-color: #a94444;
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">DecaDhen</div>
+    <nav>
+      <a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
+      <a href="view-orders.html"><i class="fas fa-receipt"></i> Orders</a>
+      <a href="menu-management.html"><i class="fas fa-utensils"></i> Menu</a>
+      <a href="order-management.html" class="active"><i class="fas fa-box"></i> Manage Orders</a>
+      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
+      <a href="customers.html"><i class="fas fa-users"></i> Customers</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <div class="icons">
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </header>
+
+    <h1>Order Management</h1>
+
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by name or order ID">
+      <input type="date" id="startDate">
+      <input type="date" id="endDate">
+      <button id="filterDateBtn">Filter</button>
+      <select id="sortField">
+        <option value="deadline">Sort by Deadline</option>
+        <option value="status">Sort by Status</option>
+      </select>
+      <select id="sortOrder">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <button id="sortBtn">Sort</button>
+      <button id="exportBtn">Export to CSV</button>
+      <button id="printBtn">Print</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Name</th>
+          <th>Order ID</th>
+          <th>Proof</th>
+          <th>Deadline</th>
+          <th>Status</th>
+          <th>Update</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="orderTableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const tableBody = document.getElementById('orderTableBody');
+    const searchInput = document.getElementById('searchInput');
+    const startDate = document.getElementById('startDate');
+    const endDate = document.getElementById('endDate');
+
+    function loadOrders() {
+      const orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
+      tableBody.innerHTML = '';
+      orders.forEach((o, i) => {
+        const badgeClass = o.status === 'Preparing' ? 'preparing' :
+                           o.status === 'Out for Delivery' ? 'out-for-delivery' : 'delivered';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${o.date}</td>
+          <td>${o.name}</td>
+          <td>${o.orderId}</td>
+          <td><a href="${o.proof}" target="_blank">View</a></td>
+          <td>${o.deadline}</td>
+          <td><span class="status-badge ${badgeClass}">${o.status}</span></td>
+          <td>
+            <select onchange="updateStatus(${i}, this.value)">
+              <option value="Preparing" ${o.status==='Preparing'?'selected':''}>Preparing</option>
+              <option value="Out for Delivery" ${o.status==='Out for Delivery'?'selected':''}>Out for Delivery</option>
+              <option value="Delivered" ${o.status==='Delivered'?'selected':''}>Delivered</option>
+            </select>
+          </td>
+          <td><button class="delete-btn" onclick="deleteOrder(${i})">Delete</button></td>
+        `;
+        tableBody.appendChild(tr);
+      });
+      applyFilters();
+    }
+
+    function updateStatus(index, newStatus) {
+      const orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
+      orders[index].status = newStatus;
+      localStorage.setItem('approvedOrders', JSON.stringify(orders));
+      loadOrders();
+    }
+
+    function deleteOrder(index) {
+      let orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
+      if (confirm('Delete this order?')) {
+        orders.splice(index, 1);
+        localStorage.setItem('approvedOrders', JSON.stringify(orders));
+        loadOrders();
+      }
+    }
+
+    function exportToCSV() {
+      const orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
+      let csv = 'Date,Name,Order ID,Deadline,Status\n';
+      orders.forEach(o => {
+        csv += `${o.date},${o.name},${o.orderId},${o.deadline},${o.status}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'approved_orders.csv';
+      link.click();
+    }
+
+    function printPDF() {
+      window.print();
+    }
+
+    function applyFilters() {
+      const q = searchInput.value.toLowerCase();
+      const sd = startDate.value;
+      const ed = endDate.value;
+      Array.from(tableBody.rows).forEach(row => {
+        const name = row.cells[1].innerText.toLowerCase();
+        const id = row.cells[2].innerText.toLowerCase();
+        const dl = row.cells[4].innerText;
+        let visible = (name.includes(q) || id.includes(q));
+        if (visible && sd) visible = dl >= sd;
+        if (visible && ed) visible = dl <= ed;
+        row.style.display = visible ? '' : 'none';
+      });
+    }
+
+    function sortTable() {
+      const field = document.getElementById('sortField').value;
+      const order = document.getElementById('sortOrder').value;
+      let orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
+      orders.sort((a, b) => {
+        let v1 = field === 'deadline' ? new Date(a.deadline) : a.status;
+        let v2 = field === 'deadline' ? new Date(b.deadline) : b.status;
+        if (v1 < v2) return order === 'asc' ? -1 : 1;
+        if (v1 > v2) return order === 'asc' ? 1 : -1;
+        return 0;
+      });
+      localStorage.setItem('approvedOrders', JSON.stringify(orders));
+      loadOrders();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('filterDateBtn').addEventListener('click', applyFilters);
+    document.getElementById('sortBtn').addEventListener('click', sortTable);
+    document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+    document.getElementById('printBtn').addEventListener('click', printPDF);
+
+    window.addEventListener('DOMContentLoaded', loadOrders);
+  </script>
+</body>
+</html>

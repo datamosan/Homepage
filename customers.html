@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customers - DecaDhen: Dhen's Kitchen</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-start: #FFFEF2;
+      --bg-end: #FFF4E6;
+      --card: #F6E7C1;
+      --accent: #294C3B;
+      --highlight: #CF5C5C;
+      --text-dark: #2f2f2f;
+      --text-light: #ffffff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      --radius: 1.25rem;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(120deg, var(--bg-start), var(--bg-end));
+      color: var(--text-dark);
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: var(--accent);
+      height: 100vh;
+      padding: 2rem 1rem;
+      color: var(--text-light);
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      box-shadow: var(--shadow);
+    }
+    .sidebar .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+      color: var(--text-light);
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: background 0.3s;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .main-content {
+      margin-left: 240px;
+      width: calc(100% - 240px);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    header {
+      background-color: var(--accent);
+      color: var(--text-light);
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    .icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .icons i {
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .controls input[type="text"] {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .controls button {
+      background-color: var(--highlight);
+      color: var(--text-light);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .controls button:hover {
+      background-color: #a84141;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    thead {
+      background-color: var(--accent);
+      color: var(--text-light);
+    }
+    th, td {
+      padding: 1rem 1.2rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      cursor: default;
+    }
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+    th.sortable:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    .pagination {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .pagination button {
+      border: none;
+      background-color: var(--accent);
+      color: var(--text-light);
+      padding: 0.5rem 0.9rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .pagination button:disabled {
+      background-color: #999;
+      cursor: default;
+    }
+    .pagination button.active {
+      background-color: var(--highlight);
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">DecaDhen</div>
+    <nav>
+      <a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
+      <a href="view-orders.html"><i class="fas fa-receipt"></i> Orders</a>
+      <a href="menu-management.html"><i class="fas fa-utensils"></i> Menu</a>
+      <a href="order-management.html"><i class="fas fa-box"></i> Manage Orders</a>
+      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
+      <a href="customers.html" class="active"><i class="fas fa-users"></i> Customers</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <div class="icons">
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </header>
+
+    <h1>Customer Data</h1>
+
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by name..." />
+      <button id="exportBtn"><i class="fas fa-file-export"></i> Export CSV</button>
+    </div>
+
+    <table id="customerTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-key="name">Name <i class="fas fa-sort"></i></th>
+          <th class="sortable" data-key="email">Email <i class="fas fa-sort"></i></th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Registered Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Customer rows inserted here -->
+      </tbody>
+    </table>
+
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <script>
+    // Sample customers data
+    const customers = [
+      { name: "Rhy Estrella", email: "rhy.estrella@example.com", phone: "0917-123-4567", address: "123 Rizal St, Manila", registered: "2023-10-01" },
+      { name: "Caro Malinis", email: "caro.malinis@example.com", phone: "0918-234-5678", address: "45 Mabini Ave, Quezon City", registered: "2023-11-15" },
+      { name: "Angelika Sagun", email: "angelika.sagun@example.com", phone: "0920-345-6789", address: "789 Bonifacio Blvd, Pasig", registered: "2024-01-10" },
+      { name: "Lyra Cunanan", email: "lyra.cunanan@example.com", phone: "0932-456-7890", address: "56 Aurora Blvd, Mandaluyong", registered: "2024-03-20" },
+      // Add more sample data if you want to test pagination
+    ];
+
+    let filteredCustomers = [...customers];
+    let currentPage = 1;
+    const rowsPerPage = 5;
+    let currentSort = { key: null, asc: true };
+
+    const tableBody = document.querySelector("#customerTable tbody");
+    const searchInput = document.getElementById("searchInput");
+    const paginationDiv = document.getElementById("pagination");
+    const exportBtn = document.getElementById("exportBtn");
+    const headers = document.querySelectorAll("th.sortable");
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const pageCustomers = filteredCustomers.slice(start, end);
+
+      if (pageCustomers.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1rem;">No customers found.</td></tr>`;
+        paginationDiv.innerHTML = "";
+        return;
+      }
+
+      for (const c of pageCustomers) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${c.name}</td>
+          <td>${c.email}</td>
+          <td>${c.phone}</td>
+          <td>${c.address}</td>
+          <td>${c.registered}</td>
+        `;
+        tableBody.appendChild(tr);
+      }
+
+      renderPagination();
+    }
+
+    function renderPagination() {
+      paginationDiv.innerHTML = "";
+      const totalPages = Math.ceil(filteredCustomers.length / rowsPerPage);
+
+      if (totalPages <= 1) return;
+
+      // Previous button
+      const prevBtn = document.createElement("button");
+      prevBtn.textContent = "Prev";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTable();
+        }
+      };
+      paginationDiv.appendChild(prevBtn);
+
+      // Page number buttons
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        if (i === currentPage) btn.classList.add("active");
+        btn.onclick = () => {
+          currentPage = i;
+          renderTable();
+        };
+        paginationDiv.appendChild(btn);
+      }
+
+      // Next button
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = "Next";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderTable();
+        }
+      };
+      paginationDiv.appendChild(nextBtn);
+    }
+
+    // Search by name only
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      filteredCustomers = customers.filter(c => c.name.toLowerCase().includes(query));
+      currentPage = 1;
+      renderTable();
+    });
+
+    // Sorting functionality
+    headers.forEach(header => {
+      header.addEventListener("click", () => {
+        const key = header.dataset.key;
+        if (currentSort.key === key) {
+          currentSort.asc = !currentSort.asc;
+        } else {
+          currentSort.key = key;
+          currentSort.asc = true;
+        }
+        sortCustomers();
+        renderTable();
+        updateSortIcons();
+      });
+    });
+
+    function sortCustomers() {
+      filteredCustomers.sort((a, b) => {
+        const valA = a[currentSort.key].toLowerCase();
+        const valB = b[currentSort.key].toLowerCase();
+        if (valA < valB) return currentSort.asc ? -1 : 1;
+        if (valA > valB) return currentSort.asc ? 1 : -1;
+        return 0;
+      });
+    }
+
+    function updateSortIcons() {
+      headers.forEach(h => {
+        const icon = h.querySelector("i");
+        if (h.dataset.key === currentSort.key) {
+          icon.className = currentSort.asc ? "fas fa-sort-up" : "fas fa-sort-down";
+        } else {
+          icon.className = "fas fa-sort";
+        }
+      });
+    }
+
+    // Export CSV
+    exportBtn.addEventListener("click", () => {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += ["Name","Email","Phone","Address","Registered Date"].join(",") + "\r\n";
+      filteredCustomers.forEach(c => {
+        const row = [c.name, c.email, c.phone, c.address, c.registered];
+        // Escape commas and quotes in fields
+        const escapedRow = row.map(field => {
+          if (typeof field === 'string' && (field.includes(",") || field.includes('"'))) {
+            return `"${field.replace(/"/g, '""')}"`;
+          }
+          return field;
+        });
+        csvContent += escapedRow.join(",") + "\r\n";
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "customers.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Initial render
+    renderTable();
+    updateSortIcons();
+  </script>
+</body>
+</html>
