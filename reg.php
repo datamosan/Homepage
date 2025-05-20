@@ -2,10 +2,10 @@
 
 include 'connection.php';
 
-if (!isset($_POST['signUp'])) {
-    echo "<script>alert('DEBUG: signUp POST variable not set. Form was not submitted via sign up button.'); window.location.href='signup.php';</script>";
-    exit();
-}
+// if (!isset($_POST['signUp'])) {
+//     echo "<script>alert('DEBUG: signUp POST variable not set. Form was not submitted via sign up button.'); window.location.href='signup.php';</script>";
+//     exit();
+// }
 
 if(isset($_POST['signUp'])) {
     $fullName = $_POST['fullName'];
@@ -29,11 +29,11 @@ if(isset($_POST['signUp'])) {
     echo "<script>alert('Debug: $fullName, $hashedPassword, $email, $phone, $address');</script>";
 
     // Prepare and execute the stored procedure
-    $stmt = $conn->prepare("CALL CreateUser(?,?,?,?,?,?, @statusmsg)");
+    $stmt = $conn->prepare("CALL CreateUser(?,?,?,?,?, @statusmsg)");
     if (!$stmt) {
         die("Prepare failed: " . $conn->error);
     }
-    $stmt->bind_param("isssss", $userrole, $fullName, $hashedPassword, $email, $phone, $address);
+    $stmt->bind_param("sssss", $fullName, $hashedPassword, $email, $phone, $address);
     if (!$stmt->execute()) {
         die("Execute failed: " . $stmt->error);
     }
@@ -69,8 +69,10 @@ if(isset($_POST['login'])) {
     $stmt->execute();
     $stmt->bind_result($stored_hash);
     if ($stmt->fetch() && password_verify($password, $stored_hash)) {
-        echo "Login Successful";
-        header("Location: index.php");
+        echo "<script>
+            alert('Login successful! Welcome back to Dhen\\'s Kitchen.');
+            window.location.href = 'index.php';
+        </script>";
         exit();
     } else {
         echo "Invalid email or password\nError: " .$conn->error;

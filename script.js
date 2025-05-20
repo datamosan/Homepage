@@ -67,20 +67,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             
-            // Get form values
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            // // Get form values
+            // const email = document.getElementById('email').value;
+            // const password = document.getElementById('password').value;
             
-            // Validate form (simple validation)
-            if (!email || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-            ge
-            alert('Login successful! Welcome back to Dhen\'s Kitchen.');
-            window.location.href = 'index.php';
+            // // Validate form (simple validation)
+            // if (!email || !password) {
+            //     alert('Please fill in all fields');
+            //     return;
+            // }
+            // ge
+            // alert('Login successful! Welcome back to Dhen\'s Kitchen.');
+            // window.location.href = 'index.php';
         });
     }
 
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
         signupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             
             // Get form values
             const fullName = document.getElementById('fullName').value;
@@ -98,24 +98,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const confirmPassword = document.getElementById('confirmPassword').value;
             const terms = document.getElementById('terms').checked;
             
-            // Validate form (simple validation)
-            if (!fullName || !email || !password || !confirmPassword) {
-                alert('Please fill in all required fields');
-                return;
-            }
+        //     // Validate form (simple validation)
+        //     if (!fullName || !email || !password || !confirmPassword) {
+        //         alert('Please fill in all required fields');
+        //         return;
+        //     }
             
-            if (password !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
+        //     if (password !== confirmPassword) {
+        //         alert('Passwords do not match');
+        //         return;
+        //     }
             
-            if (!terms) {
-                alert('Please agree to the terms and conditions');
-                return;
-            }
+        //     if (!terms) {
+        //         alert('Please agree to the terms and conditions');
+        //         return;
+        //     }
 
-        // alert('Account created successfully! Please log in with your new credentials.');
-            window.location.href = 'login.php';
+        // // alert('Account created successfully! Please log in with your new credentials.');
+        //     window.location.href = 'login.php';
         });
     }
 

@@ -42,7 +42,7 @@
                     <input type="checkbox" id="remember" name="remember">
                     <label for="remember">Remember me</label>
                 </div>
-               <button type="button" name="login" class="auth-button">Login</button>
+               <button type="submit" name="login" class="auth-button">Login</button>
                 <div class="auth-links">
                     <a href="#" class="forgot-password">Forgot Password?</a>
                 </div>

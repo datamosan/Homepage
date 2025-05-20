@@ -39,7 +39,7 @@
                 <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
                 <input type="text" id="address" name="address" placeholder="Address" required>
                 <input type="email" id="email" name="email" placeholder="Email Address" required>
-                <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                <input type="tel" id="phone" name="phone" maxlength="10" placeholder="Phone Number" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
                 <div class="terms">
