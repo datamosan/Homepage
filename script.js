@@ -299,16 +299,308 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Menu item click to go to item detail page
-    const menuItems = document.querySelectorAll('.menu-item');
-    menuItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const itemId = this.getAttribute('data-id');
-            if (itemId) {
-                window.location.href = `item.html?id=${itemId}`;
-            }
+    // Dish Detail Modal
+    const modal = document.getElementById('dish-modal');
+    const closeBtn = document.querySelector('.dish-modal-close');
+    const closeButton = document.getElementById('dish-modal-close');
+    const orderButton = document.getElementById('dish-modal-order');
+
+    // Dish data
+    const dishData = {
+        'bicol-express': {
+            title: 'Bicol Express',
+            price: '₱750.00',
+            image: 'images/bicol-express.jpg',
+            description: 'A spicy Filipino dish made from pork cooked in coconut milk with shrimp paste, chili peppers, and other spices. This authentic Bicolano recipe brings the perfect balance of creaminess and heat that the region is known for.',
+            serving: '4-5 people',
+            spice: 'Medium-Hot',
+            prep: '45 minutes',
+            ingredients: [
+                'Pork belly', 'Coconut milk', 'Shrimp paste', 'Bird's eye chili', 
+                'Bell peppers', 'Onion', 'Garlic', 'Ginger', 'Salt', 'Pepper'
+            ]
+        },
+        'laing': {
+            title: 'Laing',
+            price: '₱650.00',
+            image: 'images/laing.jpg',
+            description: 'A creamy dish made from dried taro leaves cooked in coconut milk, with meat and chili. This traditional Bicolano delicacy has a rich, spicy flavor that comes from the perfect blend of coconut cream and chili peppers.',
+            serving: '4 people',
+            spice: 'Medium',
+            prep: '60 minutes',
+            ingredients: [
+                'Dried taro leaves', 'Coconut milk', 'Pork', 'Shrimp paste', 
+                'Chili peppers', 'Garlic', 'Onion', 'Ginger', 'Salt'
+            ]
+        },
+        'kinunot': {
+            title: 'Kinunot',
+            price: '₱850.00',
+            image: 'images/kinunot.jpg',
+            description: 'A traditional Bicolano dish made with shark meat or stingray cooked in coconut milk with malunggay leaves and chili peppers. The name comes from the Bicolano word "kinunot" which means "to tear apart" as the fish meat is shredded.',
+            serving: '3-4 people',
+            spice: 'Medium',
+            prep: '50 minutes',
+            ingredients: [
+                'Shark meat/Stingray', 'Coconut milk', 'Malunggay leaves', 
+                'Chili peppers', 'Ginger', 'Garlic', 'Onion', 'Lemongrass', 'Salt', 'Pepper'
+            ]
+        },
+        'tilmok': {
+            title: 'Tilmok',
+            price: '₱750.00',
+            image: 'images/tilmok.jpg',
+            description: 'A delicacy from Bicol made of crab meat cooked in coconut milk, wrapped in taro leaves and then steamed. This dish showcases the region\'s love for coconut milk and seafood in a unique presentation.',
+            serving: '4 people',
+            spice: 'Mild',
+            prep: '55 minutes',
+            ingredients: [
+                'Crab meat', 'Coconut milk', 'Taro leaves', 'Garlic', 
+                'Onion', 'Ginger', 'Chili', 'Salt', 'Pepper'
+            ]
+        },
+        'adobo': {
+            title: 'Pork Adobo',
+            price: '₱650.00',
+            image: 'images/adobo.jpg',
+            description: 'The unofficial national dish of the Philippines. Pork is marinated and simmered in a mixture of soy sauce, vinegar, garlic, bay leaves, and black peppercorns. The result is a savory, slightly tangy meat dish that's both comforting and flavorful.',
+            serving: '4-5 people',
+            spice: 'Mild',
+            prep: '60 minutes',
+            ingredients: [
+                'Pork belly', 'Soy sauce', 'Vinegar', 'Garlic', 
+                'Bay leaves', 'Black peppercorns', 'Sugar', 'Water', 'Cooking oil'
+            ]
+        },
+        'kare-kare': {
+            title: 'Kare-Kare',
+            price: '₱850.00',
+            image: 'images/kare-kare.jpg',
+            description: 'A Filipino stew with a thick, savory peanut sauce. It's traditionally made with oxtail, tripe, and vegetables such as eggplant, banana heart, and string beans. Served with a side of bagoong (shrimp paste) for an extra layer of flavor.',
+            serving: '5-6 people',
+            spice: 'Mild',
+            prep: '120 minutes',
+            ingredients: [
+                'Oxtail', 'Tripe', 'Eggplant', 'String beans', 'Banana heart', 
+                'Peanut butter', 'Ground rice', 'Annatto seeds', 'Garlic', 'Onion', 'Bagoong'
+            ]
+        },
+        'crispy-pata': {
+            title: 'Crispy Pata',
+            price: '₱950.00',
+            image: 'images/crispy-pata.jpg',
+            description: 'A famous Filipino dish of deep-fried pork leg, first simmered in spices until tender, then deep-fried until the skin becomes crispy. Served with a dipping sauce of soy sauce, vinegar, and chili.',
+            serving: '6-8 people',
+            spice: 'Mild',
+            prep: '150 minutes',
+            ingredients: [
+                'Whole pork leg', 'Bay leaves', 'Peppercorns', 'Star anise', 
+                'Garlic', 'Onion', 'Salt', 'Soy sauce', 'Vinegar', 'Cooking oil'
+            ]
+        },
+        'sinigang': {
+            title: 'Sinigang na Baboy',
+            price: '₱750.00',
+            image: 'images/sinigang.jpg',
+            description: 'A sour Filipino soup made with pork, vegetables, and tamarind as the souring agent. The dish perfectly balances sour and savory flavors, creating a comforting soup that's perfect for rainy days.',
+            serving: '5 people',
+            spice: 'Mild',
+            prep: '60 minutes',
+            ingredients: [
+                'Pork ribs', 'Tamarind', 'Radish', 'String beans', 'Eggplant', 
+                'Tomatoes', 'Onion', 'Fish sauce', 'Chili peppers', 'Kangkong leaves'
+            ]
+        },
+        'leche-flan': {
+            title: 'Leche Flan',
+            price: '₱350.00',
+            image: 'images/leche-flan.jpg',
+            description: 'A rich and creamy Filipino custard dessert made with egg yolks, condensed milk, and caramelized sugar. This smooth, silky dessert has a perfect balance of sweetness and a delightful caramel topping.',
+            serving: '6-8 people',
+            spice: 'None',
+            prep: '60 minutes',
+            ingredients: [
+                'Egg yolks', 'Condensed milk', 'Evaporated milk', 'Sugar', 'Vanilla extract', 'Lemon zest'
+            ]
+        },
+        'halo-halo': {
+            title: 'Halo-Halo',
+            price: '₱180.00',
+            image: 'images/halo-halo.jpg',
+            description: 'A popular Filipino dessert with layers of shaved ice, sweet beans, jellies, fruits, and ice cream. The name literally means "mix-mix" in Filipino, as you mix all the ingredients together before eating.',
+            serving: '1 person',
+            spice: 'None',
+            prep: '15 minutes',
+            ingredients: [
+                'Shaved ice', 'Ube ice cream', 'Sweetened beans', 'Nata de coco', 
+                'Kaong', 'Macapuno', 'Jackfruit', 'Leche flan', 'Evaporated milk'
+            ]
+        },
+        'chocolate-cake': {
+            title: 'Chocolate Cake',
+            price: '₱550.00',
+            image: 'images/chocolate-cake.jpg',
+            description: 'A rich, moist chocolate cake with smooth ganache frosting. Made with premium cocoa and high-quality chocolate for an intense flavor that chocolate lovers will adore.',
+            serving: '8-10 people',
+            spice: 'None',
+            prep: '90 minutes',
+            ingredients: [
+                'Flour', 'Sugar', 'Cocoa powder', 'Eggs', 'Butter', 
+                'Baking powder', 'Milk', 'Vanilla extract', 'Dark chocolate', 'Heavy cream'
+            ]
+        },
+        'red-velvet': {
+            title: 'Red Velvet Cake',
+            price: '₱650.00',
+            image: 'images/red-velvet.jpg',
+            description: 'A classic red velvet cake with cream cheese frosting. This elegant dessert features a subtle chocolate flavor with a distinctive red color, topped with rich, tangy cream cheese frosting.',
+            serving: '8-10 people',
+            spice: 'None',
+            prep: '90 minutes',
+            ingredients: [
+                'Flour', 'Sugar', 'Cocoa powder', 'Eggs', 'Butter', 
+                'Buttermilk', 'Vinegar', 'Red food coloring', 'Cream cheese', 'Vanilla extract'
+            ]
+        },
+        'calamansi-juice': {
+            title: 'Calamansi Juice',
+            price: '₱80.00',
+            image: 'images/calamansi-juice.jpg',
+            description: 'A refreshing Filipino citrus drink made from freshly squeezed calamansi limes and sweetened with honey or sugar. This tangy beverage is perfect for hot days.',
+            serving: '1 person',
+            spice: 'None',
+            prep: '10 minutes',
+            ingredients: [
+                'Calamansi limes', 'Honey/Sugar', 'Water', 'Ice'
+            ]
+        },
+        'sago-gulaman': {
+            title: 'Sago\'t Gulaman',
+            price: '₱90.00',
+            image: 'images/sago-gulaman.jpg',
+            description: 'A sweet Filipino drink with tapioca pearls (sago) and gelatin (gulaman) in brown sugar syrup. This popular refreshment has a delightful mix of textures and a sweet, caramel-like flavor.',
+            serving: '1 person',
+            spice: 'None',
+            prep: '20 minutes',
+            ingredients: [
+                'Tapioca pearls', 'Gelatin', 'Brown sugar', 'Vanilla extract', 'Water', 'Ice'
+            ]
+        },
+        'buko-juice': {
+            title: 'Buko Juice',
+            price: '₱100.00',
+            image: 'images/buko-juice.jpg',
+            description: 'Fresh coconut water served with strips of young coconut meat. This natural, hydrating beverage is lightly sweetened to enhance the coconut\'s natural flavor.',
+            serving: '1 person',
+            spice: 'None',
+            prep: '15 minutes',
+            ingredients: [
+                'Young coconut water', 'Young coconut meat', 'Sugar (optional)', 'Ice'
+            ]
+        },
+        'iced-tea': {
+            title: 'Iced Tea',
+            price: '₱70.00',
+            image: 'images/iced-tea.jpg',
+            description: 'Homemade sweet iced tea with a hint of lemon. This classic refreshment is brewed from premium tea leaves and perfectly balanced with just the right amount of sweetness.',
+            serving: '1 person',
+            spice: 'None',
+            prep: '15 minutes',
+            ingredients: [
+                'Black tea', 'Sugar', 'Lemon', 'Water', 'Ice'
+            ]
+        }
+    };
+
+    // Open modal when View Details button is clicked
+    const viewDetailsButtons = document.querySelectorAll('.item-button');
+    viewDetailsButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling to parent menu-item
+            const menuItem = this.closest('.menu-item');
+            const dishId = menuItem.getAttribute('data-id');
+            openDishModal(dishId);
         });
     });
+
+    // Function to open dish modal
+    function openDishModal(dishId) {
+        const dish = dishData[dishId];
+        if (dish) {
+            // Populate modal with dish data
+            document.getElementById('dish-modal-title').textContent = dish.title;
+            document.getElementById('dish-modal-price').textContent = dish.price;
+            document.getElementById('dish-modal-img').src = dish.image;
+            document.getElementById('dish-modal-img').alt = dish.title;
+            document.getElementById('dish-modal-description').textContent = dish.description;
+            document.getElementById('dish-modal-serving').textContent = dish.serving;
+            document.getElementById('dish-modal-spice').textContent = dish.spice;
+            document.getElementById('dish-modal-prep').textContent = dish.prep;
+
+            // Clear and populate ingredients list
+            const ingredientsList = document.getElementById('dish-modal-ingredients');
+            ingredientsList.innerHTML = '';
+            dish.ingredients.forEach(ingredient => {
+                const li = document.createElement('li');
+                li.textContent = ingredient;
+                ingredientsList.appendChild(li);
+            });
+
+            // Set up order button
+            orderButton.setAttribute('data-id', dishId);
+            orderButton.setAttribute('data-name', dish.title);
+            orderButton.setAttribute('data-price', dish.price.replace('₱', ''));
+
+            // Show modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+    }
+
+    // Close modal when X button is clicked
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeDishModal);
+    }
+
+    // Close modal when Close button is clicked
+    if (closeButton) {
+        closeButton.addEventListener('click', closeDishModal);
+    }
+
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeDishModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+            closeDishModal();
+        }
+    });
+
+    // Function to close dish modal
+    function closeDishModal() {
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+    }
+
+    // Add to order from modal
+    if (orderButton) {
+        orderButton.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const price = this.getAttribute('data-price');
+            
+            cart.addItem(id, name, price);
+            alert(`${name} added to your order!`);
+            closeDishModal();
+        });
+    }
 
     // Instagram grid hover effects
     const instagramItems = document.querySelectorAll('.instagram-item');
@@ -357,244 +649,6 @@ document.addEventListener('DOMContentLoaded', function() {
             paginationNumber.textContent = `${currentPage}/${totalPages}`;
             
             alert(`Loading page ${currentPage}...`);
-        }
-    }
-
-    // Custom Order Button
-    const customOrderButton = document.querySelector('.custom-order-button');
-    if (customOrderButton) {
-        customOrderButton.addEventListener('click', function() {
-            window.location.href = 'contact.html?subject=custom-order';
-        });
-    }
-
-    // Admin Dashboard Functionality
-    const adminSectionButtons = document.querySelectorAll('.admin-nav button');
-    if (adminSectionButtons.length > 0) {
-        adminSectionButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const section = this.getAttribute('data-section');
-                showAdminSection(section);
-            });
-        });
-
-        function showAdminSection(section) {
-            const sections = document.querySelectorAll('section[id$="Section"]');
-            sections.forEach(s => {
-                s.style.display = 'none';
-            });
-            
-            document.getElementById(section + 'Section').style.display = 'block';
-            
-            // Hide any open details panels
-            document.getElementById('details').style.display = 'none';
-            document.getElementById('paymentDetails').style.display = 'none';
-            document.getElementById('replyForm').style.display = 'none';
-        }
-    }
-
-    // Admin Order View
-    const viewOrderButtons = document.querySelectorAll('.admin-view-btn[data-type="order"]');
-    if (viewOrderButtons.length > 0) {
-        viewOrderButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const orderId = this.getAttribute('data-id');
-                viewOrder(orderId);
-            });
-        });
-
-        function viewOrder(orderId) {
-            const orderDetails = {
-                O001: { customer: 'Rhy Estrella', items: [{ name: 'Chocolate Cake', qty: 1 }] },
-                O002: { customer: 'Lyra Cunanan', items: [{ name: 'Strawberry Cake', qty: 2 }] }
-            };
-
-            const order = orderDetails[orderId];
-            let detailText = `<strong>Customer:</strong> ${order.customer}<br><strong>Items:</strong><br>`;
-            order.items.forEach(item => detailText += `• ${item.name} - ${item.qty}<br>`);
-            
-            document.getElementById('orderDetails').innerHTML = detailText;
-            document.getElementById('statusSelect').value = document.getElementById('status' + orderId).innerText;
-            document.getElementById('details').style.display = 'block';
-            
-            // Store current order ID for status update
-            document.getElementById('details').setAttribute('data-current-order', orderId);
-        }
-    }
-
-    // Admin Status Update
-    const saveStatusButton = document.querySelector('.admin-save-btn[data-action="update-status"]');
-    if (saveStatusButton) {
-        saveStatusButton.addEventListener('click', function() {
-            const orderId = document.getElementById('details').getAttribute('data-current-order');
-            const newStatus = document.getElementById('statusSelect').value;
-            
-            document.getElementById('status' + orderId).innerText = newStatus;
-            alert(`Order ${orderId} updated to ${newStatus}`);
-            document.getElementById('details').style.display = 'none';
-        });
-    }
-
-    // Admin Payment View
-    const viewPaymentButtons = document.querySelectorAll('.admin-view-btn[data-type="payment"]');
-    if (viewPaymentButtons.length > 0) {
-        viewPaymentButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const paymentId = this.getAttribute('data-id');
-                viewPayment(paymentId);
-            });
-        });
-
-        function viewPayment(paymentId) {
-            const payments = {
-                P001: { customer: 'Rhy Estrella', amount: '₱500', mode: 'Gcash', proof: 'gcash_proof.jpg', sender: 'Rhy Estrella', bank: 'None' },
-                P002: { customer: 'Lyra Cunanan', amount: '₱1200', mode: 'Bank Transfer', proof: 'bank_receipt.jpg', sender: 'Lyra Cunanan', bank: 'BDO' }
-            };
-
-            const payment = payments[paymentId];
-            let info = `<strong>Customer:</strong> ${payment.customer}<br>
-                        <strong>Amount:</strong> ${payment.amount}<br>
-                        <strong>Mode:</strong> ${payment.mode}<br>
-                        <strong>Sender:</strong> ${payment.sender}<br>
-                        <strong>Bank:</strong> ${payment.bank}<br>
-                        <strong>Proof of Payment:</strong> <a href="${payment.proof}" target="_blank">View Proof</a>`;
-            
-            document.getElementById('paymentInfo').innerHTML = info;
-            document.getElementById('paymentStatus').value = 'Pending';
-            document.getElementById('paymentDetails').style.display = 'block';
-            
-            // Store current payment ID for status update
-            document.getElementById('paymentDetails').setAttribute('data-current-payment', paymentId);
-        }
-    }
-
-    // Admin Payment Status Update
-    const savePaymentStatusButton = document.querySelector('.admin-save-btn[data-action="update-payment"]');
-    if (savePaymentStatusButton) {
-        savePaymentStatusButton.addEventListener('click', function() {
-            const paymentId = document.getElementById('paymentDetails').getAttribute('data-current-payment');
-            const status = document.getElementById('paymentStatus').value;
-            
-            alert(`Payment ${paymentId} marked as ${status}`);
-            document.getElementById('paymentDetails').style.display = 'none';
-        });
-    }
-
-    // Admin Message Reply
-    const replyMessageButtons = document.querySelectorAll('.admin-reply-btn');
-    if (replyMessageButtons.length > 0) {
-        replyMessageButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const customer = this.getAttribute('data-customer');
-                replyMessage(customer);
-            });
-        });
-
-        function replyMessage(customer) {
-            document.getElementById('replyForm').style.display = 'block';
-            document.getElementById('replyTo').innerText = customer;
-            document.getElementById('replyMessageBox').value = '';
-        }
-    }
-
-    // Admin Send Reply
-    const sendReplyButton = document.querySelector('.admin-save-btn[data-action="send-reply"]');
-    if (sendReplyButton) {
-        sendReplyButton.addEventListener('click', function() {
-            const customer = document.getElementById('replyTo').innerText;
-            const message = document.getElementById('replyMessageBox').value;
-            
-            if (message.trim() === '') {
-                alert('Please type a message before sending.');
-                return;
-            }
-            
-            alert(`Reply sent to ${customer}: ${message}`);
-            document.getElementById('replyForm').style.display = 'none';
-        });
-    }
-
-    // Admin Logout
-    const logoutButton = document.querySelector('.admin-logout-btn');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', function() {
-            alert('Logging out...');
-            window.location.href = 'login.html';
-        });
-    }
-
-    // Load item details on item page
-    const itemDetailContainer = document.querySelector('.item-detail-container');
-    if (itemDetailContainer) {
-        // Get item ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const itemId = urlParams.get('id');
-        
-        if (itemId) {
-            loadItemDetails(itemId);
-        }
-    }
-
-    function loadItemDetails(itemId) {
-        // In a real application, you would fetch item details from a server
-        // For demonstration, we'll use dummy data
-        const items = {
-            'chocolate-cake': {
-                name: 'Chocolate Cake',
-                price: '₱550.00',
-                description: 'Rich chocolate layers with smooth ganache frosting. Perfect for birthdays and special occasions.',
-                image: 'images/chocolate-cake.jpg',
-                specs: {
-                    'Serving Size': '6-8 pax',
-                    'Size': '8 inches',
-                    'Allergens': 'Contains dairy, eggs, wheat',
-                    'Storage': 'Refrigerate up to 3 days',
-                    'Lead Time': '24-48 hours'
-                }
-            },
-            'red-velvet': {
-                name: 'Red Velvet Cake',
-                price: '₱650.00',
-                description: 'Classic red velvet cake with cream cheese frosting. A perfect blend of cocoa and vanilla flavors.',
-                image: 'images/red-velvet.jpg',
-                specs: {
-                    'Serving Size': '10-12 pax',
-                    'Size': '10 inches',
-                    'Allergens': 'Contains dairy, eggs, wheat',
-                    'Storage': 'Refrigerate up to 3 days',
-                    'Lead Time': '24-48 hours'
-                }
-            },
-            'bicol-express': {
-                name: 'Bicol Express',
-                price: '₱750.00',
-                description: 'Spicy Filipino dish with pork, coconut milk, and chili peppers. A Bicolano specialty.',
-                image: 'images/bicol-express.jpg',
-                specs: {
-                    'Serving Size': 'Party Tray (10-12 pax)',
-                    'Spice Level': 'Medium to Hot',
-                    'Allergens': 'Contains coconut, may contain shrimp paste',
-                    'Storage': 'Refrigerate up to 2 days',
-                    'Reheating': 'Microwave or stovetop'
-                }
-            }
-        };
-
-        const item = items[itemId];
-        if (item) {
-            document.querySelector('.item-detail-title').textContent = item.name;
-            document.querySelector('.item-detail-price').textContent = item.price;
-            document.querySelector('.item-detail-description').textContent = item.description;
-            document.querySelector('.item-detail-image img').src = item.image;
-            
-            const specsList = document.querySelector('.item-detail-specs ul');
-            specsList.innerHTML = '';
-            
-            for (const [key, value] of Object.entries(item.specs)) {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${key}</span><span>${value}</span>`;
-                specsList.appendChild(li);
-            }
         }
     }
 

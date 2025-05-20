@@ -292,8 +292,8 @@
             <div class="footer-social">
                 <h3>Follow Us</h3>
                 <div class="social-icons">
-                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="https://web.facebook.com/dhenskitchen?mibextid=wwXIfr&rdid=4NGrYasRkC4yQ3iE&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F1BdBoZHYRb%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/dhenskitchen/?igsh=azgxNndtd2E0ZHN1#" class="social-icon"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
                 </div>
                 <div class="footer-links">
@@ -301,36 +301,51 @@
                 </div>
             </div>
         </div>
-        <div class="footer-nav">
-            <div class="footer-menu">
-                <a href="menu.html">
-                    <div class="menu-icon"></div>
-                    <div class="menu-icon"></div>
-                    <div class="menu-icon"></div>
-                    <span>Menu</span>
-                </a>
-            </div>
-            <div class="footer-home">
-                <a href="index.html">
-                    <div class="home-icon"></div>
-                    <div class="home-icon"></div>
-                    <div class="home-icon"></div>
-                    <span>Home</span>
-                </a>
-            </div>
-            <div class="footer-account">
-                <a href="auth.html">
-                    <div class="account-icon"></div>
-                    <div class="account-icon"></div>
-                    <div class="account-icon"></div>
-                    <span>Account</span>
-                </a>
-            </div>
-        </div>
-        <div class="copyright">
-            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
-        </div>
     </footer>
+
+    <!-- Dish Detail Modal -->
+    <div id="dish-modal" class="dish-modal">
+        <div class="dish-modal-content">
+            <span class="dish-modal-close">&times;</span>
+            <div class="dish-modal-header">
+                <h2 id="dish-modal-title"></h2>
+                <p id="dish-modal-price" class="dish-modal-price"></p>
+            </div>
+            <div class="dish-modal-body">
+                <div class="dish-modal-image">
+                    <img id="dish-modal-img" src="/placeholder.svg" alt="Dish Image">
+                </div>
+                <div class="dish-modal-details">
+                    <div class="dish-modal-description">
+                        <h3>Description</h3>
+                        <p id="dish-modal-description"></p>
+                    </div>
+                    <div class="dish-modal-info">
+                        <div class="dish-info-item">
+                            <i class="fas fa-users"></i>
+                            <span id="dish-modal-serving"></span>
+                        </div>
+                        <div class="dish-info-item">
+                            <i class="fas fa-fire"></i>
+                            <span id="dish-modal-spice"></span>
+                        </div>
+                        <div class="dish-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="dish-modal-prep"></span>
+                        </div>
+                    </div>
+                    <div class="dish-modal-ingredients">
+                        <h3>Ingredients</h3>
+                        <ul id="dish-modal-ingredients"></ul>
+                    </div>
+                    <div class="dish-modal-actions">
+                        <button id="dish-modal-order" class="dish-modal-button order-button">Add to Order</button>
+                        <button id="dish-modal-close" class="dish-modal-button close-button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

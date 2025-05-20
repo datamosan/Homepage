@@ -22,7 +22,6 @@ body {
     background-color: var(--white);
     color: var(--teal);
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
 a {
@@ -69,28 +68,20 @@ header {
     box-shadow: var(--box-shadow);
 }
 
-@keyframes moveText {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
 .page-title {
     position: absolute;
     top: 0;
     left: 10px;
-    width: 100vw;
     color: var(--white);
     padding: 5px;
-    font-size: 16px;
+    font-size: 18px;
     z-index: 10;
-    animation: moveText 20s linear infinite
 }
 
 .header-bar {
     height: 40px;
     background-color: var(--teal);
     width: 100%;
-    overflow:hidden
 }
 
 .main-nav {
@@ -104,13 +95,14 @@ header {
 .nav-links {
     display: flex;
     gap: 20px;
-    ;
 }
 
 .nav-item {
     color: var(--teal);
     font-weight: bold;
-    padding: 5px 10px;
+    padding: 15px 10px;
+    padding-left: 40px;
+    padding-right: 40px;
     border-bottom: 2px solid var(--teal);
     transition: var(--transition);
 }
@@ -1756,6 +1748,193 @@ footer {
     border-radius: 20px;
     display: inline-block;
     font-weight: bold;
+}
+
+/* Dish Modal Styles */
+.dish-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+}
+
+.dish-modal-content {
+    position: relative;
+    background-color: var(--white);
+    margin: 5% auto;
+    width: 90%;
+    max-width: 1000px;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    animation: slideIn 0.4s;
+}
+
+.dish-modal-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    color: var(--dark-gray);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: var(--transition);
+}
+
+.dish-modal-close:hover {
+    color: var(--coral);
+}
+
+.dish-modal-header {
+    padding: 20px 30px;
+    border-bottom: 2px solid var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dish-modal-header h2 {
+    color: var(--teal);
+    font-size: 1.8rem;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
+
+.dish-modal-price {
+    color: var(--coral);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.dish-modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+@media (min-width: 768px) {
+    .dish-modal-body {
+        flex-direction: row;
+    }
+}
+
+.dish-modal-image {
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+    .dish-modal-image {
+        margin-bottom: 0;
+        margin-right: 30px;
+    }
+}
+
+.dish-modal-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.dish-modal-details {
+    flex: 1.5;
+}
+
+.dish-modal-description h3 {
+    color: var(--teal);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.dish-modal-description p {
+    color: var(--dark-gray);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.dish-modal-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.dish-info-item {
+    display: flex;
+    align-items: center;
+    background-color: var(--light-gray);
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+.dish-info-item i {
+    margin-right: 8px;
+    color: var(--coral);
+}
+
+.dish-modal-ingredients h3 {
+    color: var(--teal);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.dish-modal-ingredients ul {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.dish-modal-ingredients li {
+    background-color: var(--light-gray);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--dark-gray);
+}
+
+.dish-modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.dish-modal-button {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.order-button {
+    background-color: var(--coral);
+    color: var(--white);
+}
+
+.close-button {
+    background-color: var(--light-gray);
+    color: var(--teal);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 /* Responsive Styles */
