@@ -1,0 +1,152 @@
+<?php
+session_start();
+include("connection.php");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhen's Kitchen - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-bar">
+            <div class="page-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="index.html" class="nav-item active">Home</a>
+                <a href="about.html" class="nav-item">About Us</a>
+                <a href="menu.html" class="nav-item">Menu</a>
+                <a href="order.html" class="nav-item">Order Now</a>
+            </div>
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.html" class="nav-item">FAQs</a>
+                <a href="contact.html" class="nav-item">Contact Us</a>
+                <a href="auth.html" class="nav-item">Login/Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Dhen's Kitchen</h1>
+            <h2 class="hero-subtitle">Authentic Filipino Cuisine</h2>
+            <p>Experience the rich flavors of Filipino cooking with our homemade specialties.</p>
+            <a href="order.html" class="cta-button">Order Now</a>
+        </div>
+    </section>
+
+    <!-- Announcement Section -->
+    <section class="announcement">
+        <div class="announcement-content">
+            <h2>Special Offers!</h2>
+            <a href="menu.html" class="announcement-button">View Special Menu</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-box">
+            <div class="feature-content">
+                <h2 class="feature-title">Our Specialties</h2>
+                <div class="feature-text">
+                    <p>At Dhen's Kitchen, we take pride in our authentic Filipino recipes passed down through generations. Each dish is prepared with love and the finest ingredients.</p>
+                    <p>From our famous Bicol Express to our mouthwatering desserts, we bring the taste of the Philippines to your table.</p>
+                    <a href="menu.html" class="feature-button">Explore Our Menu</a>
+                </div>
+            </div>
+            <div class="feature-image">
+                <img src="images/specialty.jpg" alt="Dhen's Kitchen Specialty Dish">
+            </div>
+        </div>
+    </section>
+
+    <section class="instagram-grid">
+        <h2 class="section-title">Popular Dishes</h2>
+        <behold-widget feed-id="zD9pzYpJzJUOEjav3w8w"></behold-widget>
+        <script>
+        (() => {
+            const d=document,s=d.createElement("script");s.type="module";
+            s.src="https://w.behold.so/widget.js";d.head.append(s);
+        })();
+        </script>
+          </a>
+        <div class="instagram-follow">
+            <a href="https://instagram.com/dhenskitchen" class="instagram-follow-button" target="_blank">
+                <i class="fab fa-instagram"></i> Follow us on Instagram
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-hours">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 10:00 AM - 9:00 PM</p>
+                <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
+                <p>Holidays: 10:00 AM - 8:00 PM</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/dhenskitchen" class="social-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/dhenskitchen" class="social-icon" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                </div>
+                <div class="footer-links">
+                    <p><a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <div class="footer-menu">
+                <a href="menu.html">
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <span>Menu</span>
+                </a>
+            </div>
+            <div class="footer-home">
+                <a href="index.html">
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <span>Home</span>
+                </a>
+            </div>
+            <div class="footer-account">
+                <a href="auth.html">
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <span>Account</span>
+                </a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

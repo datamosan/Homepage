@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Dhen's Kitchen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-bar">
+            <div class="page-title">Login</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="index.php" class="nav-item">Home</a>
+                <a href="about.html" class="nav-item">About Us</a>
+                <a href="menu.html" class="nav-item">Menu</a>
+                <a href="order.html" class="nav-item">Order Now</a>
+            </div>
+            <a href="index.php" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.html" class="nav-item">FAQs</a>
+                <a href="contact.html" class="nav-item">Contact Us</a>
+                <a href="auth.html" class="nav-item active">Login/Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login Main -->
+    <div class="auth-main">
+        <h2 class="auth-subtitle">Login to Your Account</h2>
+        <div class="auth-form-container">
+            <form id="loginForm" class="auth-form" action="reg.php" method="post">
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+               <button type="button" name="login" class="auth-button">Login</button>
+                <div class="auth-links">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+            </form>
+            <div class="auth-redirect">
+                <p>Don't have an account? <a href="signup.php">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="footer-hours">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 10:00 AM - 9:00 PM</p>
+                <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
+                <p>Holidays: 10:00 AM - 8:00 PM</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-links">
+                    <p><a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <div class="footer-menu">
+                <a href="menu.html">
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <div class="menu-icon"></div>
+                    <span>Menu</span>
+                </a>
+            </div>
+            <div class="footer-home">
+                <a href="index.php">
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <div class="home-icon"></div>
+                    <span>Home</span>
+                </a>
+            </div>
+            <div class="footer-account">
+                <a href="auth.html">
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <div class="account-icon"></div>
+                    <span>Account</span>
+                </a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

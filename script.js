@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const homeIcons = document.querySelectorAll('.footer-home');
     homeIcons.forEach(icon => {
         icon.addEventListener('click', function() {
-            window.location.href = 'index.html';
+            window.location.href = 'index.php';
         });
     });
 
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             ge
             alert('Login successful! Welcome back to Dhen\'s Kitchen.');
-            window.location.href = 'index.html';
+            window.location.href = 'index.php';
         });
     }
 
@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            alert('Account created successfully! Please log in with your new credentials.');
-            window.location.href = 'login.html';
+        // alert('Account created successfully! Please log in with your new credentials.');
+            window.location.href = 'login.php';
         });
     }
 
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoutButton) {
         logoutButton.addEventListener('click', function() {
             alert('Logging out...');
-            window.location.href = 'login.html';
+            window.location.href = 'login.php';
         });
     }
 
