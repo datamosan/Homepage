@@ -6,6 +6,242 @@
     <title>Order Now - Dhen's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Additional CSS for Cart Functionality */
+        .cart-section {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        .cart-title {
+            color: var(--teal);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 10px;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+            min-height: 50px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: var(--dark-gray);
+            font-style: italic;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light-gray);
+            gap: 10px;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            color: var(--teal);
+        }
+
+        .cart-item-price {
+            text-align: right;
+            color: var(--coral);
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-item-quantity input {
+            width: 40px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            margin: 0 5px;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-remove {
+            text-align: center;
+        }
+
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: var(--teal);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .remove-item-btn:hover {
+            background-color: var(--light-gray);
+            color: var(--coral);
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--teal);
+            border-top: 2px solid var(--light-gray);
+            padding-top: 15px;
+        }
+
+        #cart-total-amount {
+            color: var(--coral);
+        }
+
+        .checkout-button {
+            background-color: var(--coral);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: var(--box-shadow);
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .checkout-button:hover {
+            background-color: var(--teal);
+            transform: translateY(-3px);
+        }
+
+        .checkout-button:disabled {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Quantity buttons */
+        .quantity-btn {
+            background: none;
+            border: 1px solid var(--light-gray);
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--teal);
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background-color: var(--light-gray);
+            color: var(--coral);
+        }
+
+        /* Product card enhancements */
+        .product-card {
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .add-to-cart {
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--coral);
+            color: var(--white);
+        }
+
+        /* Cart animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cart-item {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cart-item {
+                grid-template-columns: 2fr 1fr 1fr 0.5fr;
+                font-size: 0.9rem;
+            }
+
+            .cart-item-quantity input {
+                width: 30px;
+                height: 25px;
+            }
+
+            .quantity-btn {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-item {
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "name name"
+                    "quantity price"
+                    "remove remove";
+                row-gap: 8px;
+                padding: 15px 0;
+            }
+
+            .cart-item-name {
+                grid-area: name;
+            }
+
+            .cart-item-quantity {
+                grid-area: quantity;
+                justify-content: flex-start;
+            }
+
+            .cart-item-price {
+                grid-area: price;
+            }
+
+            .cart-item-remove {
+                grid-area: remove;
+                text-align: center;
+                margin-top: 5px;
+            }
+
+            .remove-item-btn {
+                margin: 0 auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -116,7 +352,7 @@
             <div class="cart-total">
                 Total: <span id="cart-total-amount">₱0.00</span>
             </div>
-            <button id="checkout-button" class="checkout-button">Proceed to Checkout</button>
+            <button id="checkout-button" class="checkout-button" disabled>Proceed to Checkout</button>
         </div>
 
         <!-- Custom Order Section -->
@@ -143,7 +379,7 @@
                 <p>Saturday - Sunday: 9:00 AM - 10:00 PM</p>
                 <p>Holidays: 10:00 AM - 8:00 PM</p>
             </div>
-                     <div class="footer-social">
+            <div class="footer-social">
                 <h3>Follow Us</h3>
                 <div class="social-icons">
                     <a href="https://web.facebook.com/dhenskitchen?mibextid=wwXIfr&rdid=4NGrYasRkC4yQ3iE&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F1BdBoZHYRb%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -155,8 +391,147 @@
                 </div>
             </div>
         </div>
+    </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let cart = [];
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalAmount = document.getElementById('cart-total-amount');
+            const checkoutButton = document.getElementById('checkout-button');
 
-    <script src="script.js"></script>
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    const sizeSelect = document.querySelector(`select[data-id="${id}"]`);
+                    const size = sizeSelect ? sizeSelect.value : 'regular';
+                    
+                    const existingItemIndex = cart.findIndex(item => item.id === id && item.size === size);
+                    
+                    if (existingItemIndex > -1) {
+                        cart[existingItemIndex].quantity += 1;
+                    } else {
+                        cart.push({
+                            id: id,
+                            name: name,
+                            price: price,
+                            size: size,
+                            quantity: 1
+                        });
+                    }
+                    
+                    updateCartDisplay();
+                });
+            });
+            
+            function updateCartDisplay() {
+                if (cart.length === 0) {
+                    cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+                    checkoutButton.disabled = true;
+                } else {
+                    let cartHTML = '';
+                    let total = 0;
+                    
+                    cart.forEach((item, index) => {
+                        const itemTotal = item.price * item.quantity;
+                        total += itemTotal;
+                        
+                        let sizeDisplay = '';
+                        if (item.size === 'small' || item.size === 'medium' || item.size === 'large') {
+                            sizeDisplay = ` (${item.size.charAt(0).toUpperCase() + item.size.slice(1)})`;
+                        } else if (item.size === '8-inch' || item.size === '10-inch' || item.size === '12-inch') {
+                            sizeDisplay = ` (${item.size})`;
+                        }
+                        
+                        cartHTML += `
+                            <div class="cart-item" data-index="${index}">
+                                <div class="cart-item-name">${item.name}${sizeDisplay}</div>
+                                <div class="cart-item-quantity">
+                                    <button class="quantity-btn decrease-btn" data-index="${index}">-</button>
+                                    <input type="number" min="1" value="${item.quantity}" class="quantity-input" data-index="${index}">
+                                    <button class="quantity-btn increase-btn" data-index="${index}">+</button>
+                                </div>
+                                <div class="cart-item-price">₱${itemTotal.toFixed(2)}</div>
+                                <div class="cart-item-remove">
+                                    <button class="remove-item-btn" data-index="${index}" title="Remove item">
+                                        <i class="fas fa-hand-pointer"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    cartItems.innerHTML = cartHTML;
+                    cartTotalAmount.textContent = `₱${total.toFixed(2)}`;
+                    checkoutButton.disabled = false;
+                    
+                    addQuantityEventListeners();
+                }
+            }
+            
+            function addQuantityEventListeners() {
+                const decreaseButtons = document.querySelectorAll('.decrease-btn');
+                decreaseButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity -= 1;
+                            updateCartDisplay();
+                        }
+                    });
+                });
+                
+                const increaseButtons = document.querySelectorAll('.increase-btn');
+                increaseButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        cart[index].quantity += 1;
+                        updateCartDisplay();
+                    });
+                });
+                
+                const quantityInputs = document.querySelectorAll('.quantity-input');
+                quantityInputs.forEach(input => {
+                    input.addEventListener('change', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const newQuantity = parseInt(this.value);
+                        
+                        if (newQuantity > 0) {
+                            cart[index].quantity = newQuantity;
+                        } else {
+                            this.value = 1;
+                            cart[index].quantity = 1;
+                        }
+                        
+                        updateCartDisplay();
+                    });
+                    
+                    input.addEventListener('wheel', function(e) {
+                        e.preventDefault();
+                    });
+                });
+                
+                const removeButtons = document.querySelectorAll('.remove-item-btn');
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        cart.splice(index, 1);
+                        updateCartDisplay();
+                    });
+                });
+            }
+            
+            checkoutButton.addEventListener('click', function() {
+                if (cart.length > 0) {
+                    alert('Proceeding to checkout with ' + cart.length + ' items. Total: ' + cartTotalAmount.textContent);
+                }
+            });
+            
+            updateCartDisplay();
+        });
+    </script>
 </body>
 </html>
