@@ -1,4 +1,39 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Menu Category Navigation - Show/Hide Sections
+    const categoryLinks = document.querySelectorAll('.category-nav a');
+    const menuSections = document.querySelectorAll('.menu-section');
+    
+    // Function to show only the selected category
+    function showCategory(categoryId) {
+        // Hide all menu sections
+        menuSections.forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Show the selected section
+        const selectedSection = document.getElementById(categoryId);
+        if (selectedSection) {
+            selectedSection.classList.add('active');
+        }
+        
+        // Update active class on category links
+        categoryLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-category') === categoryId) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    // Add click event listeners to category links
+    categoryLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const categoryId = this.getAttribute('data-category');
+            showCategory(categoryId);
+        });
+    });
+
     // Navigation Menu Toggle
     const menuIcons = document.querySelectorAll('.footer-menu');
     menuIcons.forEach(icon => {
@@ -57,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-
             alert('Thank you for your message! We will get back to you soon.');
             contactForm.reset();
         });
@@ -78,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Please fill in all fields');
                 return;
             }
-            ge
+            
             alert('Login successful! Welcome back to Dhen\'s Kitchen.');
             window.location.href = 'index.html';
         });
@@ -274,31 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Menu category navigation
-    const categoryLinks = document.querySelectorAll('.category-nav a');
-    categoryLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove active class from all links
-            categoryLinks.forEach(l => l.classList.remove('active'));
-            
-            // Add active class to clicked link
-            this.classList.add('active');
-            
-            // Scroll to the corresponding section
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-            
-            if (targetSection) {
-                window.scrollTo({
-                    top: targetSection.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
     // Dish Detail Modal
     const modal = document.getElementById('dish-modal');
     const closeBtn = document.querySelector('.dish-modal-close');
@@ -316,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
             spice: 'Medium-Hot',
             prep: '45 minutes',
             ingredients: [
-                'Pork belly', 'Coconut milk', 'Shrimp paste', 'Bird's eye chili', 
+                'Pork belly', 'Coconut milk', 'Shrimp paste', 'Birds eye chili', 
                 'Bell peppers', 'Onion', 'Garlic', 'Ginger', 'Salt', 'Pepper'
             ]
         },
@@ -363,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Pork Adobo',
             price: '₱650.00',
             image: 'images/adobo.jpg',
-            description: 'The unofficial national dish of the Philippines. Pork is marinated and simmered in a mixture of soy sauce, vinegar, garlic, bay leaves, and black peppercorns. The result is a savory, slightly tangy meat dish that's both comforting and flavorful.',
+            description: 'The unofficial national dish of the Philippines. Pork is marinated and simmered in a mixture of soy sauce, vinegar, garlic, bay leaves, and black peppercorns. The result is a savory, slightly tangy meat dish thats both comforting and flavorful.',
             serving: '4-5 people',
             spice: 'Mild',
             prep: '60 minutes',
@@ -376,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Kare-Kare',
             price: '₱850.00',
             image: 'images/kare-kare.jpg',
-            description: 'A Filipino stew with a thick, savory peanut sauce. It's traditionally made with oxtail, tripe, and vegetables such as eggplant, banana heart, and string beans. Served with a side of bagoong (shrimp paste) for an extra layer of flavor.',
+            description: 'A Filipino stew with a thick, savory peanut sauce. Its traditionally made with oxtail, tripe, and vegetables such as eggplant, banana heart, and string beans. Served with a side of bagoong (shrimp paste) for an extra layer of flavor.',
             serving: '5-6 people',
             spice: 'Mild',
             prep: '120 minutes',
@@ -402,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Sinigang na Baboy',
             price: '₱750.00',
             image: 'images/sinigang.jpg',
-            description: 'A sour Filipino soup made with pork, vegetables, and tamarind as the souring agent. The dish perfectly balances sour and savory flavors, creating a comforting soup that's perfect for rainy days.',
+            description: 'A sour Filipino soup made with pork, vegetables, and tamarind as the souring agent. The dish perfectly balances sour and savory flavors, creating a comforting soup thats perfect for rainy days.',
             serving: '5 people',
             spice: 'Mild',
             prep: '60 minutes',
@@ -523,6 +532,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Menu item click also opens modal
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const dishId = this.getAttribute('data-id');
+            openDishModal(dishId);
+        });
+    });
+
     // Function to open dish modal
     function openDishModal(dishId) {
         const dish = dishData[dishId];
@@ -602,24 +620,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Instagram grid hover effects
-    const instagramItems = document.querySelectorAll('.instagram-item');
-    instagramItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            const caption = this.querySelector('.instagram-caption');
-            if (caption) {
-                caption.style.transform = 'translateY(0)';
-            }
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            const caption = this.querySelector('.instagram-caption');
-            if (caption) {
-                caption.style.transform = 'translateY(100%)';
-            }
-        });
-    });
-
     // Pagination functionality
     const paginationPrev = document.querySelector('.page-prev');
     const paginationNext = document.querySelector('.page-next');
@@ -652,32 +652,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Initialize any active FAQ items
-    if (faqItems.length > 0) {
-        // Activate the first FAQ item by default
-        faqItems[0].classList.add('active');
-        faqItems[0].querySelector('.faq-answer').style.display = 'block';
-    }
-
-    // Check if URL has a subject parameter for contact form
-    if (contactForm) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const subject = urlParams.get('subject');
-        
-        if (subject && subject === 'custom-order') {
-            const subjectSelect = document.getElementById('subject');
-            if (subjectSelect) {
-                // Find the option for custom order or catering
-                for (let i = 0; i < subjectSelect.options.length; i++) {
-                    if (subjectSelect.options[i].value === 'catering') {
-                        subjectSelect.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
-            
-            // Scroll to the form
-            contactForm.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
+    // Initialize the menu to show the first category by default
+    showCategory('bicol');
 });
