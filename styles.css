@@ -62,10 +62,18 @@ ul, ol {
     border-bottom: 3px solid !important;
 }
 
-/* Header Styles */
 header {
-    position: relative;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
     box-shadow: var(--box-shadow);
+    z-index: 1000; 
+    background-color: var(--white); 
+}
+
+body {
+    padding-top: 140px; 
 }
 
 .page-title {
@@ -1939,6 +1947,11 @@ footer {
 }
 
 @media (max-width: 768px) {
+    /* Adjust body padding for smaller screens */
+    body {
+        padding-top: 120px; /* Smaller padding for mobile */
+    }
+
     .nav-links {
         display: none;
     }
@@ -1973,6 +1986,11 @@ footer {
 }
 
 @media (max-width: 480px) {
+    /* Further adjust body padding for very small screens */
+    body {
+        padding-top: 100px; /* Even smaller padding for very small screens */
+    }
+
     .footer-content {
         flex-direction: column;
         text-align: center;
