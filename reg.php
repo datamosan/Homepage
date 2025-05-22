@@ -2,11 +2,6 @@
 
 include 'connection.php';
 
-// if (!isset($_POST['signUp'])) {
-//     echo "<script>alert('DEBUG: signUp POST variable not set. Form was not submitted via sign up button.'); window.location.href='signup.php';</script>";
-//     exit();
-// }
-
 if(isset($_POST['signUp'])) {
     $fullName = $_POST['fullName'];
     $userrole = 2; // Assuming user role is set to 2 for regular users
