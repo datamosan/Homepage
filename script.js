@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', function() {
             const itemId = this.getAttribute('data-id');
             if (itemId) {
-                window.location.href = `item.html?id=${itemId}`;
+                window.location.href = `item.php?id=${itemId}`;
             }
         });
     });

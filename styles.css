@@ -726,7 +726,7 @@ footer {
 
 .menu-section {
     margin-bottom: 60px;
-    display: none; /* Hide all menu sections by default */
+    /* display: none; Hide all menu sections by default */
 }
 
 .menu-section.active {
