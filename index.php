@@ -21,8 +21,8 @@ include("connection.php");
         <nav class="main-nav">
             <div class="nav-links">
                 <a href="about.html" class="nav-item active">About Us</a>
-                <a href="menu.html" class="nav-item">Menu</a>
-                <a href="order.html" class="nav-item">Order Now</a>
+                <a href="menu.php" class="nav-item">Menu</a>
+                <a href="order.php" class="nav-item">Order Now</a>
             </div>
             <a href="index.php" class="logo-container">
                 <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">

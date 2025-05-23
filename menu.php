@@ -21,7 +21,7 @@
             <div class="nav-links">
                 <a href="about.html" class="nav-item active">About Us</a>
                 <a href="menu.php" class="nav-item">Menu</a>
-                <a href="order.html" class="nav-item">Order Now</a>
+                <a href="order.php" class="nav-item">Order Now</a>
             </div>
             <a href="index.php" class="logo-container">
                 <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
@@ -88,47 +88,6 @@
             echo '<p>No categories found.</p>';
         }
         ?>
-
-        <div class= container>
-            <div class="container my-4" id="cont">
-                <div class="row jumbotron">
-                <?php
-                if (isset($_GET['ProductID'])) {
-                    $product_id = $_GET['ProductID'];
-                    $query = "SELECT * FROM products WHERE ProductID = '$product_id'";
-                    $result = mysqli_query($conn, $query);
-                    $row = mysqli_fetch_assoc($result);
-                    if ($row) {
-                        $product_name = $row['ProductName'];
-                        $description = $row['ProductDescription'];
-                        $price = $row['Price'];
-                        $image = $row['Image'];
-                        $category = $row['ProductCategory'];
-                        $query = "SELECT * FROM products WHERE ProductCategory = '$category' AND ProductID != '$product_id'";
-                        $result = mysqli_query($conn, $query);
-                        if ($result) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<div class="col-md-4">';
-                                echo '<img src="images/' . $row['Image'] . '" alt="' . $row['ProductName'] . '" class="img-fluid">';
-                                echo '</div>';
-                                echo '<div class="col-md-8">';
-                                echo '<h2>' . $row['ProductName'] . '</h2>';
-                                echo '<p>' . $row['ProductDescription'] . '</p>';
-                                echo '<p class="item-price">₱' . number_format($row['Price'], 2) . '</p>';
-                                echo '</div>';
-                            }
-                        } else {
-                            echo 'Error: ' . mysqli_error($conn);
-                        }
-                    } else {
-                        echo '<p>Product not found.</p>';
-                    }
-                } else {
-                    echo '<p>No product selected.</p>';
-                }
-                ?>
-                </div>
-            </div>
 
         <!-- Pagination -->
         <div class="pagination">

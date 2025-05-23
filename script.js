@@ -310,22 +310,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Make the whole card clickable
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            window.location.href = 'item.php?id=' + id;
-        });
-    });
-
-    // Prevent card click when clicking the button
-    document.querySelectorAll('.item-button a').forEach(btn => {
-        btn.addEventListener('click', function(event) {
-            event.stopPropagation();
-            // The link will work as normal
-        });
-    });
-
     // Instagram grid hover effects
     const instagramItems = document.querySelectorAll('.instagram-item');
     instagramItems.forEach(item => {
@@ -642,4 +626,17 @@ document.addEventListener('DOMContentLoaded', function() {
             contactForm.scrollIntoView({ behavior: 'smooth' });
         }
     }
+
+    document.querySelectorAll('.size-select').forEach(function(select) {
+        // Set initial price
+        const priceDisplay = document.getElementById('product-price-' + select.dataset.id);
+        if (select.options.length > 0) {
+            priceDisplay.textContent = '₱' + Number(select.options[0].dataset.price).toLocaleString(undefined, {minimumFractionDigits:2});
+        }
+        // Update price on change
+        select.addEventListener('change', function() {
+            const selected = select.options[select.selectedIndex];
+            priceDisplay.textContent = '₱' + Number(selected.dataset.price).toLocaleString(undefined, {minimumFractionDigits:2});
+        });
+    });
 });

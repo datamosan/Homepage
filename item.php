@@ -40,7 +40,7 @@ while ($row = $attr_result->fetch_assoc()) {
             <div class="nav-links">
                 <a href="about.html" class="nav-item active">About Us</a>
                 <a href="menu.php" class="nav-item">Menu</a>
-                <a href="order.html" class="nav-item">Order Now</a>
+                <a href="order.php" class="nav-item">Order Now</a>
             </div>
             <a href="index.php" class="logo-container">
                 <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
@@ -78,7 +78,7 @@ while ($row = $attr_result->fetch_assoc()) {
                     <p><?php echo htmlspecialchars($product['ProductAllergens']); ?></p>
                 </div>
                 <div class="item-detail-actions">
-                    <a href="order.html?id=<?php echo $product['ProductID']; ?>" class="item-detail-button order-button">Order Now</a>
+                    <a href="order.php?id=<?php echo $product['ProductID']; ?>" class="item-detail-button order-button">Order Now</a>
                     <a href="menu.php" class="item-detail-button back-button">Back to Menu</a>
                 </div>
             </div>
