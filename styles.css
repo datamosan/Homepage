@@ -23,6 +23,7 @@ body {
     color: var(--teal);
     line-height: 1.6;
     overflow-x: hidden;
+    padding-top: 140px; 
 }
 
 a {
@@ -65,8 +66,13 @@ ul, ol {
 
 /* Header Styles */
 header {
-    position: relative;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
     box-shadow: var(--box-shadow);
+    z-index: 1000; 
+    background-color: var(--white); 
 }
 
 @keyframes moveText {
@@ -95,24 +101,33 @@ header {
 
 .main-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;      /* Center the nav contents */
     align-items: center;
     padding: 15px 20px;
     background-color: var(--white);
+    max-width: 80vw;            /* Set a max width for the nav bar */
+    margin: 0 auto;               /* Center the nav bar itself */
+    width: 100%;
+    gap: 80px;                    /* Add space between nav sections */
 }
 
 .nav-links {
     display: flex;
-    gap: 20px;
-    ;
+    gap: 30px;
 }
 
 .nav-item {
     color: var(--teal);
     font-weight: bold;
-    padding: 5px 10px;
-    border-bottom: 2px solid var(--teal);
+    padding: 15px 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-bottom: 3px solid var(--teal);
     transition: var(--transition);
+    text-align: center;
+    min-width: 120px;
+    max-width: 120px;
+    box-sizing: border-box;
 }
 
 .nav-item:hover {
@@ -154,15 +169,33 @@ footer {
 
 .footer-content {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: flex-start;
     flex-wrap: wrap;
+    width: 100%;
     max-width: 1200px;
-    margin: 0 auto 20px;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    gap: 0;
+    position: relative;
 }
 
-.footer-info, .footer-hours, .footer-social {
-    margin-bottom: 20px;
+.footer-info{
+    flex: 1 1 0;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-social {
+    flex: 1 1 0;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
 }
 
 .footer-info h3, .footer-hours h3, .footer-social h3 {
@@ -235,6 +268,16 @@ footer {
     padding-top: 15px;
     color: var(--mint);
     font-size: 14px;
+    flex: 0 1 400px; /* Center column, adjust width as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 250px;
+    max-width: 100%;
+    text-align: center;
+    margin: 0 40px; /* This creates equal gap on both sides */
+    margin-top: 40px;
 }
 
 /* Hero Section */
@@ -683,6 +726,11 @@ footer {
 
 .menu-section {
     margin-bottom: 60px;
+    display: none; /* Hide all menu sections by default */
+}
+
+.menu-section.active {
+    display: block; /* Show only active menu section */
 }
 
 .category-title {
@@ -1136,12 +1184,18 @@ footer {
 }
 
 .footer-links {
-    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .footer-links a {
     color: var(--white);
-    margin: 0 10px;
+    margin-bottom: 10px;
+    white-space: nowrap;
 }
 
 /* FAQ Page Styles */
@@ -1827,6 +1881,10 @@ footer {
     .admin-table th, .admin-table td {
         padding: 0.7em;
     }
+
+    body {
+        padding-top: 120px; /* Smaller padding for mobile */
+    }
 }
 
 @media (max-width: 480px) {
@@ -1857,6 +1915,10 @@ footer {
         padding: 0.6em 0.8em;
         margin-left: 0.5em;
         font-size: 0.9rem;
+    }
+
+    body {
+        padding-top: 100px; /* Even smaller padding for very small screens */
     }
 }
 
