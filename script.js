@@ -310,6 +310,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Make the whole card clickable
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            window.location.href = 'item.php?id=' + id;
+        });
+    });
+
+    // Prevent card click when clicking the button
+    document.querySelectorAll('.item-button a').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.stopPropagation();
+            // The link will work as normal
+        });
+    });
+
     // Instagram grid hover effects
     const instagramItems = document.querySelectorAll('.instagram-item');
     instagramItems.forEach(item => {

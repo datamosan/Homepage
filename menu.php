@@ -77,7 +77,7 @@
                     echo '  </div>';
                     echo '  <div class="item-details">';
                     echo '      <h3>' . htmlspecialchars($row['ProductName']) . '</h3>';
-                    echo '      <div class="item-button"><a href="menu.php?ProductID=' . htmlspecialchars($row['ProductID']) . '">View Details</a></div>';
+                    echo '      <div class="item-button"><a href="item.php?id=' . htmlspecialchars($row['ProductID']) . '">View Details</a></div>';
                     echo '  </div>';
                     echo '</div>';
                 }
