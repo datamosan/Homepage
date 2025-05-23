@@ -726,11 +726,7 @@ footer {
 
 .menu-section {
     margin-bottom: 60px;
-<<<<<<< Updated upstream
     /* display: none; Hide all menu sections by default */
-=======
-
->>>>>>> Stashed changes
 }
 
 .menu-section.active {
