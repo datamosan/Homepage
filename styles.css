@@ -1501,16 +1501,29 @@ footer {
     min-height: 70vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;      /* Center children horizontally */
+    justify-content: center;  /* Center children vertically */
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.auth-subtitle {
-    color: var(--teal);
-    margin: 0 0 30px;
-    text-align: center;
-    font-size: 1.8rem;
+.auth-flex-row {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1100px; /* Prevents stretching too wide on large screens */
+    margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .auth-flex-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        max-width: 100%;
+    }
 }
 
 .auth-form-container {
@@ -1529,6 +1542,37 @@ footer {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
+}
+
+.auth-form label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 0.18rem;
+  display: block;
+}
+
+.auth-form .phone-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem; /* small gap between +63 and input */
+}
+
+.auth-form .phone-group .country-code {
+  font-size: 1rem;
+  font-weight: 700;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  color: var(--teal);
+  margin-right: 0;
+  padding-bottom: 20px;
+}
+
+.auth-form .phone-group input[type="tel"] {
+  flex: 1;
+  border-radius: 0.4rem;
+  border-left: 1px solid #ccc;
 }
 
 .remember-me, .terms, .newsletter {

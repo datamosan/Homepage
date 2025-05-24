@@ -81,9 +81,6 @@ require 'connection.php';
     }
     .sidebar nav a i {
       color: var(--mint);
-      font-size: 1.2rem;
-      min-width: 20px;
-      text-align: center;
     }
     .main-content {
       margin-left: 240px;
@@ -248,14 +245,14 @@ require 'connection.php';
     <h1>Customer Data</h1>
 
     <div class="controls">
-      <input type="text" id="searchInput" placeholder="Search by name..." />
+      <input type="text" id="searchInput" placeholder="Search by name or email..." />
       <button id="exportBtn"><i class="fas fa-file-export"></i> Export CSV</button>
     </div>
 
     <table id="customerTable">
       <thead>
         <tr>
-          <th>UserID</th>
+          <th class="sortable" data-key="UserID">UserID <i class="fas fa-sort"></i></th>
           <th class="sortable" data-key="UserName">Name <i class="fas fa-sort"></i></th>
           <th class="sortable" data-key="UserEmail">Email <i class="fas fa-sort"></i></th>
           <th>Phone</th>
@@ -291,13 +288,21 @@ require 'connection.php';
     </footer>
   </div>
   <script>
-    // Client-side search
-    document.getElementById('searchInput').addEventListener('input', function() {
+    // Collect table data into JS array for sorting/filtering
+    const table = document.getElementById('customerTable');
+    const headers = table.querySelectorAll('th.sortable');
+    const searchInput = document.getElementById('searchInput');
+    const exportBtn = document.getElementById('exportBtn');
+    let rows = Array.from(table.querySelectorAll('tbody tr'));
+    let currentSort = { key: null, asc: true };
+
+    // Filter by name or email
+    searchInput.addEventListener('input', function() {
       const filter = this.value.trim().toLowerCase();
-      const rows = document.querySelectorAll('#customerTable tbody tr');
       rows.forEach(row => {
         const name = row.children[1]?.textContent.toLowerCase() || '';
-        if (name.includes(filter) || filter === '') {
+        const email = row.children[2]?.textContent.toLowerCase() || '';
+        if (name.includes(filter) || email.includes(filter) || filter === '') {
           row.style.display = '';
         } else {
           row.style.display = 'none';
@@ -305,12 +310,69 @@ require 'connection.php';
       });
     });
 
+    // Sorting function
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        const key = this.getAttribute('data-key');
+        let colIdx;
+        if (key === 'UserID') colIdx = 0;
+        else if (key === 'UserName') colIdx = 1;
+        else if (key === 'UserEmail') colIdx = 2;
+        else return;
+        if (currentSort.key === key) {
+          currentSort.asc = !currentSort.asc;
+        } else {
+          currentSort.key = key;
+          currentSort.asc = true;
+        }
+        // Sort rows array
+        rows.sort((a, b) => {
+          let valA = a.children[colIdx].textContent;
+          let valB = b.children[colIdx].textContent;
+          // Numeric sort for UserID, string sort for others
+          if (key === 'UserID') {
+            valA = parseInt(valA, 10);
+            valB = parseInt(valB, 10);
+            if (isNaN(valA)) valA = 0;
+            if (isNaN(valB)) valB = 0;
+          } else {
+            valA = valA.toLowerCase();
+            valB = valB.toLowerCase();
+          }
+          if (valA < valB) return currentSort.asc ? -1 : 1;
+          if (valA > valB) return currentSort.asc ? 1 : -1;
+          return 0;
+        });
+        // Remove all rows and re-append in sorted order
+        const tbody = table.querySelector('tbody');
+        rows.forEach(row => tbody.appendChild(row));
+        updateSortIcons();
+      });
+    });
+
+    function updateSortIcons() {
+      headers.forEach(header => {
+        const icon = header.querySelector('i');
+        if (header.getAttribute('data-key') === currentSort.key) {
+          icon.className = currentSort.asc ? "fas fa-sort-up" : "fas fa-sort-down";
+          header.classList.add("active");
+        } else {
+          icon.className = "fas fa-sort";
+          header.classList.remove("active");
+        }
+      });
+    }
+
     // Export CSV functionality
-    document.getElementById('exportBtn').addEventListener('click', function() {
-      const rows = Array.from(document.querySelectorAll('#customerTable tr'));
+    exportBtn.addEventListener('click', function() {
+      const visibleRows = Array.from(table.querySelectorAll('tbody tr')).filter(row => row.style.display !== 'none');
       let csv = [];
-      rows.forEach(row => {
-        const cols = Array.from(row.querySelectorAll('th,td')).map(col => {
+      // Get headers
+      const headerCols = Array.from(table.querySelectorAll('thead th')).map(col => col.innerText.replace(/\s+/g, ' ').trim());
+      csv.push(headerCols.join(','));
+      // Get rows
+      visibleRows.forEach(row => {
+        const cols = Array.from(row.querySelectorAll('td')).map(col => {
           let text = col.innerText.replace(/"/g, '""');
           if (text.search(/("|,|\n)/g) >= 0) text = `"${text}"`;
           return text;
@@ -325,6 +387,9 @@ require 'connection.php';
       link.click();
       document.body.removeChild(link);
     });
+
+    // Initial sort icon state
+    updateSortIcons();
   </script>
 </body>
 </html>

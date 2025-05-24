@@ -33,6 +33,7 @@
     <!-- Login Main -->
     <div class="auth-main">
         <h2 class="auth-subtitle">Login to Your Account</h2>
+        <br>
         <div class="auth-form-container">
             <form id="loginForm" class="auth-form" action="reg.php" method="post">
                 <input type="email" id="email" name="email" placeholder="Email Address" required>
