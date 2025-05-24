@@ -9,10 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     :root {
-      --bg-start: #FFFEF2;
-      --bg-end: #FFF4E6;
-      --highlight: #CF5C5C;
-      
       --coral: #f48a8a;
       --mint: #8cd3a9;
       --teal: #1d4b53;
@@ -92,6 +88,10 @@
 
     .sidebar nav a:hover {
       background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar nav a i {
+      color: var(--mint);
     }
 
     .main-content {
@@ -190,10 +190,11 @@
     <nav>
       <a href="#"><i class="fas fa-home"></i>Home</a>
       <a href="view-orders.html"><i class="fas fa-receipt"></i>View Orders</a>
-      <a href="menu-management.html"><i class="fas fa-utensils"></i> Manage Menu</a>
+      <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-management.html"><i class="fas fa-box"></i>Manage Orders</a>
       <a href="messages.html"><i class="fas fa-envelope"></i>Messages</a>
       <a href="customers.html"><i class="fas fa-users"></i>Customer Data</a>
+      <a href="index.php"><i class="fas fa-user"></i>Logout</a>
     </nav>
   </aside>
 
