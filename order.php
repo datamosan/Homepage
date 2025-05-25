@@ -79,15 +79,14 @@ $products = $conn->query("SELECT * FROM products");
                         $first = $attr->fetch_assoc();
                         $price = $first ? $first['Price'] : 0;
                     ?>
-                    <p class="product-price">₱<?php echo number_format($price, 2); ?></p>
                     <div class="product-options">
-                        <select data-id="<?php echo $product['ProductID']; ?>">
+                        <p class="product-price" id="product-price-<?php echo $product['ProductID']; ?>">₱<?php echo number_format($price, 2); ?></p>
+                        <select class="size-select" data-id="<?php echo $product['ProductID']; ?>">
                             <?php
-                            if ($first) {
-                                echo '<option value="' . htmlspecialchars($first['Size']) . '">' . htmlspecialchars($first['Size']) . '</option>';
-                                while ($row = $attr->fetch_assoc()) {
-                                    echo '<option value="' . htmlspecialchars($row['Size']) . '">' . htmlspecialchars($row['Size']) . '</option>';
-                                }
+                            $attr = $conn->query("SELECT * FROM product_attributes WHERE ProductID = $pid");
+                            while ($row = $attr->fetch_assoc()) {
+                                echo '<option value="' . htmlspecialchars($row['Size']) . '" data-price="' . htmlspecialchars($row['Price']) . '">'
+                                    . htmlspecialchars($row['Size']) . '</option>';
                             }
                             ?>
                         </select>

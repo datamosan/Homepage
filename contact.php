@@ -106,9 +106,6 @@ session_start();
             <div class="social-media-icons">
                 <a href="#" class="social-media-icon"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" class="social-media-icon"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="social-media-icon"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-media-icon"><i class="fab fa-youtube"></i></a>
-                <a href="#" class="social-media-icon"><i class="fab fa-tiktok"></i></a>
             </div>
             <a href="#" class="messenger-chat"><i class="fab fa-facebook-messenger"></i> Chat with us on Messenger</a>
         </div>

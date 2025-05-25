@@ -60,7 +60,7 @@
 
                     <div class="terms">
                         <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">I agree to the <a href="terms.html">Terms & Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a></label>
+                        <label for="terms">I agree to the <a href="terms.php">Terms & Conditions</a> and <a href="privacy-policy.php">Privacy Policy</a></label>
                     </div>
                     <div class="newsletter">
                         <input type="checkbox" id="newsletter" name="newsletter">

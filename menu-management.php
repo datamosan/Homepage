@@ -55,11 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_item'])) {
         $ext = pathinfo($_FILES['edit_image']['name'], PATHINFO_EXTENSION);
         $image_filename = uniqid('menu_', true) . '.' . $ext;
         move_uploaded_file($_FILES['edit_image']['tmp_name'], 'images/' . $image_filename);
-        mysqli_query($conn, "UPDATE products SET Image='$image_filename' WHERE ProductID='$edit_id'");
+        // Update all fields including image
+        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', Image='$image_filename' WHERE ProductID='$edit_id'");
+    } else {
+        // Update all fields except image
+        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category' WHERE ProductID='$edit_id'");
     }
-
-    // Update products table
-    mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category' WHERE ProductID='$edit_id'");
 
     // Update product_attributes (assumes one attribute per product for simplicity)
     $attr_check = mysqli_query($conn, "SELECT SizeID FROM product_attributes WHERE ProductID='$edit_id'");
@@ -420,9 +421,10 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
         <input type="text" placeholder="Search item..." id="searchInput" onkeyup="filterMenu()">
         <select id="categoryFilter" onchange="filterMenu()">
           <option value="">All Categories</option>
-          <option>Customized Cakes</option>
+          <option>Featured</option>
+          <option>Pinoy Pride</option>
           <option>Special Cakes</option>
-          <option>Kakanin</option>
+          <option>Bicol Specialties</option>
           <option>Pasta and Noodles</option>
         </select>
       </div>
@@ -466,9 +468,10 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
         <form id="addForm" method="post" enctype="multipart/form-data">
           <select name="category" required>
             <option value="">Select Category</option>
-            <option>Customized Cakes</option>
+            <option>Featured</option>
+            <option>Pinoy Pride</option>
             <option>Special Cakes</option>
-            <option>Kakanin</option>
+            <option>Bicol Specialties</option>
             <option>Pasta and Noodles</option>
           </select>
           <input type="text" name="item" placeholder="Item Name" required>
@@ -487,10 +490,11 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
           <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="edit_id" value="<?= $edit_row['ProductID'] ?>">
             <select name="edit_category" required>
-              <option <?= $edit_row['ProductCategory']=='Customized Cakes'?'selected':'' ?>>Customized Cakes</option>
-              <option <?= $edit_row['ProductCategory']=='Special Cakes'?'selected':'' ?>>Special Cakes</option>
-              <option <?= $edit_row['ProductCategory']=='Kakanin'?'selected':'' ?>>Kakanin</option>
-              <option <?= $edit_row['ProductCategory']=='Pasta and Noodles'?'selected':'' ?>>Pasta and Noodles</option>
+              <option <?= $edit_row['ProductCategory'] == 'Featured' ? 'selected' : '' ?>>Featured</option>
+              <option <?= $edit_row['ProductCategory'] == 'Pinoy Pride' ? 'selected' : '' ?>>Pinoy Pride</option>
+              <option <?= $edit_row['ProductCategory'] == 'Special Cakes' ? 'selected' : '' ?>>Special Cakes</option>
+              <option <?= $edit_row['ProductCategory'] == 'Bicol Specialties' ? 'selected' : '' ?>>Bicol Specialties</option>
+              <option <?= $edit_row['ProductCategory'] == 'Pasta and Noodles' ? 'selected' : '' ?>>Pasta and Noodles</option>
             </select>
             <input type="text" name="edit_item" value="<?= htmlspecialchars($edit_row['ProductName']) ?>" required>
             <input type="text" name="edit_variation" value="<?= htmlspecialchars($edit_row['Size']) ?>">

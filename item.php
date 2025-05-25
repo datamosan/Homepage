@@ -73,7 +73,7 @@ while ($row = $attr_result->fetch_assoc()) {
     <div class="item-detail-container">
         <div class="item-detail">
             <div class="item-detail-image">
-                <img src="<?php echo htmlspecialchars($product['Image']); ?>" alt="<?php echo htmlspecialchars($product['ProductName']); ?>">
+                <img src="images/<?php echo htmlspecialchars($product['Image']); ?>" alt="<?php echo htmlspecialchars($product['ProductName']); ?>">
             </div>
             <div class="item-detail-info">
                 <h1 class="item-detail-title"><?php echo htmlspecialchars($product['ProductName']); ?></h1>
@@ -113,11 +113,13 @@ while ($row = $attr_result->fetch_assoc()) {
                     <div class="menu-item" data-id="<?php echo htmlspecialchars($related['ProductID']); ?>">
                         <div class="item-color"></div>
                         <div class="item-image">
-                            <img src="<?php echo htmlspecialchars($related['Image']); ?>" alt="<?php echo htmlspecialchars($related['ProductName']); ?>">
+                            <?php
+                              $img = !empty($related['Image']) ? htmlspecialchars($related['Image']) : 'placeholder.jpg';
+                            ?>
+                            <img src="images/<?= $img ?>" alt="<?= htmlspecialchars($related['ProductName']) ?>" style="width:200px; height:200px; object-fit:cover; border-radius:1rem;">
                         </div>
                         <div class="item-details">
                             <h3><?php echo htmlspecialchars($related['ProductName']); ?></h3>
-                            <p><?php echo htmlspecialchars($related['ProductDescription']); ?></p>
                             <div class="item-button">
                                 <a href="item.php?id=<?php echo htmlspecialchars($related['ProductID']); ?>">View Details</a>
                             </div>

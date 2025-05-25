@@ -27,7 +27,7 @@ body {
 }
 
 a {
-    text-decoration: none;
+    text-decoration: none !important;
     color: inherit;
     transition: var(--transition);
 }
@@ -101,14 +101,13 @@ header {
 
 .main-nav {
     display: flex;
-    justify-content: center;      /* Center the nav contents */
+    justify-content: center;
     align-items: center;
     padding: 15px 20px;
     background-color: var(--white);
-    max-width: 80vw;            /* Set a max width for the nav bar */
-    margin: 0 auto;               /* Center the nav bar itself */
+    margin: 0 auto;
     width: 100%;
-    gap: 80px;                    /* Add space between nav sections */
+    gap: 40px; /* Reduce gap */
 }
 
 .nav-links {
@@ -199,7 +198,7 @@ header {
 }
 
 .logo-container {
-    background-color: var(--light-gray);
+    /* background-color: var(--light-gray); */
     border-radius: 50%;
     width: 80px;
     height: 80px;
@@ -208,7 +207,8 @@ header {
     align-items: center;
     overflow: hidden;
     transition: var(--transition);
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
+    margin: 0 10px; /* Use a smaller margin */
 }
 
 .logo-container:hover {
@@ -216,9 +216,10 @@ header {
 }
 
 .logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    display: block;
 }
 
 /* Footer Styles */
@@ -844,16 +845,20 @@ footer {
 }
 
 .item-image {
-    height: 180px;
-    margin: 15px;
+    width: 90%; /* Set a fixed width */
+    height: 100%; 
+    margin: 15px auto; /* Center the image horizontally */
     border-radius: 8px;
     overflow: hidden;
+    display: flex; /* Ensure proper alignment */
+    justify-content: center;
+    align-items: center;
 }
 
 .item-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Ensures the image fills the square without distortion */
 }
 
 .item-details {
@@ -1051,7 +1056,7 @@ footer {
 
 .order-main {
     padding: 40px 20px;
-    background-color: var(--light-gray);
+    /* background-color: var(--light-gray); */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -1073,7 +1078,7 @@ footer {
 .product-card {
     display: flex;
     flex-direction: column;
-    height: 420px; /* Adjust as needed */
+    height: 390px; /* Adjust as needed */
     justify-content: space-between;
     background-color: var(--white);
     padding: 25px;
@@ -1108,7 +1113,7 @@ footer {
 
 .product-description {
     font-size: 0.83rem;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: var(--dark-gray);
     min-height: 60px;   /* Adjust as needed */
     max-height: 60px;   /* Adjust as needed */
@@ -1127,7 +1132,7 @@ footer {
 }
 
 .product-options {
-    margin-top: auto;
+    margin-top: 10px;
 }
 
 .product-options select {
@@ -1139,7 +1144,7 @@ footer {
 }
 
 .add-to-cart {
-    margin-top: auto;
+    margin-top: 10px;
     background-color: var(--teal);
     color: var(--white);
     padding: 10px;
@@ -1165,23 +1170,37 @@ footer {
 }
 
 .cart-items {
-    margin-bottom: 10px;  
-    min-height: 50px; 
+    margin-bottom: 10px;
+    min-height: 50px;
 }
 
 .cart-item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 2fr 0.7fr 0.7fr 0.7fr auto; /* last column auto for remove button */
     align-items: center;
-    padding: 5px 0; 
+    gap: 10px;
+    padding: 8px 0;
     border-bottom: 1px solid var(--light-gray);
-    font-size: 0.9rem; 
+    font-size: 0.98rem;
 }
 
-.cart-item input {
-    width: 50px;  
-    padding: 3px;
+.cart-item input[type="number"] {
+    width: 50px;
+    padding: 1px;
     text-align: center;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item > * {
+    text-align: left;
+}
+
+.cart-item .cart-remove {
+    text-align: right;
+    justify-self: end; /* ensures the remove button is at the rightmost */
 }
 
 .cart-total {
@@ -1560,7 +1579,7 @@ footer {
 
 .auth-main {
     padding: 40px 20px;
-    background-color: var(--light-gray);
+    /* background-color: var(--light-gray); */
     min-height: 70vh;
     display: flex;
     flex-direction: column;
@@ -1746,7 +1765,7 @@ footer {
 .logo-large img {
     max-width: 200px;
     border-radius: 50%;
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
 }
 
 .welcome-message {

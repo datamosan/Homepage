@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const cartItem = document.createElement('div');
                         cartItem.className = 'cart-item';
                         
-                        const itemName = item.size ? `${item.name} (${item.size})` : item.name;
+                        const itemName = item.size ? `${item.name} - ${item.size}` : item.name;
                         
                         cartItem.innerHTML = `
                             <div class="cart-item-name">${itemName}</div>
@@ -628,10 +628,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.querySelectorAll('.size-select').forEach(function(select) {
-        // Set initial price
         const priceDisplay = document.getElementById('product-price-' + select.dataset.id);
+        // Set initial price
         if (select.options.length > 0) {
-            priceDisplay.textContent = '₱' + Number(select.options[0].dataset.price).toLocaleString(undefined, {minimumFractionDigits:2});
+            priceDisplay.textContent = '₱' + Number(select.options[select.selectedIndex].dataset.price).toLocaleString(undefined, {minimumFractionDigits:2});
         }
         // Update price on change
         select.addEventListener('change', function() {
