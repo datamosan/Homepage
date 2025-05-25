@@ -1,0 +1,175 @@
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Policy - Dhen's Kitchen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-bar">
+            <div class="page-title">About Us</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="about.php" class="nav-item active">About Us</a>
+                <a href="menu.php" class="nav-item">Menu</a>
+                <a href="order.php" class="nav-item">Order Now</a>
+            </div>
+            <a href="index.php" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.php" class="nav-item">FAQs</a>
+                <a href="contact.php" class="nav-item">Contact Us</a>
+                <?php if (isset($_SESSION['first_name'])): ?>
+                    <div class="nav-dropdown">
+                        <button class="nav-item nav-dropdown-btn">
+                            Hi, <?php echo htmlspecialchars($_SESSION['first_name']); ?> <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="nav-dropdown-content">
+                            <a href="profilepage.php">Profile</a>
+                            <a href="logout.php">Logout</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="auth.html" class="nav-item">Login</a>
+                <?php endif; ?>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Policy Content -->
+    <section class="faq-section">
+        <h1 class="faq-title">Delivery Policy</h1>
+        <div class="faq-container">
+            <div class="faq-item active">
+                <div class="faq-question">Delivery Areas</div>
+                <div class="faq-answer">
+                    <p>Dhen's Kitchen currently delivers to the following areas:</p>
+                    <ul>
+                        <li>Manila</li>
+                        <li>Quezon City</li>
+                        <li>Makati</li>
+                        <li>Pasig</li>
+                        <li>Mandaluyong</li>
+                        <li>San Juan</li>
+                        <li>Taguig</li>
+                        <li>Parañaque</li>
+                        <li>Pasay</li>
+                    </ul>
+                    <p>For areas outside Metro Manila, please contact us to check if delivery is available.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Delivery Fees</div>
+                <div class="faq-answer">
+                    <p>Our delivery fees are as follows:</p>
+                    <ul>
+                        <li>Manila - ₱100</li>
+                        <li>Quezon City - ₱150</li>
+                        <li>Makati - ₱150</li>
+                        <li>Pasig - ₱200</li>
+                        <li>Mandaluyong - ₱150</li>
+                        <li>San Juan - ₱150</li>
+                        <li>Taguig - ₱200</li>
+                        <li>Parañaque - ₱250</li>
+                        <li>Pasay - ₱200</li>
+                    </ul>
+                    <p>Free delivery for orders above ₱3,000 within Metro Manila.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Delivery Schedule</div>
+                <div class="faq-answer">
+                    <p>We deliver during the following hours:</p>
+                    <ul>
+                        <li>Monday to Friday: 10:00 AM - 8:00 PM</li>
+                        <li>Saturday and Sunday: 9:00 AM - 9:00 PM</li>
+                        <li>Holidays: 10:00 AM - 7:00 PM</li>
+                    </ul>
+                    <p>Please note that delivery times may vary depending on traffic conditions and order volume.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Delivery Time</div>
+                <div class="faq-answer">
+                    <p>Estimated delivery times:</p>
+                    <ul>
+                        <li>Regular menu items: 60-90 minutes from order confirmation</li>
+                        <li>Cakes and desserts: May require 24-48 hours advance notice</li>
+                        <li>Customized orders: As agreed upon during order placement</li>
+                    </ul>
+                    <p>You will receive a confirmation call or message when your order is dispatched.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Order Tracking</div>
+                <div class="faq-answer">
+                    <p>You can track your order by:</p>
+                    <ul>
+                        <li>Logging into your account on our website</li>
+                        <li>Contacting our customer service at (02) 8123-4567</li>
+                        <li>Responding to the confirmation message you received</li>
+                    </ul>
+                    <p>We will provide updates on your order status and estimated delivery time.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Delivery Conditions</div>
+                <div class="faq-answer">
+                    <p>Please note the following delivery conditions:</p>
+                    <ul>
+                        <li>Someone must be present at the delivery address to receive the order</li>
+                        <li>Our delivery personnel will wait for a maximum of 10 minutes</li>
+                        <li>If no one is available to receive the order, it will be returned to our store and you will need to arrange for redelivery (additional fees may apply)</li>
+                        <li>Please provide accurate and complete delivery address information</li>
+                        <li>Contact number must be reachable during delivery</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-contact">
+            <p>For any questions about our delivery policy, please contact us.</p>
+            <a href="contact.html" class="contact-button">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="copyright">
+            <div class="footer-links">
+                <br>
+                <a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a>
+            </div>
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://web.facebook.com/dhenskitchen?mibextid=wwXIfr&rdid=4NGrYasRkC4yQ3iE&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F1BdBoZHYRb%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/dhenskitchen/?igsh=azgxNndtd2E0ZHN1#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

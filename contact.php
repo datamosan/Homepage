@@ -1,14 +1,18 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Dhen's Kitchen</title>
+    <title>Contact Us - Dhen's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Header -->
+   <!-- Header -->
     <header>
         <div class="header-bar">
             <div class="page-title">About Us</div>
@@ -42,26 +46,71 @@
         </nav>
     </header>
 
-    <!-- Login Main -->
-    <div class="auth-main">
-        <h2 class="auth-subtitle">Login to Your Account</h2>
-        <br>
-        <div class="auth-form-container">
-            <form id="loginForm" class="auth-form" action="reg.php" method="post">
-                <input type="email" id="email" name="email" placeholder="Email Address" required>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-               <button type="submit" name="login" class="auth-button">Login</button>
-                <div class="auth-links">
-                    <a href="#" class="forgot-password">Forgot Password?</a>
-                </div>
-            </form>
-            <div class="auth-redirect">
-                <p>Don't have an account? <a href="signup.php">Sign Up</a></p>
+    <!-- Contact Header -->
+    <div class="contact-header">
+        <h1>Contact Us</h1>
+    </div>
+
+    <!-- Contact Main -->
+    <div class="contact-main">
+        <h2 class="contact-subtitle">Get in Touch</h2>
+
+        <!-- Map Section -->
+        <div class="map-container">
+            <h3>Our Location</h3>
+            <div class="map-placeholder">
+                <i class="fas fa-map-marker-alt fa-3x"></i>
+                <p>123 Filipino Street, Manila, Philippines</p>
+                <p>Interactive map will be displayed here</p>
             </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-container">
+            <h3 class="form-title">Send Us a Message</h3>
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Your Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="order">Order Status</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="catering">Custom Order/Catering</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Your Message *</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Social Media Section -->
+        <div class="contact-social">
+            <h3>Connect With Us</h3>
+            <div class="social-media-icons">
+                <a href="#" class="social-media-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-media-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-media-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-media-icon"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-media-icon"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <a href="#" class="messenger-chat"><i class="fab fa-facebook-messenger"></i> Chat with us on Messenger</a>
         </div>
     </div>
 

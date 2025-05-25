@@ -1,4 +1,8 @@
 <?php
+session_start();
+?>
+
+<?php
 include 'connection.php';
 
 // Handle Add New Item

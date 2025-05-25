@@ -1,6 +1,5 @@
 <?php
 session_start();
-include("connection.php");
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +10,7 @@ include("connection.php");
     <title>Dhen's Kitchen - Home</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
     <!-- Header -->
@@ -20,7 +20,7 @@ include("connection.php");
         </div>
         <nav class="main-nav">
             <div class="nav-links">
-                <a href="about.html" class="nav-item active">About Us</a>
+                <a href="about.php" class="nav-item active">About Us</a>
                 <a href="menu.php" class="nav-item">Menu</a>
                 <a href="order.php" class="nav-item">Order Now</a>
             </div>
@@ -28,9 +28,21 @@ include("connection.php");
                 <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
             </a>
             <div class="nav-links">
-                <a href="faq.html" class="nav-item">FAQs</a>
-                <a href="contact.html" class="nav-item">Contact Us</a>
-                <a href="auth.html" class="nav-item">Login</a>
+                <a href="faq.php" class="nav-item">FAQs</a>
+                <a href="contact.php" class="nav-item">Contact Us</a>
+                <?php if (isset($_SESSION['first_name'])): ?>
+                    <div class="nav-dropdown">
+                        <button class="nav-item nav-dropdown-btn">
+                            Hi, <?php echo htmlspecialchars($_SESSION['first_name']); ?> <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="nav-dropdown-content">
+                            <a href="profilepage.php">Profile</a>
+                            <a href="logout.php">Logout</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="auth.html" class="nav-item">Login</a>
+                <?php endif; ?>
             </div>
         </nav>
     </header>
@@ -44,14 +56,6 @@ include("connection.php");
             <a href="order.html" class="cta-button">Order Now</a>
         </div>
     </section>
-
-    <!-- Announcement Section -->
-    <!-- <section class="announcement">
-        <div class="announcement-content">
-            <h2>Special Offers!</h2>
-            <a href="menu.html" class="announcement-button">View Special Menu</a>
-        </div>
-    </section> -->
 
     <!-- Features Section -->
     <section class="features">
@@ -116,5 +120,6 @@ include("connection.php");
     </footer>
 
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

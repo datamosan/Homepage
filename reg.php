@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 include 'connection.php';
 
@@ -58,16 +59,28 @@ if(isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = "SELECT UserPassword FROM Users WHERE UserEmail = ?";
+    // Fetch password, UserRolesID, and UserName
+    $query = "SELECT UserPassword, UserRolesID, UserName FROM Users WHERE UserEmail = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $stmt->bind_result($stored_hash);
+    $stmt->bind_result($stored_hash, $userRolesID, $userName);
     if ($stmt->fetch() && password_verify($password, $stored_hash)) {
-        echo "<script>
-            alert('Login successful! Welcome back to Dhen\\'s Kitchen.');
-            window.location.href = 'index.php';
-        </script>";
+        // Get first name from UserName
+        $firstName = explode(' ', trim($userName))[0];
+        $_SESSION['first_name'] = $firstName;
+
+        if ($userRolesID == 1) {
+            echo "<script>
+                alert('Admin login successful! Redirecting to Admin Hub.');
+                window.location.href = 'adminhub.html';
+            </script>";
+        } else {
+            echo "<script>
+                alert('Login successful! Welcome back to Dhen\\'s Kitchen.');
+                window.location.href = 'index.php';
+            </script>";
+        }
         exit();
     } else {
         echo "Invalid email or password\nError: " .$conn->error;

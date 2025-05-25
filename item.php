@@ -1,4 +1,8 @@
 <?php
+session_start();
+?>
+
+<?php
 // Database connection
 $conn = new mysqli("localhost", "root", "", "decadhen");
 if ($conn->connect_error) {
@@ -38,7 +42,7 @@ while ($row = $attr_result->fetch_assoc()) {
         </div>
         <nav class="main-nav">
             <div class="nav-links">
-                <a href="about.html" class="nav-item active">About Us</a>
+                <a href="about.php" class="nav-item active">About Us</a>
                 <a href="menu.php" class="nav-item">Menu</a>
                 <a href="order.php" class="nav-item">Order Now</a>
             </div>
@@ -46,9 +50,21 @@ while ($row = $attr_result->fetch_assoc()) {
                 <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
             </a>
             <div class="nav-links">
-                <a href="faq.html" class="nav-item">FAQs</a>
-                <a href="contact.html" class="nav-item">Contact Us</a>
-                <a href="auth.html" class="nav-item">Login</a>
+                <a href="faq.php" class="nav-item">FAQs</a>
+                <a href="contact.php" class="nav-item">Contact Us</a>
+                <?php if (isset($_SESSION['first_name'])): ?>
+                    <div class="nav-dropdown">
+                        <button class="nav-item nav-dropdown-btn">
+                            Hi, <?php echo htmlspecialchars($_SESSION['first_name']); ?> <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="nav-dropdown-content">
+                            <a href="profilepage.php">Profile</a>
+                            <a href="logout.php">Logout</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="auth.html" class="nav-item">Login</a>
+                <?php endif; ?>
             </div>
         </nav>
     </header>

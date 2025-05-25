@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,20 +19,38 @@
         </div>
         <nav class="main-nav">
             <div class="nav-links">
-                <a href="about.html" class="nav-item active">About Us</a>
+                <a href="about.php" class="nav-item active">About Us</a>
                 <a href="menu.php" class="nav-item">Menu</a>
-                <a href="order.html" class="nav-item">Order Now</a>
+                <a href="order.php" class="nav-item">Order Now</a>
             </div>
             <a href="index.php" class="logo-container">
                 <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
             </a>
             <div class="nav-links">
-                <a href="faq.html" class="nav-item">FAQs</a>
-                <a href="contact.html" class="nav-item">Contact Us</a>
-                <a href="auth.html" class="nav-item">Login</a>
+                <a href="faq.php" class="nav-item">FAQs</a>
+                <a href="contact.php" class="nav-item">Contact Us</a>
+                <?php if (isset($_SESSION['first_name'])): ?>
+                    <div class="nav-dropdown">
+                        <button class="nav-item nav-dropdown-btn">
+                            Hi, <?php echo htmlspecialchars($_SESSION['first_name']); ?> <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="nav-dropdown-content">
+                            <a href="profilepage.php">Profile</a>
+                            <a href="logout.php">Logout</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="auth.html" class="nav-item">Login</a>
+                <?php endif; ?>
             </div>
         </nav>
     </header>
+
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <h1 class="about-title">About Dhen's Kitchen</h1>
+        <p class="about-subtitle">Authentic Filipino Cuisine Since 2015</p>
+    </section>
 
     <!-- Footer -->
     <footer>
@@ -43,7 +65,7 @@
             <div class="copyright">
             <div class="footer-links">
                 <br>
-                <a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a>
+                <a href="delivery-policy.php">Delivery Policy</a> | <a href="privacy-policy.php">Privacy Policy</a> | <a href="terms.php">Terms & Conditions</a>
             </div>
             <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
             </div>

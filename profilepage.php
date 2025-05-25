@@ -1,9 +1,13 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Dhen's Kitchen</title>
+    <title>About Us - Dhen's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -41,29 +45,6 @@
             </div>
         </nav>
     </header>
-
-    <!-- Login Main -->
-    <div class="auth-main">
-        <h2 class="auth-subtitle">Login to Your Account</h2>
-        <br>
-        <div class="auth-form-container">
-            <form id="loginForm" class="auth-form" action="reg.php" method="post">
-                <input type="email" id="email" name="email" placeholder="Email Address" required>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-               <button type="submit" name="login" class="auth-button">Login</button>
-                <div class="auth-links">
-                    <a href="#" class="forgot-password">Forgot Password?</a>
-                </div>
-            </form>
-            <div class="auth-redirect">
-                <p>Don't have an account? <a href="signup.php">Sign Up</a></p>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer>
