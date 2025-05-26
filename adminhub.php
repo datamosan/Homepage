@@ -210,7 +210,7 @@ session_start();
     </header>
 
     <section class="dashboard">
-      <div class="card" onclick="location.href='view-orders.html'">
+      <div class="card" onclick="location.href='view-orders.php'">
         <div>
           <h3>View Order Submissions</h3>
           <p>Manage and track all orders submitted by customers.</p>
@@ -218,7 +218,7 @@ session_start();
         <i class="fas fa-receipt"></i>
       </div>
 
-      <div class="card" onclick="location.href='menu-management.html'">
+      <div class="card" onclick="location.href='menu-management.php'">
         <div>
           <h3>Menu Management</h3>
           <p>Update, add or remove products on the website menu.</p>
@@ -226,7 +226,7 @@ session_start();
         <i class="fas fa-utensils"></i>
       </div>
 
-      <div class="card" onclick="location.href='order-management.html'">
+      <div class="card" onclick="location.href='order-management.php'">
         <div>
           <h3>Order Management</h3>
           <p>Track, edit and filter existing customer orders.</p>
@@ -234,7 +234,7 @@ session_start();
         <i class="fas fa-box"></i>
       </div>
 
-      <div class="card" onclick="location.href='messages.html'">
+      <div class="card" onclick="location.href='messages.php'">
         <div>
           <h3>Messages</h3>
           <p>Check and respond to customer inquiries.</p>
@@ -242,7 +242,7 @@ session_start();
         <i class="fas fa-envelope"></i>
       </div>
 
-      <div class="card" onclick="location.href='customers.html'">
+      <div class="card" onclick="location.href='customers.php'">
         <div>
           <h3>Customer Data</h3>
           <p>View registered customer details.</p>

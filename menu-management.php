@@ -396,12 +396,12 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
   <aside class="sidebar">
     <div class="logo">DecaDhen</div>
     <nav>
-      <a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
-      <a href="view-orders.html"><i class="fas fa-receipt"></i> View Orders</a>
+      <a href="dashboard.php"><i class="fas fa-home"></i> Home</a>
+      <a href="view-orders.php"><i class="fas fa-receipt"></i> View Orders</a>
       <a href="menu-management.php" class="active"><i class="fas fa-utensils"></i> Menu Management</a>
-      <a href="order-management.html"><i class="fas fa-box"></i> Order Management</a>
-      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="customers.html"><i class="fas fa-users"></i> Customer Data</a>
+      <a href="order-management.php"><i class="fas fa-box"></i> Order Management</a>
+      <a href="messages.php"><i class="fas fa-envelope"></i> Messages</a>
+      <a href="customers.php"><i class="fas fa-users"></i> Customer Data</a>
     </nav>
   </aside>
 

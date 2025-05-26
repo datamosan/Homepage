@@ -259,20 +259,36 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Checkout button
-    const checkoutButton = document.getElementById('checkout-button');
-    if (checkoutButton) {
-        checkoutButton.addEventListener('click', function() {
-            if (cart.items.length === 0) {
-                alert('Your cart is empty. Please add items before checking out.');
+document.addEventListener('DOMContentLoaded', function () {
+    const checkoutBtn = document.getElementById('checkout-button');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function () {
+            // Check if user is logged in (from PHP session)
+            const isLoggedIn = !!document.body.getAttribute('data-logged-in');
+            // Get cart items from localStorage (or however your cart is stored)
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            if (!isLoggedIn) {
+                // Redirect to login page
+                window.location.href = 'auth.html?redirect=place-order.php';
             } else {
-                alert('Proceeding to checkout...');
-                alert(`Total: ₱${cart.getTotal()}\nThank you for your order!`);
-                cart.items = [];
-                cart.updateCart();
-                cart.saveCart();
+                // Send cart to server via AJAX then redirect
+                fetch('save-cart.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cart })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    window.location.href = 'place-order.php';
+                });
             }
         });
     }
+});
 
     // Menu category navigation
     const categoryLinks = document.querySelectorAll('.category-nav a');

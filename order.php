@@ -21,7 +21,7 @@ $products = $conn->query("SELECT * FROM products");
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body data-logged-in="<?php echo isset($_SESSION['first_name']) ? '1' : ''; ?>">
     <!-- Header -->
     <header>
         <div class="header-bar">
@@ -117,7 +117,7 @@ $products = $conn->query("SELECT * FROM products");
         <div class="custom-order-section">
             <h3 class="custom-order-title">Need a Customized Cake?</h3>
             <p class="custom-order-description">We offer customized cakes for birthdays, weddings, and special occasions. Contact us to discuss your requirements and get a personalized quote.</p>
-            <a href="contact.html?subject=custom-order" class="custom-order-button">Contact for Custom Order</a>
+            <a href="contact.php?subject=custom-order" class="custom-order-button">Contact for Custom Order</a>
         </div>
     </div>
 

@@ -139,7 +139,7 @@ session_start();
 
         <div class="faq-contact">
             <p>For any questions about our delivery policy, please contact us.</p>
-            <a href="contact.html" class="contact-button">Contact Us</a>
+            <a href="contact.php" class="contact-button">Contact Us</a>
         </div>
     </section>
 

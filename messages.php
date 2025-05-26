@@ -254,12 +254,12 @@ session_start();
   <aside class="sidebar">
     <div class="logo">DecaDhen</div>
     <nav>
-      <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
-      <a href="view-orders.html"><i class="fas fa-receipt"></i> Orders</a>
-      <a href="menu-management.html"><i class="fas fa-utensils"></i> Menu</a>
-      <a href="order-management.html"><i class="fas fa-box"></i> Manage Orders</a>
-      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="customers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="view-orders.php"><i class="fas fa-receipt"></i> Orders</a>
+      <a href="menu-management.php"><i class="fas fa-utensils"></i> Menu</a>
+      <a href="order-management.php"><i class="fas fa-box"></i> Manage Orders</a>
+      <a href="messages.php"><i class="fas fa-envelope"></i> Messages</a>
+      <a href="customers.php"><i class="fas fa-users"></i> Customers</a>
     </nav>
   </aside>
 
