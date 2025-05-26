@@ -191,7 +191,7 @@ session_start();
       <img src="logo.png" alt="Dhen's Kitchen Logo">
     </div>
     <nav>
-      <a href="#"><i class="fas fa-home"></i>Home</a>
+      <a href="adminhub.php" class="active"><i class="fas fa-home"></i>Home</a>
       <a href="view-orders.php"><i class="fas fa-receipt"></i>View Orders</a>
       <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-management.php"><i class="fas fa-box"></i>Manage Orders</a>
@@ -252,7 +252,7 @@ session_start();
     </section>
 
     <footer>
-      &copy; 2023 Dhen's Kitchen. All rights reserved.
+      &copy; 2025 Dhen's Kitchen. All rights reserved.
     </footer>
   </div>
 </body>

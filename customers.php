@@ -235,7 +235,7 @@ require 'connection.php';
       <a href="order-management.php"><i class="fas fa-box"></i>Manage Orders</a>
       <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
       <a href="customers.php" class="active"><i class="fas fa-users"></i>Customer Data</a>
-      <a href="index.php"><i class="fas fa-user"></i>Logout</a>
+      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
     </nav>
   </aside>
 
