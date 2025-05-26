@@ -225,7 +225,7 @@ session_start();
         }
 
         .back-to-top:hover {
-            background-color: var(--teal);
+            background-color: var(--mint);
             transform: translateY(-3px);
         }
 

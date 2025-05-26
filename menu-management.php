@@ -117,150 +117,248 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Menu Management - DecaDhen Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     :root {
-      --bg: #fffdf6;
-      --sidebar-bg: #294C3B;
-      --header-bg: #294C3B;
-      --text-light: #fff;
-      --text-dark: #2f2f2f;
-      --accent: #CF5C5C;
-      --card-bg: #FFF4E6;
-      --button-bg: #294C3B;
+      --coral: #f48a8a;
+      --mint: #8cd3a9;
+      --teal: #1d4b53;
+      --lavender: #b0b4ff;
+      --white: #ffffff;
+      --light-gray: #f5f5f5;
+      --dark-gray: #333333;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       --radius: 1.25rem;
-      --shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Inter', sans-serif;
+      background: var(--light-gray);
+      color: var(--dark-gray);
       display: flex;
-      background: var(--bg);
-      color: var(--text-dark);
     }
 
-    /* Sidebar */
     .sidebar {
-      width: 250px;
-      background: var(--sidebar-bg);
+      width: 240px;
+      background-color: var(--teal);
       height: 100vh;
       padding: 2rem 1rem;
+      color: var(--light-gray);
       position: fixed;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
-      color: var(--text-light);
+      gap: 1rem;
+      box-shadow: var(--shadow);
     }
 
     .sidebar .logo {
       font-family: 'DM Serif Display', serif;
       font-size: 1.7rem;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar .logo img {
+      max-width: 150px;
+      max-height: 150px;
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .sidebar nav a {
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      color: var(--text-light);
       text-decoration: none;
+      color: var(--light-gray);
+      font-weight: 600;
       padding: 0.5rem 1rem;
       border-radius: 0.5rem;
-      font-weight: 600;
       transition: background 0.3s;
     }
 
-    .sidebar nav a:hover, .sidebar nav a.active {
-      background: rgba(255, 255, 255, 0.1);
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
-    /* Main content */
-    .main {
-      margin-left: 250px;
-      width: calc(100% - 250px);
+    .sidebar nav a i {
+      color: var(--mint);
+    }
+
+    .main-content {
+      margin-left: 240px;
+      width: calc(100% - 240px);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      padding: 0;
     }
 
     header {
-      background: var(--header-bg);
-      color: var(--text-light);
-      padding: 1rem 2rem;
+      background-color: var(--teal);
+      color: var(--light-gray);
+      padding: 1.2rem 2rem;
       display: flex;
       justify-content: flex-end;
       align-items: center;
       box-shadow: var(--shadow);
     }
 
-    header .notification {
-      position: relative;
+    .icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .icons i {
       font-size: 1.3rem;
       cursor: pointer;
     }
 
-    .notification .badge {
-      position: absolute;
-      top: -6px;
-      right: -10px;
-      background: var(--accent);
-      color: white;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .content {
-      padding: 2rem;
-    }
-
     h1 {
       font-family: 'DM Serif Display', serif;
-      font-size: 2rem;
-      color: var(--sidebar-bg);
+      color: var(--teal);
       margin-bottom: 1rem;
+      margin-top: 2rem;
+      margin-left: 2rem;
     }
 
-    .filter-bar {
+    .controls, .filter-bar {
       display: flex;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      margin-left: 2rem;
+      margin-right: 2rem;
     }
 
-    .filter-bar input, .filter-bar select {
-      padding: 0.6rem 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
+    .controls input[type="text"], .filter-bar input[type="text"], .filter-bar select {
       flex: 1;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .controls button {
+      background-color: var(--teal);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .controls button:hover {
+      background-color: var(--coral);
     }
 
     table {
-      width: 100%;
-      background: var(--card-bg);
+      width: calc(100% - 4rem);
+      margin-left: 2rem;
+      margin-right: 2rem;
+      border-collapse: collapse;
+      background-color: var(--white);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
-      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: var(--teal);
+      color: var(--white);
     }
 
     th, td {
-      padding: 1rem;
-      border-bottom: 1px solid #ddd;
+      padding: 1rem 1.2rem;
       text-align: left;
-      vertical-align: middle;
+      border-bottom: 1px solid #ddd;
+      cursor: default;
     }
 
-    th {
-      background: #fff8e6;
-      color: var(--sidebar-bg);
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
     }
 
-    /* Image in table */
+    th.sortable:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    th.sortable.active {
+      background-color: var(--mint) !important;
+      color: var(--teal);
+    }
+
+    th.sortable.active i {
+      color: var(--teal);
+    }
+
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .pagination {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pagination button {
+      border: none;
+      background-color: var(--teal);
+      color: var(--white);
+      padding: 0.5rem 0.9rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .pagination button:disabled {
+      background-color: #999;
+      cursor: default;
+    }
+
+    .pagination button.active {
+      background-color: var(--coral);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--light-gray);
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .main-content > footer, .main > footer {
+      margin-top: auto;
+    }
+
+    /* Custom styles for menu images and actions */
     td img.menu-image {
       width: 60px;
       height: 60px;
@@ -270,54 +368,43 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       vertical-align: middle;
     }
 
-    .actions button {
+    .actions a, .actions button {
       margin-right: 0.5rem;
       border: none;
       padding: 0.4rem 0.8rem;
       border-radius: 0.5rem;
       font-weight: 600;
       cursor: pointer;
-    }
-
-    .edit-btn,
-    .delete-btn {
       background: none;
-      border: none;
-      color: var(--button-bg); /* dark green for edit */
-      font-weight: 600;
-      padding: 0;
-      margin: 0 0.5rem 0 0;
-      border-radius: 0;
-      text-decoration: none;   /* <-- Add this line */
-      cursor: pointer;
-      transition: color 0.2s;
+      color: var(--teal);
+      text-decoration: none;
       font-size: 1rem;
+      transition: color 0.2s;
       box-shadow: none;
       outline: none;
       display: inline;
     }
 
-    .edit-btn:hover {
-      color: var(--accent); /* red accent on hover */
-      text-decoration: none;
+    .actions .edit-btn:hover {
+      color: var(--coral);
     }
 
-    .delete-btn {
-      color: var(--accent); /* red */
-      text-decoration: none;   /* <-- Add this line */
+    .actions .delete-btn {
+      color: var(--coral);
     }
 
-    .delete-btn:hover {
+    .actions .delete-btn:hover {
       color: #a94442;
-      text-decoration: none;
     }
 
     .add-form {
       margin-top: 2rem;
-      background: var(--card-bg);
+      background: var(--white);
       padding: 1.5rem;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
+      margin-left: 2rem;
+      margin-right: 2rem;
     }
 
     .add-form input, .add-form select {
@@ -329,13 +416,17 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     }
 
     .add-form button {
-      background: var(--button-bg);
+      background: var(--teal);
       color: white;
       border: none;
       padding: 0.6rem 1.2rem;
       border-radius: 0.5rem;
       font-weight: 600;
       cursor: pointer;
+    }
+
+    .add-form button:hover {
+      background: var(--coral);
     }
 
     /* Modal */
@@ -347,6 +438,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       background: rgba(0, 0, 0, 0.5);
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
 
     .modal-content {
@@ -367,7 +459,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     }
 
     .modal-content button {
-      background: var(--button-bg);
+      background: var(--teal);
       color: white;
       border: none;
       padding: 0.6rem 1.2rem;
@@ -376,40 +468,47 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       cursor: pointer;
     }
 
+    .modal-content button:hover {
+      background: var(--coral);
+    }
+
     /* Toast */
     #toast {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: var(--button-bg);
+      background: var(--teal);
       color: white;
       padding: 1rem 1.5rem;
       border-radius: var(--radius);
       opacity: 0;
       transition: opacity 0.5s;
       box-shadow: var(--shadow);
+      z-index: 2000;
     }
   </style>
 </head>
 <body>
-
   <aside class="sidebar">
-    <div class="logo">DecaDhen</div>
+    <div class="logo">
+      <img src="logo.png" alt="Dhen's Kitchen Logo">
+    </div>
     <nav>
-      <a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
-      <a href="view-orders.html"><i class="fas fa-receipt"></i> View Orders</a>
-      <a href="menu-management.php" class="active"><i class="fas fa-utensils"></i> Menu Management</a>
-      <a href="order-management.html"><i class="fas fa-box"></i> Order Management</a>
-      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="customers.html"><i class="fas fa-users"></i> Customer Data</a>
+      <a href="adminhub.php"><i class="fas fa-home"></i>Home</a>
+      <a href="view-orders.php"><i class="fas fa-receipt"></i>View Orders</a>
+      <a href="menu-management.php" class="active"><i class="fas fa-utensils"></i> Manage Menu</a>
+      <a href="order-management.php"><i class="fas fa-box"></i>Manage Orders</a>
+      <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
+      <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
+      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
     </nav>
   </aside>
 
-  <div class="main">
+  <div class="main-content">
     <header>
-      <div class="notification">
+      <div class="icons">
         <i class="fas fa-bell"></i>
-        <span class="badge">3</span>
+        <i class="fas fa-user-circle"></i>
       </div>
     </header>
 
@@ -464,7 +563,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
 
       <!-- Add Item -->
       <div class="add-form">
-        <h3>Add New Menu Item</h3>
+        <h3>Add New Menu Item</h3> <br>
         <form id="addForm" method="post" enctype="multipart/form-data">
           <select name="category" required>
             <option value="">Select Category</option>
@@ -486,7 +585,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       <?php if ($edit_row): ?>
       <div class="modal" style="display:flex;">
         <div class="modal-content">
-          <h3>Edit Menu Item</h3>
+          <h3>Edit Menu Item</h3> <br>
           <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="edit_id" value="<?= $edit_row['ProductID'] ?>">
             <select name="edit_category" required>
@@ -520,6 +619,9 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       <?php endif; ?>
 
     </div>
+    <footer>
+      &copy; 2025 Dhen's Kitchen. All rights reserved.
+    </footer>
   </div>
   <script>
     // Simple filter for search/category (client-side)

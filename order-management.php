@@ -9,125 +9,179 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Order Management - DecaDhen</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     :root {
-      --bg-start: #FFFEF2;
-      --bg-end: #FFF4E6;
-      --card: #F6E7C1;
-      --accent: #294C3B;
-      --highlight: #CF5C5C;
-      --text-dark: #2f2f2f;
-      --text-light: #ffffff;
+      --coral: #f48a8a;
+      --mint: #8cd3a9;
+      --teal: #1d4b53;
+      --lavender: #b0b4ff;
+      --white: #ffffff;
+      --light-gray: #f5f5f5;
+      --dark-gray: #333333;
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       --radius: 1.25rem;
     }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(120deg, var(--bg-start), var(--bg-end));
-      min-height: 100vh;
+      background: var(--light-gray);
+      color: var(--dark-gray);
       display: flex;
     }
     .sidebar {
       width: 240px;
-      background-color: var(--accent);
-      color: var(--text-light);
-      padding: 2rem 1rem;
-      position: fixed;
+      background-color: var(--teal);
       height: 100vh;
+      padding: 2rem 1rem;
+      color: var(--light-gray);
+      position: fixed;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1rem;
       box-shadow: var(--shadow);
     }
     .sidebar .logo {
       font-family: 'DM Serif Display', serif;
       font-size: 1.7rem;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .sidebar .logo img {
+      max-width: 150px;
+      max-height: 150px;
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
     .sidebar nav a {
       display: flex;
       align-items: center;
       gap: 0.8rem;
       text-decoration: none;
-      color: var(--text-light);
+      color: var(--light-gray);
       font-weight: 600;
       padding: 0.5rem 1rem;
       border-radius: 0.5rem;
       transition: background 0.3s;
     }
-    .sidebar nav a:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .sidebar nav a i {
+      color: var(--mint);
     }
     .main-content {
       margin-left: 240px;
       width: calc(100% - 240px);
-      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 0;
     }
     header {
-      background-color: var(--accent);
-      color: var(--text-light);
+      background-color: var(--teal);
+      color: var(--light-gray);
       padding: 1.2rem 2rem;
       display: flex;
       justify-content: flex-end;
       align-items: center;
       box-shadow: var(--shadow);
-      margin-bottom: 1rem;
     }
-    header .icons i {
+    .icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .icons i {
       font-size: 1.3rem;
-      margin-left: 1.5rem;
       cursor: pointer;
     }
     h1 {
       font-family: 'DM Serif Display', serif;
-      color: var(--accent);
+      color: var(--teal);
       margin-bottom: 1rem;
+      margin-top: 2rem;
+      margin-left: 2rem;
     }
     .controls {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      margin-left: 2rem;   /* Match table's margin */
+      margin-right: 2rem;  /* Match table's margin */
+      flex-wrap: nowrap;
+      overflow-x: visible;
+      white-space: nowrap;
+      font-size: 0.97rem;
     }
     .controls input,
     .controls select,
     .controls button {
-      padding: 8px;
+      padding: 0.5rem 1rem; /* Match customers.php */
+      border-radius: var(--radius);
       border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 0.9em;
+      min-width: 0;
+      flex-shrink: 1;
+      max-width: 140px;
     }
     .controls button {
-      background-color: var(--accent);
-      color: var(--text-light);
+      background-color: var(--teal);
+      color: var(--white);
       border: none;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     .controls button:hover {
-      background-color: #1d3c2e;
+      background-color: var(--coral);
+    }
+    .controls #searchInput {
+      min-width: 220px;
+      max-width: 320px;
+      flex-basis: 220px;
+    }
+    .controls #sortField {
+      min-width: 160px;
+      max-width: 220px;
+      flex-basis: 160px;
     }
     table {
-      width: 100%;
+      width: calc(100% - 4rem);
+      margin-left: 2rem;
+      margin-right: 2rem;
       border-collapse: collapse;
-      background: var(--card);
+      background-color: var(--white);
       border-radius: var(--radius);
-      overflow: hidden;
       box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    thead {
+      background-color: var(--teal);
+      color: var(--white);
     }
     th, td {
-      padding: 1rem;
+      padding: 1rem 1.2rem;
       text-align: left;
       border-bottom: 1px solid #ddd;
+      cursor: default;
     }
     th {
-      background: #fff8e6;
-      color: var(--accent);
-      cursor: pointer;
+      font-weight: 600;
     }
     tr:last-child td {
       border-bottom: none;
@@ -138,33 +192,73 @@ session_start();
       color: white;
       font-weight: bold;
       font-size: 0.9em;
+      display: inline-block;
     }
     .preparing { background: #ff9800; }
     .out-for-delivery { background: #2196f3; }
     .delivered { background: #4caf50; }
     button.delete-btn {
-      background-color: var(--highlight);
+      background-color: var(--coral);
       color: white;
       padding: 6px 12px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
     }
     button.delete-btn:hover {
       background-color: #a94444;
+    }
+    .main-content > footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--light-gray);
+      font-size: 0.9rem;
+      color: #555;
+    }
+    @media (max-width: 900px) {
+      .sidebar { width: 100px; }
+      .main-content { margin-left: 100px; width: calc(100% - 100px);}
+      table, .controls { margin-left: 1rem; margin-right: 1rem; }
+      .controls {
+        gap: 0.3rem;
+        font-size: 0.92rem;
+      }
+      .controls input,
+      .controls select,
+      .controls button {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.92rem;
+        max-width: 90px;
+      }
+      .controls #searchInput {
+        min-width: 110px;
+        max-width: 180px;
+        flex-basis: 110px;
+      }
+      .controls #sortField {
+        min-width: 90px;
+        max-width: 120px;
+        flex-basis: 90px;
+      }
     }
   </style>
 </head>
 <body>
   <aside class="sidebar">
-    <div class="logo">DecaDhen</div>
+    <div class="logo">
+      <img src="logo.png" alt="Dhen's Kitchen Logo">
+    </div>
     <nav>
-      <a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
-      <a href="view-orders.html"><i class="fas fa-receipt"></i> Orders</a>
-      <a href="menu-management.html"><i class="fas fa-utensils"></i> Menu</a>
-      <a href="order-management.html" class="active"><i class="fas fa-box"></i> Manage Orders</a>
-      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="customers.html"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminhub.php"><i class="fas fa-home"></i>Home</a>
+      <a href="view-orders.php"><i class="fas fa-receipt"></i>View Orders</a>
+      <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
+      <a href="order-management.php" class="active"><i class="fas fa-box"></i>Manage Orders</a>
+      <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
+      <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
+      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
     </nav>
   </aside>
 
@@ -182,7 +276,7 @@ session_start();
       <input type="text" id="searchInput" placeholder="Search by name or order ID">
       <input type="date" id="startDate">
       <input type="date" id="endDate">
-      <button id="filterDateBtn">Filter</button>
+      <button id="filterDateBtn"><i class="fas fa-filter"></i> Filter</button>
       <select id="sortField">
         <option value="deadline">Sort by Deadline</option>
         <option value="status">Sort by Status</option>
@@ -191,9 +285,9 @@ session_start();
         <option value="asc">Ascending</option>
         <option value="desc">Descending</option>
       </select>
-      <button id="sortBtn">Sort</button>
-      <button id="exportBtn">Export to CSV</button>
-      <button id="printBtn">Print</button>
+      <button id="sortBtn"><i class="fas fa-sort"></i> Sort</button>
+      <button id="exportBtn"><i class="fas fa-file-export"></i> Export CSV</button>
+      <button id="printBtn"><i class="fas fa-print"></i> Print</button>
     </div>
 
     <table>
@@ -211,6 +305,9 @@ session_start();
       </thead>
       <tbody id="orderTableBody"></tbody>
     </table>
+    <footer>
+      &copy; 2025 Dhen's Kitchen. All rights reserved.
+    </footer>
   </div>
 
   <script>
