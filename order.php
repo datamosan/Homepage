@@ -69,7 +69,7 @@ $products = $conn->query("SELECT * FROM products");
         <div class="products-grid">
             <?php while ($product = $products->fetch_assoc()): ?>
                 <div class="product-card">
-                    <div class="product-color"></div>
+                    <div class="product-color"><i class="fas fa-image"></i></div>
                     <h3 class="product-title"><?php echo htmlspecialchars($product['ProductName']); ?></h3>
                     <p class="product-description"><?php echo htmlspecialchars($product['ProductDescription']); ?></p>
                     <?php

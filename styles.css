@@ -1098,6 +1098,13 @@ footer {
     background-color: var(--coral);
     margin-bottom: 15px;
     border-radius: 50%;
+    cursor: pointer;
+}
+
+.product-color i {
+    color: var(--white);
+    margin-left: 7px;
+    margin-top: 7px;
 }
 
 .product-title {
@@ -2177,9 +2184,10 @@ footer {
 
 .show-qr-btn {
     width: 100%;
-    margin: 10px 0 8px 0;
+    margin: 15px 0 15px 0;
     background: none;
     color: var(--teal);
+    gap: 0.3rem;
     border: none;
     padding: 0;
     font-size: 0.8rem;
@@ -2189,6 +2197,7 @@ footer {
     display: flex;
     justify-content: left; /* Center horizontally */
     align-items: center;     /* Center vertically if needed */
+    text-decoration: underline;
 }
 
 .show-qr-btn:hover {
