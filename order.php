@@ -110,7 +110,9 @@ $products = $conn->query("SELECT * FROM products");
             <div class="cart-total">
                 Total: <span id="cart-total-amount">₱0.00</span>
             </div>
-            <button id="checkout-button" class="checkout-button">Proceed to Checkout</button>
+            <button id="checkout-button" class="checkout-button">
+                Proceed to Checkout
+            </button>
         </div>
 
         <!-- Custom Order Section -->

@@ -124,12 +124,8 @@ document.addEventListener('DOMContentLoaded', function() {
         items: [],
         
         addItem: function(id, name, price, size = null, quantity = 1) {
-            // Create a unique identifier for the item with its size
             const itemId = size ? `${id}-${size}` : id;
-            
-            // Check if item already exists in cart
             const existingItem = this.items.find(item => item.id === itemId);
-            
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
@@ -142,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     quantity: quantity
                 });
             }
-            
             this.updateCart();
             this.saveCart();
         },
@@ -173,19 +168,15 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCart: function() {
             const cartItems = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total-amount');
-            
             if (cartItems && cartTotal) {
                 if (this.items.length === 0) {
                     cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
                 } else {
                     cartItems.innerHTML = '';
-                    
                     this.items.forEach(item => {
                         const cartItem = document.createElement('div');
                         cartItem.className = 'cart-item';
-                        
                         const itemName = item.size ? `${item.name} - ${item.size}` : item.name;
-                        
                         cartItem.innerHTML = `
                             <div class="cart-item-name">${itemName}</div>
                             <div class="cart-item-price">₱${item.price.toFixed(2)}</div>
@@ -195,11 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="cart-item-total">₱${(item.price * item.quantity).toFixed(2)}</div>
                             <div class="cart-item-remove" data-id="${item.id}">✕</div>
                         `;
-                        
                         cartItems.appendChild(cartItem);
                     });
-                    
-                    // Add event listeners for quantity inputs
+                    // Quantity and remove event listeners
                     const quantityInputs = document.querySelectorAll('.quantity-input');
                     quantityInputs.forEach(input => {
                         input.addEventListener('change', function() {
@@ -208,8 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             cart.updateQuantity(id, quantity);
                         });
                     });
-                    
-                    // Add event listeners for remove buttons
                     const removeButtons = document.querySelectorAll('.cart-item-remove');
                     removeButtons.forEach(button => {
                         button.addEventListener('click', function() {
@@ -218,17 +205,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     });
                 }
-                
                 cartTotal.textContent = `₱${this.getTotal()}`;
             }
         },
         
+        // Save cart to both active and user-specific key
         saveCart: function() {
             localStorage.setItem('dhensKitchenCart', JSON.stringify(this.items));
+            const userKey = getCurrentUserKey();
+            if (userKey) {
+                localStorage.setItem('dhensKitchenCart_' + userKey, JSON.stringify(this.items));
+            }
         },
         
+        // Load cart from user-specific key if logged in, else from active cart
         loadCart: function() {
-            const savedCart = localStorage.getItem('dhensKitchenCart');
+            const userKey = getCurrentUserKey();
+            let savedCart = null;
+            if (userKey) {
+                savedCart = localStorage.getItem('dhensKitchenCart_' + userKey);
+            }
+            if (!savedCart) {
+                savedCart = localStorage.getItem('dhensKitchenCart');
+            }
             if (savedCart) {
                 this.items = JSON.parse(savedCart);
                 this.updateCart();
@@ -243,52 +242,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const addToCartButtons = document.querySelectorAll('.add-to-cart');
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function() {
+            // Check login status
+            const isLoggedIn = document.body.getAttribute('data-logged-in') === '1';
+            if (!isLoggedIn) {
+                // Redirect to login with redirect back to order.php
+                window.location.href = 'auth.html?redirect=order.php';
+                return;
+            }
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
-            
-            // Check if there's a size selector for this product
             const sizeSelector = document.querySelector(`select[data-id="${id}"]`);
             const size = sizeSelector ? sizeSelector.value : null;
-            
             cart.addItem(id, name, price, size);
-            
-            // Show confirmation message
-            alert(`${name}${size ? ` (${size})` : ''} added to cart!`);
         });
     });
     
     // Checkout button
-document.addEventListener('DOMContentLoaded', function () {
     const checkoutBtn = document.getElementById('checkout-button');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', function () {
-            // Check if user is logged in (from PHP session)
-            const isLoggedIn = !!document.body.getAttribute('data-logged-in');
-            // Get cart items from localStorage (or however your cart is stored)
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            if (cart.length === 0) {
+            const isLoggedIn = document.body.getAttribute('data-logged-in') === '1';
+            if (cart.items.length === 0) {
                 alert('Your cart is empty!');
                 return;
             }
             if (!isLoggedIn) {
-                // Redirect to login page
+                // Redirect to login with redirect to place-order.php
                 window.location.href = 'auth.html?redirect=place-order.php';
             } else {
-                // Send cart to server via AJAX then redirect
-                fetch('save-cart.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cart })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    window.location.href = 'place-order.php';
-                });
+                window.location.href = 'place-order.php';
             }
         });
     }
-});
 
     // Menu category navigation
     const categoryLinks = document.querySelectorAll('.category-nav a');
@@ -530,10 +516,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Helper to get current user key (adjust as needed)
+    function getCurrentUserKey() {
+        // You can set this value on login, e.g., localStorage.setItem('dhensKitchenUser', email);
+        return localStorage.getItem('dhensKitchenUser'); // e.g., user's email
+    }
+
     // Admin Logout
     const logoutButton = document.querySelector('.admin-logout-btn');
     if (logoutButton) {
         logoutButton.addEventListener('click', function() {
+            localStorage.removeItem('dhensKitchenCart');
+            // Optionally, remove user key as well
+            localStorage.removeItem('dhensKitchenUser');
             alert('Logging out...');
             window.location.href = 'login.php';
         });
@@ -552,50 +547,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function loadItemDetails(itemId) {
-        // In a real application, you would fetch item details from a server
-        // For demonstration, we'll use dummy data
-        const items = {
-            'chocolate-cake': {
-                name: 'Chocolate Cake',
-                price: '₱550.00',
-                description: 'Rich chocolate layers with smooth ganache frosting. Perfect for birthdays and special occasions.',
-                image: 'images/chocolate-cake.jpg',
-                specs: {
-                    'Serving Size': '6-8 pax',
-                    'Size': '8 inches',
-                    'Allergens': 'Contains dairy, eggs, wheat',
-                    'Storage': 'Refrigerate up to 3 days',
-                    'Lead Time': '24-48 hours'
-                }
-            },
-            'red-velvet': {
-                name: 'Red Velvet Cake',
-                price: '₱650.00',
-                description: 'Classic red velvet cake with cream cheese frosting. A perfect blend of cocoa and vanilla flavors.',
-                image: 'images/red-velvet.jpg',
-                specs: {
-                    'Serving Size': '10-12 pax',
-                    'Size': '10 inches',
-                    'Allergens': 'Contains dairy, eggs, wheat',
-                    'Storage': 'Refrigerate up to 3 days',
-                    'Lead Time': '24-48 hours'
-                }
-            },
-            'bicol-express': {
-                name: 'Bicol Express',
-                price: '₱750.00',
-                description: 'Spicy Filipino dish with pork, coconut milk, and chili peppers. A Bicolano specialty.',
-                image: 'images/bicol-express.jpg',
-                specs: {
-                    'Serving Size': 'Party Tray (10-12 pax)',
-                    'Spice Level': 'Medium to Hot',
-                    'Allergens': 'Contains coconut, may contain shrimp paste',
-                    'Storage': 'Refrigerate up to 2 days',
-                    'Reheating': 'Microwave or stovetop'
-                }
-            }
-        };
-
         const item = items[itemId];
         if (item) {
             document.querySelector('.item-detail-title').textContent = item.name;

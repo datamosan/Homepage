@@ -13,13 +13,6 @@ function cart_total($cart)
     return $total;
 }
 
-// Example shipping options
-$shipping_options = [
-    ['label' => 'Pick-up (Free)', 'price' => 0],
-    ['label' => 'Within Davao City (+₱50)', 'price' => 50],
-    ['label' => 'Outside Davao City (+₱120)', 'price' => 120],
-];
-
 // Bank details
 $bank_details = [
     'Bank Name' => 'Metrobank',
@@ -98,38 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Cart Items Table -->
                 <div class="checkout-cart">
                     <h3 class="cart-title">Your Cart</h3>
-                    <?php if (empty($cart)): ?>
-                        <div class="cart-empty">Your cart is empty.</div>
-                    <?php else: ?>
-                        <table class="cart-table">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Qty</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($cart as $item): ?>
-                                    <tr>
-                                        <td>
-                                            <?php if (!empty($item['image'])): ?>
-                                                <img src="<?= htmlspecialchars($item['image']) ?>"
-                                                    alt="<?= htmlspecialchars($item['name']) ?>" class="cart-product-img">
-                                            <?php endif; ?>
-                                            <span style="margin-left:10px;"><?= htmlspecialchars($item['name']) ?></span>
-                                        </td>
-                                        <td>₱<?= number_format($item['price'], 2) ?></td>
-                                        <td><?= $item['qty'] ?></td>
-                                        <td style="color:var(--coral); font-weight:bold;">
-                                            ₱<?= number_format($item['price'] * $item['qty'], 2) ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    <?php endif; ?>
+                    <div id="cart-table-container"></div>
                 </div>
                 <!-- Summary / Shipping / Payment -->
                 <div class="checkout-summary">
@@ -144,9 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span>
                                 <select name="shipping"
                                     style="padding:4px 10px; border-radius:6px; border:1px solid var(--teal); color:var(--teal);">
-                                    <?php foreach ($shipping_options as $opt): ?>
-                                        <option value="<?= $opt['price'] ?>"><?= htmlspecialchars($opt['label']) ?></option>
-                                    <?php endforeach; ?>
+                                    <option>Self-Pickup</option>
+                                    <option>Delivery (Self-Arrange)</option>
                                 </select>
                             </span>
                         </div>
@@ -161,8 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <li><strong><?= $label ?>:</strong> <?= htmlspecialchars($value) ?></li>
                             <?php endforeach; ?>
                         </ul>
-                        <button type="button" id="show-qr-btn"
-                            style="width:100%; margin: 12px 0 8px 0; background:none; color:var(--teal); border:none; font-weight:bold; text-align:left; padding:0; font-size:1rem; cursor:pointer; text-decoration:none; box-shadow:none;">
+                        <button type="button" id="show-qr-btn" class="show-qr-btn">
                             &#128247; Show QR Codes
                         </button>
                         <div id="qr-modal"
@@ -202,14 +162,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </form>
+        
     </main>
     <script>
-        // Update total when shipping changes
-        document.querySelector('select[name="shipping"]').addEventListener('change', function () {
-            var shipping = parseFloat(this.value) || 0;
-            var subtotal = <?= cart_total($cart) ?>;
-            var total = subtotal + shipping;
-            document.getElementById('order-total').textContent = total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = JSON.parse(localStorage.getItem('dhensKitchenCart') || '[]');
+            const container = document.getElementById('cart-table-container');
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="cart-empty">Your cart is empty.</div>';
+                return;
+            }
+            let html = `<table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            let total = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                html += `<tr>
+                    <td>
+                        ${item.name}${item.size ? ' - ' + item.size : ''}
+                    </td>
+                    <td>₱${Number(item.price).toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td style="color:var(--coral); font-weight:bold;">₱${subtotal.toFixed(2)}</td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+
+            // Update summary subtotal and total if present
+            const subtotalSpan = document.querySelector('.summary-row span:last-child');
+            const totalSpan = document.getElementById('order-total');
+            if (subtotalSpan) subtotalSpan.textContent = '₱' + total.toLocaleString(undefined, {minimumFractionDigits:2});
+            if (totalSpan) totalSpan.textContent = total.toLocaleString(undefined, {minimumFractionDigits:2});
+            // Update total when shipping changes
+            const shippingSelect = document.querySelector('select[name="shipping"]');
+            if (shippingSelect && totalSpan) {
+                shippingSelect.addEventListener('change', function () {
+                    const shipping = parseFloat(this.value) || 0;
+                    totalSpan.textContent = (total + shipping).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                });
+            }
         });
 
         document.getElementById('show-qr-btn').onclick = function () {
