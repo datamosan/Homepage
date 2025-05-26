@@ -105,7 +105,7 @@ session_start();
             <div class="copyright">
             <div class="footer-links">
                 <br>
-                <a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a>
+                <a href="delivery-policy.php">Delivery Policy</a> | <a href="privacy-policy.php">Privacy Policy</a> | <a href="terms.php">Terms & Conditions</a>
             </div>
             <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
             </div>

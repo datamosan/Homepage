@@ -1,0 +1,604 @@
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhen's Kitchen - Privacy Policy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .privacy-policy-section, .terms-section {
+            padding: 60px 20px;
+            background-color: var(--white);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .policy-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .last-updated {
+            color: var(--dark-gray);
+            font-style: italic;
+            margin-bottom: 30px;
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        .policy-section {
+            margin-bottom: 30px;
+        }
+
+        .policy-section h2 {
+            color: var(--coral);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 8px;
+        }
+
+        .policy-section h3 {
+            color: var(--teal);
+            margin: 20px 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .policy-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+        }
+
+        .policy-section strong {
+            color: var(--teal);
+        }
+
+        .policy-section ul, .policy-section ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            list-style-position: outside;
+        }
+
+        .policy-section ul li, .policy-section ol li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            padding-left: 5px;
+        }
+
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .policy-table th, .policy-table td {
+            border: 1px solid var(--light-gray);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .policy-table th {
+            background-color: var(--teal);
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .policy-table tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+
+        .legal-contact {
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .legal-contact h3 {
+            color: var(--teal);
+            margin-bottom: 15px;
+        }
+
+        .legal-contact p {
+            margin-bottom: 10px;
+        }
+
+        .legal-contact a {
+            color: var(--coral);
+            text-decoration: underline;
+        }
+
+        @media print {
+            header, footer, .nav-links {
+                display: none;
+            }
+            
+            .privacy-policy-section, .terms-section {
+                padding: 0;
+            }
+            
+            .policy-content {
+                box-shadow: none;
+                padding: 0;
+            }
+            
+            body {
+                font-size: 12pt;
+                color: #000;
+            }
+            
+            .policy-section h2 {
+                font-size: 14pt;
+                color: #000;
+            }
+            
+            .policy-section h3 {
+                font-size: 12pt;
+                color: #000;
+            }
+            
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .privacy-policy-section, .terms-section {
+                padding: 40px 15px;
+            }
+            
+            .policy-content {
+                padding: 20px;
+            }
+            
+            .policy-section h2 {
+                font-size: 1.3rem;
+            }
+            
+            .policy-section h3 {
+                font-size: 1.1rem;
+            }
+            
+            .policy-section ul, .policy-section ol {
+                margin-left: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .privacy-policy-section, .terms-section {
+                padding: 30px 10px;
+            }
+            
+            .policy-content {
+                padding: 15px;
+            }
+            
+            .policy-section h2 {
+                font-size: 1.2rem;
+            }
+            
+            .policy-section h3 {
+                font-size: 1rem;
+            }
+            
+            .last-updated {
+                text-align: center;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--coral);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--teal);
+            transform: translateY(-3px);
+        }
+
+        .legal-accordion {
+            margin-bottom: 20px;
+        }
+
+        .legal-accordion-header {
+            background-color: var(--light-gray);
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: relative;
+            color: var(--teal);
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .legal-accordion-header:hover {
+            background-color: #e8e8e8;
+        }
+
+        .legal-accordion-header::after {
+            content: '+';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        .legal-accordion.active .legal-accordion-header::after {
+            content: '-';
+        }
+
+        .legal-accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .legal-accordion.active .legal-accordion-content {
+            padding: 15px;
+            max-height: 1000px;
+            border: 1px solid var(--light-gray);
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .important-notice {
+            background-color: rgba(244, 138, 138, 0.1);
+            border-left: 4px solid var(--coral);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .important-notice h4 {
+            color: var(--coral);
+            margin-bottom: 10px;
+        }
+
+        .toc {
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            color: var(--teal);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .toc ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+
+        .toc ul li {
+            margin-bottom: 8px;
+        }
+
+        .toc ul li a {
+            color: var(--teal);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .toc ul li a:hover {
+            color: var(--coral);
+            text-decoration: underline;
+        }
+
+        .update-badge {
+            display: inline-block;
+            background-color: var(--teal);
+            color: var(--white);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-bar">
+            <div class="page-title">About Us</div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-links">
+                <a href="about.php" class="nav-item active">About Us</a>
+                <a href="menu.php" class="nav-item">Menu</a>
+                <a href="order.php" class="nav-item">Order Now</a>
+            </div>
+            <a href="index.php" class="logo-container">
+                <img src="logo.png" alt="Dhen's Kitchen Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="faq.php" class="nav-item">FAQs</a>
+                <a href="contact.php" class="nav-item">Contact Us</a>
+                <?php if (isset($_SESSION['first_name'])): ?>
+                    <div class="nav-dropdown">
+                        <button class="nav-item nav-dropdown-btn">
+                            Hi, <?php echo htmlspecialchars($_SESSION['first_name']); ?> <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="nav-dropdown-content">
+                            <a href="profilepage.php">Profile</a>
+                            <a href="logout.php">Logout</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="auth.html" class="nav-item">Login</a>
+                <?php endif; ?>
+            </div>
+        </nav>
+    </header>
+
+    <section class="privacy-policy-section">
+        <div class="container">
+            <h1 class="section-title">Privacy Policy</h1>
+            <div class="policy-content">
+                <p class="last-updated">Last Updated: <span class="update-badge">May 21, 2025</span></p>
+                
+                <div class="toc">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li><a href="#introduction">1. Introduction</a></li>
+                        <li><a href="#information-we-collect">2. Information We Collect</a></li>
+                        <li><a href="#how-we-use">3. How We Use Your Information</a></li>
+                        <li><a href="#cookies">4. Cookies and Similar Technologies</a></li>
+                        <li><a href="#information-sharing">5. Information Sharing and Disclosure</a></li>
+                        <li><a href="#data-security">6. Data Security</a></li>
+                        <li><a href="#your-rights">7. Your Rights</a></li>
+                        <li><a href="#childrens-privacy">8. Children's Privacy</a></li>
+                        <li><a href="#changes">9. Changes to This Privacy Policy</a></li>
+                        <li><a href="#contact-us">10. Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div id="introduction" class="policy-section">
+                    <h2>1. Introduction</h2>
+                    <p>Welcome to Dhen's Kitchen ("we," "our," or "us"). We are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or place orders with us.</p>
+                    <p>Please read this Privacy Policy carefully. By accessing or using our website and services, you acknowledge that you have read, understood, and agree to be bound by all the terms of this Privacy Policy.</p>
+                </div>
+
+                <div id="information-we-collect" class="policy-section">
+                    <h2>2. Information We Collect</h2>
+                    <h3>2.1 Personal Information</h3>
+                    <p>We may collect personal information that you voluntarily provide to us when you:</p>
+                    <ul>
+                        <li>Register for an account</li>
+                        <li>Place an order</li>
+                        <li>Sign up for our newsletter</li>
+                        <li>Contact us through our website</li>
+                        <li>Participate in promotions or surveys</li>
+                    </ul>
+                    <p>This information may include:</p>
+                    <ul>
+                        <li>Name</li>
+                        <li>Email address</li>
+                        <li>Phone number</li>
+                        <li>Delivery address</li>
+                        <li>Payment information</li>
+                        <li>Dietary preferences or restrictions</li>
+                    </ul>
+
+                    <h3>2.2 Automatically Collected Information</h3>
+                    <p>When you visit our website, we may automatically collect certain information about your device and usage patterns, including:</p>
+                    <ul>
+                        <li>IP address</li>
+                        <li>Browser type and version</li>
+                        <li>Operating system</li>
+                        <li>Pages visited and time spent on those pages</li>
+                        <li>Referring website</li>
+                        <li>Device information (e.g., device type, screen size)</li>
+                    </ul>
+                </div>
+
+                <div id="how-we-use" class="policy-section">
+                    <h2>3. How We Use Your Information</h2>
+                    <p>We may use the information we collect for various purposes, including to:</p>
+                    <ul>
+                        <li>Process and fulfill your orders</li>
+                        <li>Create and manage your account</li>
+                        <li>Send order confirmations and updates</li>
+                        <li>Provide customer support</li>
+                        <li>Send promotional emails and newsletters (if you've opted in)</li>
+                        <li>Improve our website, products, and services</li>
+                        <li>Analyze usage patterns and trends</li>
+                        <li>Protect against fraudulent or unauthorized transactions</li>
+                        <li>Comply with legal obligations</li>
+                    </ul>
+                    
+                    <div class="important-notice">
+                        <h4>Important Notice</h4>
+                        <p>We will never sell your personal information to third parties for marketing purposes. Your information is collected solely to provide and improve our services to you.</p>
+                    </div>
+                </div>
+
+                <div id="cookies" class="policy-section">
+                    <h2>4. Cookies and Similar Technologies</h2>
+                    <p>We use cookies and similar tracking technologies to collect information about your browsing activities. Cookies are small text files that are stored on your device when you visit our website.</p>
+                    <p>We use the following types of cookies:</p>
+                    <ul>
+                        <li><strong>Essential cookies:</strong> These cookies are necessary for the website to function properly.</li>
+                        <li><strong>Preference cookies:</strong> These cookies remember your preferences and settings.</li>
+                        <li><strong>Analytics cookies:</strong> These cookies help us understand how visitors interact with our website.</li>
+                        <li><strong>Marketing cookies:</strong> These cookies track your online activity to help deliver targeted advertising.</li>
+                    </ul>
+                    <p>You can control cookies through your browser settings. However, disabling certain cookies may limit your ability to use some features of our website.</p>
+                    
+                    <table class="policy-table">
+                        <tr>
+                            <th>Cookie Type</th>
+                            <th>Purpose</th>
+                            <th>Duration</th>
+                        </tr>
+                        <tr>
+                            <td>Essential</td>
+                            <td>Website functionality</td>
+                            <td>Session</td>
+                        </tr>
+                        <tr>
+                            <td>Preference</td>
+                            <td>Remember settings</td>
+                            <td>1 year</td>
+                        </tr>
+                        <tr>
+                            <td>Analytics</td>
+                            <td>Track usage patterns</td>
+                            <td>2 years</td>
+                        </tr>
+                        <tr>
+                            <td>Marketing</td>
+                            <td>Targeted advertising</td>
+                            <td>90 days</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="information-sharing" class="policy-section">
+                    <h2>5. Information Sharing and Disclosure</h2>
+                    <p>We may share your information with third parties in the following circumstances:</p>
+                    <ul>
+                        <li><strong>Service Providers:</strong> We may share your information with third-party service providers who perform services on our behalf, such as payment processing, delivery services, data analysis, email delivery, and customer service.</li>
+                        <li><strong>Business Transfers:</strong> If we are involved in a merger, acquisition, or sale of all or a portion of our assets, your information may be transferred as part of that transaction.</li>
+                        <li><strong>Legal Requirements:</strong> We may disclose your information if required to do so by law or in response to valid requests by public authorities.</li>
+                        <li><strong>Protection of Rights:</strong> We may disclose your information to protect our rights, privacy, safety, or property, or that of our customers or others.</li>
+                    </ul>
+                </div>
+
+                <div id="data-security" class="policy-section">
+                    <h2>6. Data Security</h2>
+                    <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+                    <p>Some of the security measures we implement include:</p>
+                    <ul>
+                        <li>Secure Socket Layer (SSL) encryption for data transmission</li>
+                        <li>Regular security assessments and updates</li>
+                        <li>Access controls and authentication procedures</li>
+                        <li>Data minimization practices</li>
+                        <li>Employee training on data protection</li>
+                    </ul>
+                </div>
+
+                <div id="your-rights" class="policy-section">
+                    <h2>7. Your Rights</h2>
+                    <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
+                    <ul>
+                        <li>The right to access your personal information</li>
+                        <li>The right to correct inaccurate or incomplete information</li>
+                        <li>The right to request deletion of your personal information</li>
+                        <li>The right to restrict or object to processing of your personal information</li>
+                        <li>The right to data portability</li>
+                        <li>The right to withdraw consent</li>
+                    </ul>
+                    <p>To exercise these rights, please contact us using the information provided in the "Contact Us" section below.</p>
+                </div>
+
+                <div id="childrens-privacy" class="policy-section">
+                    <h2>8. Children's Privacy</h2>
+                    <p>Our website and services are not directed to children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us, and we will take steps to delete such information.</p>
+                </div>
+
+                <div id="changes" class="policy-section">
+                    <h2>9. Changes to This Privacy Policy</h2>
+                    <p>We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will post the revised Privacy Policy on our website with an updated "Last Updated" date. We encourage you to review this Privacy Policy periodically.</p>
+                    <p>If we make material changes to this Privacy Policy, we may notify you by email or through a notice on our website.</p>
+                </div>
+
+                <div id="contact-us" class="policy-section">
+                    <h2>10. Contact Us</h2>
+                    <div class="legal-contact">
+                        <h3>If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please contact us at:</h3>
+                        <p>Dhen's Kitchen<br>
+                        123 Filipino Street<br>
+                        Manila, Philippines<br>
+                        Email: privacy@dhenskitchen.com<br>
+                        Phone: (02) 8123-4567</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Dhen's Kitchen</h3>
+                <p>123 Filipino Street</p>
+                <p>Manila, Philippines</p>
+                <p>Phone: (02) 8123-4567</p>
+                <p>Email: info@dhenskitchen.com</p>
+            </div>
+            <div class="copyright">
+            <div class="footer-links">
+                <br>
+                <a href="delivery-policy.php">Delivery Policy</a> | <a href="privacy-policy.php">Privacy Policy</a> | <a href="terms.php">Terms & Conditions</a>
+            </div>
+            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://web.facebook.com/dhenskitchen?mibextid=wwXIfr&rdid=4NGrYasRkC4yQ3iE&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F1BdBoZHYRb%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/dhenskitchen/?igsh=azgxNndtd2E0ZHN1#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

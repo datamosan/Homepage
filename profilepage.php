@@ -1,5 +1,22 @@
 <?php
 session_start();
+require_once "connection.php";
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth.html");
+    exit();
+}
+
+// Fetch user info from database
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT UserName, UserAddress FROM users WHERE UserID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($username, $address);
+$stmt->fetch();
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -7,7 +24,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Dhen's Kitchen</title>
+    <title>Profile - Dhen's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -15,11 +32,11 @@ session_start();
     <!-- Header -->
     <header>
         <div class="header-bar">
-            <div class="page-title">About Us</div>
+            <div class="page-title">Profile</div>
         </div>
         <nav class="main-nav">
             <div class="nav-links">
-                <a href="about.php" class="nav-item active">About Us</a>
+                <a href="about.php" class="nav-item">About Us</a>
                 <a href="menu.php" class="nav-item">Menu</a>
                 <a href="order.php" class="nav-item">Order Now</a>
             </div>
@@ -46,6 +63,23 @@ session_start();
         </nav>
     </header>
 
+    <!-- Profile Content -->
+    <main style="max-width: 500px; margin: 60px auto 40px; background: var(--white); box-shadow: var(--box-shadow); border-radius: 12px; padding: 40px 30px;">
+        <h2 style="color: var(--teal); margin-bottom: 30px; text-align: center;">My Profile</h2>
+        <div style="margin-bottom: 25px;">
+            <label style="font-weight: bold; color: var(--coral); font-size: 1.1rem;">User Name:</label>
+            <div style="color: var(--teal); font-size: 1.2rem; margin-top: 5px;">
+                <?php echo htmlspecialchars($username); ?>
+            </div>
+        </div>
+        <div>
+            <label style="font-weight: bold; color: var(--coral); font-size: 1.1rem;">Address:</label>
+            <div style="color: var(--teal); font-size: 1.1rem; margin-top: 5px;">
+                <?php echo nl2br(htmlspecialchars($address)); ?>
+            </div>
+        </div>
+    </main>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -57,11 +91,11 @@ session_start();
                 <p>Email: info@dhenskitchen.com</p>
             </div>
             <div class="copyright">
-            <div class="footer-links">
-                <br>
-                <a href="delivery-policy.html">Delivery Policy</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a>
-            </div>
-            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+                <div class="footer-links">
+                    <br>
+                    <a href="delivery-policy.php">Delivery Policy</a> | <a href="privacy-policy.php">Privacy Policy</a> | <a href="terms.php">Terms & Conditions</a>
+                </div>
+                <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
             </div>
             <div class="footer-social">
                 <h3>Follow Us</h3>
@@ -72,7 +106,6 @@ session_start();
             </div>
         </div>
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>

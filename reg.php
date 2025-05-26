@@ -59,21 +59,22 @@ if(isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Fetch password, UserRolesID, and UserName
-    $query = "SELECT UserPassword, UserRolesID, UserName FROM Users WHERE UserEmail = ?";
+    // Fetch password, UserRolesID, UserName, and UserID
+    $query = "SELECT UserPassword, UserRolesID, UserName, UserID FROM Users WHERE UserEmail = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $stmt->bind_result($stored_hash, $userRolesID, $userName);
+    $stmt->bind_result($stored_hash, $userRolesID, $userName, $userID);
     if ($stmt->fetch() && password_verify($password, $stored_hash)) {
         // Get first name from UserName
         $firstName = explode(' ', trim($userName))[0];
         $_SESSION['first_name'] = $firstName;
+        $_SESSION['user_id'] = $userID; // Store UserID in session
 
         if ($userRolesID == 1) {
             echo "<script>
                 alert('Admin login successful! Redirecting to Admin Hub.');
-                window.location.href = 'adminhub.html';
+                window.location.href = 'adminhub.php';
             </script>";
         } else {
             echo "<script>
