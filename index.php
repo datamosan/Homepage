@@ -53,7 +53,7 @@ session_start();
             <h1 class="hero-title">Dhen's Kitchen</h1>
             <h2 class="hero-subtitle">Authentic Filipino Cuisine</h2>
             <p>Experience the rich flavors of Filipino cooking with our homemade specialties.</p>
-            <a href="order.html" class="cta-button">Order Now</a>
+            <a href="order.php" class="cta-button">Order Now</a>
         </div>
     </section>
 
@@ -65,17 +65,17 @@ session_start();
                 <div class="feature-text">
                     <p>At Dhen's Kitchen, we take pride in our authentic Filipino recipes passed down through generations. Each dish is prepared with love and the finest ingredients.</p>
                     <p>From our famous Bicol Express to our mouthwatering desserts, we bring the taste of the Philippines to your table.</p>
-                    <a href="menu.html" class="feature-button">Explore Our Menu</a>
+                    <a href="menu.php" class="feature-button">Explore Our Menu</a>
                 </div>
             </div>
             <div class="feature-image">
-                <img src="images/specialty.jpg" alt="Dhen's Kitchen Specialty Dish">
+                <img src="images/dhens1.jpg" alt="Dhen's Kitchen Specialty Dish">
             </div>
         </div>
     </section>
 
     <section class="instagram-grid">
-        <h2 class="section-title">Popular Dishes</h2>
+        <h2 class="section-title">Recent Orders</h2>
         <behold-widget feed-id="zD9pzYpJzJUOEjav3w8w"></behold-widget>
         <script>
         (() => {
