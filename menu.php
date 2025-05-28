@@ -105,12 +105,12 @@ session_start();
         }
         ?>
 
-        <!-- Pagination -->
+        <!-- Pagination
         <div class="pagination">
             <a href="#" class="page-prev">Previous</a>
             <div class="page-number">1/3</div>
             <a href="#" class="page-next">Next</a>
-        </div>
+        </div> -->
     </section>
 
     <!-- Footer -->

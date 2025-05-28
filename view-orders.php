@@ -9,61 +9,79 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>View Orders - DecaDhen: Dhen's Kitchen</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     :root {
-      --bg-start: #FFFEF2;
-      --bg-end: #FFF4E6;
-      --card: #F6E7C1;
-      --accent: #294C3B;
-      --highlight: #CF5C5C;
-      --text-dark: #2f2f2f;
-      --text-light: #ffffff;
+      --coral: #f48a8a;
+      --mint: #8cd3a9;
+      --teal: #1d4b53;
+      --lavender: #b0b4ff;
+      --white: #ffffff;
+      --light-gray: #f5f5f5;
+      --dark-gray: #333333;
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       --radius: 1.25rem;
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(120deg, var(--bg-start), var(--bg-end));
-      color: var(--text-dark);
+      background: var(--light-gray);
+      color: var(--dark-gray);
       display: flex;
     }
     .sidebar {
       width: 240px;
-      background-color: var(--accent);
+      background-color: var(--teal);
       height: 100vh;
       padding: 2rem 1rem;
-      color: var(--text-light);
+      color: var(--light-gray);
       position: fixed;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1rem;
       box-shadow: var(--shadow);
     }
     .sidebar .logo {
       font-family: 'DM Serif Display', serif;
       font-size: 1.7rem;
-      text-align: center;
-      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .sidebar .logo img {
+      max-width: 150px;
+      max-height: 150px;
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
     .sidebar nav a {
       display: flex;
       align-items: center;
       gap: 0.8rem;
       text-decoration: none;
-      color: var(--text-light);
+      color: var(--light-gray);
       font-weight: 600;
       padding: 0.5rem 1rem;
       border-radius: 0.5rem;
       transition: background 0.3s;
     }
-    .sidebar nav a:hover {
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
       background-color: rgba(255, 255, 255, 0.1);
+    }
+    .sidebar nav a i {
+      color: var(--mint);
     }
     .main-content {
       margin-left: 240px;
@@ -71,10 +89,11 @@ session_start();
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      padding: 0;
     }
     header {
-      background-color: var(--accent);
-      color: var(--text-light);
+      background-color: var(--teal);
+      color: var(--light-gray);
       padding: 1.2rem 2rem;
       display: flex;
       justify-content: flex-end;
@@ -89,73 +108,119 @@ session_start();
       font-size: 1.3rem;
       cursor: pointer;
     }
-    .page-content {
-      padding: 2rem;
-    }
-    .page-content h1 {
+    h1 {
       font-family: 'DM Serif Display', serif;
-      font-size: 2rem;
-      color: var(--accent);
+      color: var(--teal);
       margin-bottom: 1rem;
+      margin-top: 2rem;
+      margin-left: 2rem;
     }
-    .filter {
-      margin-bottom: 1.5rem;
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      margin-left: 2rem;
+      margin-right: 2rem;
+      flex-wrap: nowrap;
+      overflow-x: visible;
+      white-space: nowrap;
+      font-size: 0.97rem;
     }
-    .filter label {
-      font-weight: 600;
-      margin-right: 1rem;
-    }
-    .filter select {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
+    .controls input,
+    .controls select,
+    .controls button {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
       border: 1px solid #ccc;
+      min-width: 0;
+      flex-shrink: 1;
+      max-width: 140px;
+    }
+    .controls button {
+      background-color: var(--teal);
+      color: var(--white);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .controls button:hover {
+      background-color: var(--coral);
+    }
+    .controls #searchInput {
+      min-width: 220px;
+      max-width: 320px;
+      flex-basis: 220px;
+    }
+    .controls #sortField {
+      min-width: 160px;
+      max-width: 220px;
+      flex-basis: 160px;
     }
     table {
-      width: 100%;
+      width: calc(100% - 4rem);
+      margin-left: 2rem;
+      margin-right: 2rem;
       border-collapse: collapse;
-      margin-bottom: 2rem;
-      background-color: var(--card);
+      background-color: var(--white);
       border-radius: var(--radius);
-      overflow: hidden;
       box-shadow: var(--shadow);
+      overflow: hidden;
     }
-    th,
-    td {
-      padding: 1rem;
+    thead {
+      background-color: var(--teal);
+      color: var(--white);
+    }
+    th, td {
+      padding: 1rem 1.2rem;
       text-align: left;
       border-bottom: 1px solid #ddd;
+      cursor: default;
     }
     th {
-      background-color: #fff8e6;
-      color: var(--accent);
       font-weight: 600;
     }
     tr:last-child td {
       border-bottom: none;
     }
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      font-size: 0.9em;
+      display: inline-block;
+    }
+    .new { background: var(--teal); }
+    .processing { background: var(--lavender); }
+    .approved { background: var(--mint); }
+    .rejected { background:var(--coral); color: #333; }
     .btn {
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 0.5rem;
       cursor: pointer;
       font-weight: 600;
-    }
-    .view-btn {
-      background-color: var(--accent);
+      background-color: var(--teal);
       color: white;
+      margin-right: 0.5rem;
+      transition: background 0.3s;
     }
-    .process-btn {
-      background-color: var(--highlight);
-      color: white;
+    .btn:hover {
+      background-color: var(--coral);
     }
-    footer {
+    .main-content > footer {
+      margin-top: auto;
       text-align: center;
       padding: 1rem;
-      background-color: var(--card);
+      background-color: var(--light-gray);
       font-size: 0.9rem;
       color: #555;
-      margin-top: auto;
     }
+    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -178,7 +243,7 @@ session_start();
     }
     .modal-content h2 {
       margin-bottom: 1rem;
-      color: var(--accent);
+      color: var(--teal);
     }
     .modal-buttons {
       display: flex;
@@ -188,12 +253,11 @@ session_start();
     .modal-buttons .btn {
       flex: 1;
     }
-    /* Process form styles */
     #processForm label {
       display: block;
       margin: 0.75rem 0 0.3rem;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--teal);
     }
     #processForm select,
     #processForm textarea {
@@ -207,18 +271,47 @@ session_start();
     #processForm textarea {
       min-height: 80px;
     }
+    @media (max-width: 900px) {
+      .sidebar { width: 100px; }
+      .main-content { margin-left: 100px; width: calc(100% - 100px);}
+      table, .controls { margin-left: 1rem; margin-right: 1rem; }
+      .controls {
+        gap: 0.3rem;
+        font-size: 0.92rem;
+      }
+      .controls input,
+      .controls select,
+      .controls button {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.92rem;
+        max-width: 90px;
+      }
+      .controls #searchInput {
+        min-width: 110px;
+        max-width: 180px;
+        flex-basis: 110px;
+      }
+      .controls #sortField {
+        min-width: 90px;
+        max-width: 120px;
+        flex-basis: 90px;
+      }
+    }
   </style>
 </head>
 <body>
   <aside class="sidebar">
-    <div class="logo">DecaDhen</div>
+    <div class="logo">
+      <img src="logo.png" alt="Dhen's Kitchen Logo">
+    </div>
     <nav>
-      <a href="dashboard.php"><i class="fas fa-home"></i> Home</a>
-      <a href="view-orders.php"><i class="fas fa-receipt"></i> Orders</a>
-      <a href="menu-management.php"><i class="fas fa-utensils"></i> Menu</a>
-      <a href="order-management.php"><i class="fas fa-box"></i> Manage Orders</a>
-      <a href="messages.php"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="customers.php"><i class="fas fa-users"></i> Customers</a>
+      <a href="adminhub.php"><i class="fas fa-home"></i>Home</a>
+      <a href="view-orders.php" class="active"><i class="fas fa-receipt"></i>View Orders</a>
+      <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
+      <a href="order-management.php"><i class="fas fa-box"></i>Manage Orders</a>
+      <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
+      <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
+      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
     </nav>
   </aside>
 
@@ -230,74 +323,75 @@ session_start();
       </div>
     </header>
 
-    <div class="page-content">
-      <h1>View Order Submissions</h1>
+    <h1>View Order Submissions</h1>
 
-      <div class="filter">
-        <label for="status">Select View:</label>
-        <select id="status" onchange="filterOrders()">
-          <option value="All">All</option>
-          <option value="New">New</option>
-          <option value="Processing">Processing</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-      </div>
-
-      <table id="ordersTable">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Customer Name</th>
-            <th>Order ID</th>
-            <th>Proof of Payment</th>
-            <th>Status</th>
-            <th>Deadline</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-status="New">
-            <td>2025-05-18</td>
-            <td>Rhy Estrella</td>
-            <td>#A102</td>
-            <td><a href="proofs/proof1.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
-            <td>New</td>
-            <td>2025-05-25</td>
-            <td>
-              <button class="btn view-btn" onclick="openModal('view', this)">View</button>
-              <button class="btn process-btn" onclick="openModal('process', this)">Process</button>
-            </td>
-          </tr>
-          <tr data-status="Approved">
-            <td>2025-05-15</td>
-            <td>Lyra Cunanan</td>
-            <td>#B223</td>
-            <td><a href="proofs/proof2.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
-            <td>Approved</td>
-            <td>2025-05-22</td>
-            <td>
-              <button class="btn view-btn" onclick="openModal('view', this)">View</button>
-              <button class="btn process-btn" onclick="openModal('process', this)">Process</button>
-            </td>
-          </tr>
-          <tr data-status="Rejected">
-            <td>2025-05-12</td>
-            <td>Ken Ramos</td>
-            <td>#C874</td>
-            <td><a href="proofs/proof3.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
-            <td>Rejected</td>
-            <td>2025-05-20</td>
-            <td>
-              <button class="btn view-btn" onclick="openModal('view', this)">View</button>
-              <button class="btn process-btn" onclick="openModal('process', this)">Process</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by name or order ID">
+      <select id="status" onchange="filterOrders()">
+        <option value="All">All Status</option>
+        <option value="New">New</option>
+        <option value="Processing">Processing</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+      <button id="exportBtn"><i class="fas fa-file-export"></i> Export CSV</button>
+      <button id="printBtn"><i class="fas fa-print"></i> Print</button>
     </div>
 
-    <footer>© 2025 DecaDhen: Dhen's Kitchen</footer>
+    <table id="ordersTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Customer Name</th>
+          <th>Order ID</th>
+          <th>Proof of Payment</th>
+          <th>Status</th>
+          <th>Deadline</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-status="New">
+          <td>2025-05-18</td>
+          <td>Rhy Estrella</td>
+          <td>#A102</td>
+          <td><a href="proofs/proof1.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
+          <td><span class="status-badge new">New</span></td>
+          <td>2025-05-25</td>
+          <td>
+            <button class="btn" onclick="openModal('view', this)">View</button>
+            <button class="btn" onclick="openModal('process', this)">Process</button>
+          </td>
+        </tr>
+        <tr data-status="Approved">
+          <td>2025-05-15</td>
+          <td>Lyra Cunanan</td>
+          <td>#B223</td>
+          <td><a href="proofs/proof2.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
+          <td><span class="status-badge approved">Approved</span></td>
+          <td>2025-05-22</td>
+          <td>
+            <button class="btn" onclick="openModal('view', this)">View</button>
+            <button class="btn" onclick="openModal('process', this)">Process</button>
+          </td>
+        </tr>
+        <tr data-status="Rejected">
+          <td>2025-05-12</td>
+          <td>Ken Ramos</td>
+          <td>#C874</td>
+          <td><a href="proofs/proof3.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
+          <td><span class="status-badge rejected">Rejected</span></td>
+          <td>2025-05-20</td>
+          <td>
+            <button class="btn" onclick="openModal('view', this)">View</button>
+            <button class="btn" onclick="openModal('process', this)">Process</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <footer>
+      &copy; 2025 DecaDhen: Dhen's Kitchen
+    </footer>
   </div>
 
   <!-- View Modal -->
@@ -310,7 +404,7 @@ session_start();
       <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
       <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
       <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-      <button class="btn process-btn" onclick="openModal('process')">Process Order</button>
+      <button class="btn" onclick="openModal('process')">Process Order</button>
       <button class="btn" onclick="closeModal()">Close</button>
     </div>
   </div>
@@ -329,7 +423,7 @@ session_start();
         <label for="remarks">Remarks:</label>
         <textarea id="remarks" placeholder="Enter remarks here..."></textarea>
         <div class="modal-buttons">
-          <button type="submit" class="btn process-btn">Submit</button>
+          <button type="submit" class="btn">Submit</button>
           <button type="button" class="btn" onclick="closeModal()">Cancel</button>
         </div>
       </form>
@@ -367,7 +461,7 @@ session_start();
         if (!currentProcessingRow) return alert('No order selected.');
 
         // Pre-select current status
-        const currentStatus = currentProcessingRow.children[4].innerText;
+        const currentStatus = currentProcessingRow.children[4].innerText.replace(/<[^>]*>?/gm, '').trim();
         document.getElementById('processStatus').value = currentStatus;
         document.getElementById('remarks').value = '';
 
@@ -389,7 +483,7 @@ session_start();
       const remarks = document.getElementById('remarks').value;
 
       // Update status text in the row
-      currentProcessingRow.children[4].innerText = status;
+      currentProcessingRow.children[4].innerHTML = `<span class="status-badge ${status.toLowerCase()}">${status}</span>`;
       // Update data-status attribute for filtering
       currentProcessingRow.dataset.status = status;
 
@@ -405,13 +499,49 @@ session_start();
       const rows = table.tBodies[0].rows;
 
       for (let row of rows) {
-        if (filter === 'All' || row.dataset.status === filter) {
+        const rowStatus = row.dataset.status;
+        if (filter === 'All' || rowStatus === filter) {
           row.style.display = '';
         } else {
           row.style.display = 'none';
         }
       }
     }
+
+    function exportToCSV() {
+      const table = document.getElementById('ordersTable');
+      let csv = '';
+      const rows = table.querySelectorAll('tr');
+      for (let row of rows) {
+        let rowData = [];
+        for (let cell of row.querySelectorAll('th,td')) {
+          rowData.push(cell.innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/ +/g, ' ').trim());
+        }
+        csv += rowData.join(',') + '\n';
+      }
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'orders.csv';
+      link.click();
+    }
+
+    function printPDF() {
+      window.print();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      const table = document.getElementById('ordersTable');
+      const rows = table.tBodies[0].rows;
+      for (let row of rows) {
+        const name = row.cells[1].innerText.toLowerCase();
+        const id = row.cells[2].innerText.toLowerCase();
+        row.style.display = (name.includes(q) || id.includes(q)) ? '' : 'none';
+      }
+    });
+    document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+    document.getElementById('printBtn').addEventListener('click', printPDF);
 
     window.onload = () => {
       filterOrders();
