@@ -1,5 +1,12 @@
 <?php
 session_start();
+require_once 'connection.php';
+
+$sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline
+        FROM orders o
+        JOIN users u ON o.UserID = u.UserID
+        ORDER BY o.OrderDate DESC";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -304,6 +311,7 @@ session_start();
     }
   </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="logo">
@@ -356,42 +364,31 @@ session_start();
         </tr>
       </thead>
       <tbody>
-        <tr data-status="New">
-          <td>2025-05-18</td>
-          <td>Rhy Estrella</td>
-          <td>#A102</td>
-          <td><a href="proofs/proof1.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
-          <td><span class="status-badge new">New</span></td>
-          <td>2025-05-25</td>
-          <td>
-            <button class="btn" onclick="openModal('view', this)">View</button>
-            <button class="btn" onclick="openModal('process', this)">Process</button>
-          </td>
-        </tr>
-        <tr data-status="Approved">
-          <td>2025-05-15</td>
-          <td>Lyra Cunanan</td>
-          <td>#B223</td>
-          <td><a href="proofs/proof2.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
-          <td><span class="status-badge approved">Approved</span></td>
-          <td>2025-05-22</td>
-          <td>
-            <button class="btn" onclick="openModal('view', this)">View</button>
-            <button class="btn" onclick="openModal('process', this)">Process</button>
-          </td>
-        </tr>
-        <tr data-status="Rejected">
-          <td>2025-05-12</td>
-          <td>Ken Ramos</td>
-          <td>#C874</td>
-          <td><a href="proofs/proof3.jpg" target="_blank" rel="noopener noreferrer">View Image</a></td>
-          <td><span class="status-badge rejected">Rejected</span></td>
-          <td>2025-05-20</td>
-          <td>
-            <button class="btn" onclick="openModal('view', this)">View</button>
-            <button class="btn" onclick="openModal('process', this)">Process</button>
-          </td>
-        </tr>
+        <?php if ($result && $result->num_rows > 0): ?>
+          <?php while($row = $result->fetch_assoc()): ?>
+            <tr data-status="<?php echo htmlspecialchars($row['OrderStatus']); ?>">
+              <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
+              <td><?php echo htmlspecialchars($row['UserName']); ?></td>
+              <td>#<?php echo htmlspecialchars($row['OrderID']); ?></td>
+              <td>
+                <!-- You can update this to fetch actual proof if you have it -->
+                <span style="color:#aaa;">No Proof</span>
+              </td>
+              <td>
+                <span class="status-badge <?php echo strtolower($row['OrderStatus']); ?>">
+                  <?php echo htmlspecialchars($row['OrderStatus']); ?>
+                </span>
+              </td>
+              <td><?php echo htmlspecialchars($row['OrderDeadline']); ?></td>
+              <td>
+                <button class="btn" onclick="openModal('view', this)">View</button>
+                <button class="btn" onclick="openModal('process', this)">Process</button>
+              </td>
+            </tr>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <tr><td colspan="7" style="text-align:center;">No orders found.</td></tr>
+        <?php endif; ?>
       </tbody>
     </table>
     <footer>
