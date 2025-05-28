@@ -48,6 +48,7 @@ session_start();
 
     <!-- Hero Section -->
     <section class="hero">
+        <iframe src="carousel.html" width="101%" height="500" class="carouselContainer" scrolling="no"></iframe> 
         <div class="hero-content">
             <h1 class="hero-title">Dhen's Kitchen</h1>
             <h2 class="hero-subtitle">Authentic Filipino Cuisine</h2>
@@ -57,7 +58,7 @@ session_start();
     </section>
     
     <section class="carousel">
-        <iframe src="carousel.html" width="101%" height="500" class="carouselContainer" scrolling="no"></iframe>     
+            
     </section>
     
 
