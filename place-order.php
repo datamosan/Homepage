@@ -1,16 +1,34 @@
 <?php
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: auth.html');
+    exit;
+}
 
-// Example cart structure: $_SESSION['cart'] = [['name'=>'Item 1', 'qty'=>2, 'price'=>100, 'image'=>'img1.jpg'], ...];
-$cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+$user_id = $_SESSION['user_id'];
 
-function cart_total($cart)
-{
-    $total = 0;
-    foreach ($cart as $item) {
-        $total += $item['qty'] * $item['price'];
+// Fetch active cart and items
+$cart_items = [];
+$cart_total = 0.0;
+$cart_id = null;
+
+$conn = new mysqli('localhost', 'root', '', 'decadhen');
+if ($conn->connect_error) die('DB error');
+
+$cart_res = $conn->query("SELECT CartID FROM Cart WHERE UserID=$user_id AND Status='active' LIMIT 1");
+if ($cart_row = $cart_res->fetch_assoc()) {
+    $cart_id = $cart_row['CartID'];
+    $items_res = $conn->query(
+        "SELECT ci.CartItemID, ci.ProductID, p.ProductName, ci.CartQuantity, ci.UnitPrice
+         FROM CartItems ci
+         JOIN Products p ON ci.ProductID = p.ProductID
+         WHERE ci.CartID = $cart_id"
+    );
+    while ($row = $items_res->fetch_assoc()) {
+        $row['Subtotal'] = $row['CartQuantity'] * $row['UnitPrice'];
+        $cart_total += $row['Subtotal'];
+        $cart_items[] = $row;
     }
-    return $total;
 }
 
 // Bank details
@@ -21,15 +39,48 @@ $bank_details = [
     'GCash' => '0915 007 7783'
 ];
 
-// Handle form submission (upload receipt)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle file upload and order processing here
-    // ...
+// Handle order placement
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($cart_items)) {
+    // 1. Handle file upload
+    $receipt_path = '';
+    if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
+        $ext = pathinfo($_FILES['receipt']['name'], PATHINFO_EXTENSION);
+        $filename = 'receipt_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+        $target = __DIR__ . '/payments/' . $filename;
+        if (!is_dir(__DIR__ . '/payments')) mkdir(__DIR__ . '/payments', 0777, true);
+        if (move_uploaded_file($_FILES['receipt']['tmp_name'], $target)) {
+            $receipt_path = 'payments/' . $filename; // This is what will be saved in the PaymentProof column
+        }
+    }
+
+    // 2. Insert into orders table (save $receipt_path to PaymentProof)
+    $shipping = $conn->real_escape_string($_POST['shipping'] ?? 'Self-Pickup');
+    $order_status = 'pending';
+    $order_deadline = $_POST['order_deadline'] ?? null;
+    $order_note = $conn->real_escape_string($_POST['order_note'] ?? '');
+
+    $stmt = $conn->prepare("INSERT INTO orders (UserID, OrderDate, OrderStatus, OrderTotal, ShippingMethod, PaymentProof, OrderDeadline, OrderNote) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param('ssdssss', $user_id, $order_status, $cart_total, $shipping, $receipt_path, $order_deadline, $order_note);
+    $stmt->execute();
+    $order_id = $stmt->insert_id;
+    $stmt->close();
+
+    // 3. Insert each cart item into orderdetails (without UnitPrice)
+    $stmt = $conn->prepare("INSERT INTO orderdetails (OrderID, ProductID, OrderQuantity) VALUES (?, ?, ?)");
+    foreach ($cart_items as $item) {
+        $stmt->bind_param('iii', $order_id, $item['ProductID'], $item['CartQuantity']);
+        $stmt->execute();
+    }
+    $stmt->close();
+
+    // 4. Mark cart as completed and clear cart items
+    $conn->query("UPDATE Cart SET Status='completed' WHERE CartID=$cart_id");
+    $conn->query("DELETE FROM CartItems WHERE CartID=$cart_id");
+
     echo "<script>alert('Order placed! Please wait for confirmation.'); window.location='order.php';</script>";
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,8 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-
-<!-- Header -->
+    <!-- Header -->
     <header>
         <div class="header-bar">
             <div class="page-title">About Us</div>
@@ -92,15 +142,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Cart Items Table -->
                 <div class="checkout-cart">
                     <h3 class="cart-title">Your Cart</h3>
-                    <div id="cart-table-container"></div>
+                    <?php if (empty($cart_items)): ?>
+                    <div class="cart-empty">Your cart is empty.</div>
+                    <?php else: ?>
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($cart_items as $item): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($item['ProductName']) ?></td>
+                                <td>₱<?= number_format($item['UnitPrice'], 2) ?></td>
+                                <td><?= intval($item['CartQuantity']) ?></td>
+                                <td style="color:var(--coral); font-weight:bold;">₱<?= number_format($item['Subtotal'], 2) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php endif; ?>
                 </div>
                 <!-- Summary / Shipping / Payment -->
                 <div class="checkout-summary">
                     <div class="summary-section">
-                        <div class="summary-title">Cart Totals</div>
+                        <div class="summary-title">Order Summary</div>
                         <div class="summary-row">
                             <span>Subtotal</span>
-                            <span>₱<?= number_format(cart_total($cart), 2) ?></span>
+                            <span>₱<?= number_format($cart_total, 2) ?></span>
                         </div>
                         <div class="summary-row">
                             <span>Shipping</span>
@@ -113,8 +186,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </span>
                         </div>
                         <div class="summary-total">
-                            Total: ₱<span id="order-total"><?= number_format(cart_total($cart), 2) ?></span>
+                            Total: ₱<span id="order-total"><?= number_format($cart_total, 2) ?></span>
                         </div>
+                    </div>
+                     <!-- Order Deadline -->
+                    <div class="summary-section">
+                        <label class="upload-label" for="order_deadline">Order Deadline <span style="color:red">*</span></label>
+                        <input type="date" name="order_deadline" id="order_deadline" required
+    style="margin-bottom:18px; font-size:1.15em; padding:10px 16px; border-radius:6px; border:1px solid #ccc; width:100%;">
+                    </div>
+                    <!-- Order Note -->
+                    <div class="summary-section">
+                        <label class="upload-label" for="order_note">Note</label>
+                        <textarea name="order_note" id="order_note" rows="3" placeholder="Type any notes or requests here..." style="width:100%; border-radius:6px; border:1px solid #ccc; padding:8px; margin-bottom:18px;"></textarea>
                     </div>
                     <div class="summary-section">
                         <div class="summary-title">Bank Details</div>
@@ -163,57 +247,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </form>
-        
+
     </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const cart = JSON.parse(localStorage.getItem('dhensKitchenCart') || '[]');
-            const container = document.getElementById('cart-table-container');
-            if (cart.length === 0) {
-                container.innerHTML = '<div class="cart-empty">Your cart is empty.</div>';
-                return;
-            }
-            let html = `<table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-            let total = 0;
-            cart.forEach(item => {
-                const subtotal = item.price * item.quantity;
-                total += subtotal;
-                html += `<tr>
-                    <td>
-                        ${item.name}${item.size ? ' - ' + item.size : ''}
-                    </td>
-                    <td>₱${Number(item.price).toFixed(2)}</td>
-                    <td>${item.quantity}</td>
-                    <td style="color:var(--coral); font-weight:bold;">₱${subtotal.toFixed(2)}</td>
-                </tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-
-            // Update summary subtotal and total if present
-            const subtotalSpan = document.querySelector('.summary-row span:last-child');
-            const totalSpan = document.getElementById('order-total');
-            if (subtotalSpan) subtotalSpan.textContent = '₱' + total.toLocaleString(undefined, {minimumFractionDigits:2});
-            if (totalSpan) totalSpan.textContent = total.toLocaleString(undefined, {minimumFractionDigits:2});
-            // Update total when shipping changes
-            const shippingSelect = document.querySelector('select[name="shipping"]');
-            if (shippingSelect && totalSpan) {
-                shippingSelect.addEventListener('change', function () {
-                    const shipping = parseFloat(this.value) || 0;
-                    totalSpan.textContent = (total + shipping).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                });
-            }
-        });
-
         document.getElementById('show-qr-btn').onclick = function () {
             document.getElementById('qr-modal').style.display = 'flex';
             showQR('metrobank');

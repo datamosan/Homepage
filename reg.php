@@ -45,6 +45,15 @@ if(isset($_POST['signUp'])) {
             echo "<script>alert('Registration failed: " . addslashes($status_message) . "'); window.location.href='signup.php';</script>";
             exit();
         }
+
+        // Fetch the new user's ID using their email
+        $user_id_result = $conn->query("SELECT UserID FROM Users WHERE UserEmail='" . $conn->real_escape_string($email) . "'");
+        if ($user_id_row = $user_id_result->fetch_assoc()) {
+            $user_id = $user_id_row['UserID'];
+            // Create a new cart for the user
+            $conn->query("INSERT INTO Cart (CartID, UserID, Status, CreatedDate) VALUES ($user_id, $user_id, 'active', NOW())");
+        }
+
         // Show success dialog
         echo "<script>alert('Registration successful! Please log in.'); window.location.href='login.php';</script>";
         exit();
@@ -71,6 +80,14 @@ if(isset($_POST['login'])) {
         $_SESSION['first_name'] = $firstName;
         $_SESSION['user_id'] = $userID; // Store UserID in session
 
+        $stmt->close(); // <-- Move this here before running a new query
+
+        // Fetch active cart ID
+        $cart_result = $conn->query("SELECT CartID FROM Cart WHERE UserID = $userID AND Status = 'active'");
+        if ($cart_row = $cart_result->fetch_assoc()) {
+            $_SESSION['cart_id'] = $cart_row['CartID'];
+        }
+
         if ($userRolesID == 1) {
             echo "<script>
                 alert('Admin login successful! Redirecting to Admin Hub.');
@@ -85,7 +102,7 @@ if(isset($_POST['login'])) {
         exit();
     } else {
         echo "Invalid email or password\nError: " .$conn->error;
+        $stmt->close(); // Still close here if login fails
     }
-    $stmt->close();
 }
 ?>

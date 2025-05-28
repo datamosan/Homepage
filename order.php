@@ -73,7 +73,6 @@ $products = $conn->query("SELECT * FROM products");
                     <h3 class="product-title"><?php echo htmlspecialchars($product['ProductName']); ?></h3>
                     <p class="product-description"><?php echo htmlspecialchars($product['ProductDescription']); ?></p>
                     <?php
-                        // Fetch sizes/prices for this product
                         $pid = intval($product['ProductID']);
                         $attr = $conn->query("SELECT * FROM product_attributes WHERE ProductID = $pid");
                         $first = $attr->fetch_assoc();
@@ -81,38 +80,100 @@ $products = $conn->query("SELECT * FROM products");
                     ?>
                     <div class="product-options">
                         <p class="product-price" id="product-price-<?php echo $product['ProductID']; ?>">₱<?php echo number_format($price, 2); ?></p>
-                        <select class="size-select" data-id="<?php echo $product['ProductID']; ?>">
-                            <?php
-                            $attr = $conn->query("SELECT * FROM product_attributes WHERE ProductID = $pid");
-                            while ($row = $attr->fetch_assoc()) {
-                                echo '<option value="' . htmlspecialchars($row['Size']) . '" data-price="' . htmlspecialchars($row['Price']) . '">'
-                                    . htmlspecialchars($row['Size']) . '</option>';
-                            }
-                            ?>
-                        </select>
+                        <form method="post" action="add-to-cart.php" class="add-to-cart-form" data-product-id="<?php echo $product['ProductID']; ?>" style="display:inline;">
+                            <input type="hidden" name="product_id" value="<?php echo $product['ProductID']; ?>">
+                            <input type="hidden" name="unit_price" value="<?php echo $price; ?>" class="unit-price-input">
+                            <select name="size" class="size-select" data-id="<?php echo $product['ProductID']; ?>" style="margin-bottom:5px;">
+                                <?php
+                                $attr = $conn->query("SELECT * FROM product_attributes WHERE ProductID = $pid");
+                                while ($row = $attr->fetch_assoc()) {
+                                    echo '<option value="' . htmlspecialchars($row['Size']) . '" data-price="' . htmlspecialchars($row['Price']) . '">' . htmlspecialchars($row['Size']) . '</option>';
+                                }
+                                ?>
+                            </select>
+                            <button type="submit" class="add-to-cart" style="margin-top:5px;">Add to Cart</button>
+                        </form>
                     </div>
-                    <button class="add-to-cart"
-                        data-id="<?php echo $product['ProductID']; ?>"
-                        data-name="<?php echo htmlspecialchars($product['ProductName']); ?>"
-                        data-price="<?php echo $price; ?>">
-                        Add to Cart
-                    </button>
                 </div>
             <?php endwhile; ?>
         </div>
 
+        <?php
+        // Display cart section for logged-in user
+        $cart_items = [];
+        $cart_total = 0;
+        if (isset($_SESSION['user_id'])) {
+            $user_id = intval($_SESSION['user_id']);
+            $cart_id = $user_id; // CartID is always the same as UserID
+
+            $cart_items_query = $conn->query("
+                SELECT ci.CartItemID, ci.ProductID, ci.CartQuantity, ci.UnitPrice, p.ProductName
+                FROM CartItems ci
+                JOIN products p ON ci.ProductID = p.ProductID
+                WHERE ci.CartID = $cart_id
+            ");
+            while ($item = $cart_items_query->fetch_assoc()) {
+                $item['Subtotal'] = $item['UnitPrice'] * $item['CartQuantity'];
+                $cart_total += $item['Subtotal'];
+                $cart_items[] = $item;
+            }
+        }
+        ?>
         <!-- Cart Section -->
         <div class="cart-section">
-            <h3 class="cart-title">Your Cart</h3>
-            <div id="cart-items" class="cart-items">
-                <p class="empty-cart">Your cart is empty</p>
+            <h3 class="cart-title" style="text-align:center;">Your Cart</h3>
+            <div id="cart-items" class="cart-items" style="display:flex; justify-content:center;">
+                <?php if (!isset($_SESSION['user_id'])): ?>
+                    <p class="empty-cart">Please <a href="auth.html">login</a> to view your cart.</p>
+                <?php elseif (empty($cart_items)): ?>
+                    <p class="empty-cart">Your cart is empty</p>
+                <?php else: ?>
+                    <table style="width:90%; max-width:600px; margin:auto; border-collapse:separate; border-spacing:0 8px; background:#fff;">
+                        <thead>
+                            <tr style="background:none;">
+                                <th style="text-align:left; padding:8px 6px;">Product</th>
+                                <th style="text-align:center; padding:8px 6px; width:80px;">Qty</th>
+                                <th style="text-align:right; padding:8px 6px;">Unit Price</th>
+                                <th style="text-align:right; padding:8px 6px;">Subtotal</th>
+                                <th style="text-align:center; padding:8px 6px; width:40px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($cart_items as $item): ?>
+                            <tr style="background:none;">
+                                <td style="padding:8px 6px; vertical-align:middle; text-align:left; font-weight:500; color:#234;">
+                                    <?php echo htmlspecialchars($item['ProductName']); ?>
+                                </td>
+                                <td style="padding:8px 6px; text-align:center; vertical-align:middle;">
+                                    <form class="update-cart-form" data-id="<?php echo $item['CartItemID']; ?>" style="display:inline;">
+                                        <input type="hidden" name="cart_item_id" value="<?php echo $item['CartItemID']; ?>">
+                                        <input type="number" name="quantity" value="<?php echo intval($item['CartQuantity']); ?>" min="1"
+                                            style="width:48px; text-align:center; border-radius:6px; border:1px solid #ccc; padding:2px 4px;">
+                                    </form>
+                                </td>
+                                <td style="padding:8px 6px; text-align:right; vertical-align:middle;">₱<?php echo number_format($item['UnitPrice'], 2); ?></td>
+                                <td class="cart-subtotal" style="padding:8px 6px; text-align:right; vertical-align:middle; font-weight:500; color:var(--coral);">
+                                    ₱<?php echo number_format($item['Subtotal'], 2); ?>
+                                </td>
+                                <td style="padding:8px 6px; text-align:center; vertical-align:middle;">
+                                    <form class="remove-cart-form" data-id="<?php echo $item['CartItemID']; ?>" style="display:inline;">
+                                        <button type="submit" title="Remove" style="background:none;border:none;color:red;cursor:pointer;font-size:1.2em;line-height:1;">&#10005;</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
             </div>
-            <div class="cart-total">
-                Total: <span id="cart-total-amount">₱0.00</span>
+            <div class="cart-total" style="text-align:right; max-width:600px; margin:16px auto 0 auto; font-size:1.15em; font-weight:bold;">
+                Total: <span id="cart-total-amount">₱<?php echo number_format($cart_total, 2); ?></span>
             </div>
-            <button id="checkout-button" class="checkout-button">
-                Proceed to Checkout
-            </button>
+            <div style="text-align:center; max-width:600px; margin:12px auto 0 auto;">
+                <a href="place-order.php" id="checkout-button" class="checkout-button" style="min-width:180px;<?php echo (empty($cart_items) || !isset($_SESSION['user_id'])) ? 'pointer-events:none;opacity:0.5;' : ''; ?>">
+                    Proceed to Checkout
+                </a>
+            </div>
         </div>
 
         <!-- Custom Order Section -->

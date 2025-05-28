@@ -115,3 +115,8 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+<?php
+// After user registration and $user_id is set
+$conn->query("INSERT INTO Cart (CartID, UserID, Status) VALUES ($user_id, $user_id, 'active')");
+?>
