@@ -242,8 +242,13 @@ session_start();
       box-shadow: var(--shadow);
     }
     .modal-content h2 {
+      font-family: 'DM Serif Display', serif;
       margin-bottom: 1rem;
       color: var(--teal);
+    }
+    .modal-content p {
+      margin: 0.5rem 0;
+      color: var(--dark-gray);
     }
     .modal-buttons {
       display: flex;
@@ -404,8 +409,11 @@ session_start();
       <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
       <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
       <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-      <button class="btn" onclick="openModal('process')">Process Order</button>
-      <button class="btn" onclick="closeModal()">Close</button>
+      
+      <div class="modal-buttons">
+        <button class="btn" onclick="openModal('process')">Process Order</button>
+        <button class="btn" onclick="closeModal()">Close</button>
+      </div>
     </div>
   </div>
 
