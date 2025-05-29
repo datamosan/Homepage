@@ -203,7 +203,7 @@ $result = $conn->query($sql);
     }
     .new { background: var(--teal); }
     .processing { background: var(--lavender); }
-    .approved { background: var(--mint); }
+    .delivered { background: var(--mint); }
     .rejected { background:var(--coral); color: #333; }
     .btn {
       padding: 0.5rem 1rem;
@@ -227,6 +227,7 @@ $result = $conn->query($sql);
       font-size: 0.9rem;
       color: #555;
     }
+
     /* Modal styles */
     .modal {
       display: none;
@@ -240,6 +241,7 @@ $result = $conn->query($sql);
       justify-content: center;
       align-items: center;
     }
+
     .modal-content {
       background: white;
       padding: 2rem;
@@ -248,6 +250,11 @@ $result = $conn->query($sql);
       max-width: 900px;
       box-shadow: var(--shadow);
     }
+
+    #processModal .modal-content {
+      max-width: 400px;
+    }
+
     .modal-content h2 {
       font-family: 'DM Serif Display', serif;
       font-size: 2rem;
@@ -285,14 +292,12 @@ $result = $conn->query($sql);
       min-height: 80px;
     }
     
-    /* Center the order items table in the modal */
     #modalOrderItems {
       display: flex;
       justify-content: center;
       margin-top: 1.5em;
     }
 
-    /* Make the info texts align with the table's left margin */
     .modal-content .modal-info {
       width: 100%;
       max-width: 600px;
@@ -342,9 +347,9 @@ $result = $conn->query($sql);
     </div>
     <nav>
       <a href="adminhub.php"><i class="fas fa-home"></i>Home</a>
-      <a href="view-orders.php" class="active"><i class="fas fa-receipt"></i>View Orders</a>
+      <a href="view-orders.php" class="active"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
-      <a href="order-management.php"><i class="fas fa-box"></i>Manage Orders</a>
+      <a href="order-history.php"><i class="fas fa-box"></i>Orders History</a>
       <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
       <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
       <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
@@ -359,7 +364,7 @@ $result = $conn->query($sql);
       </div>
     </header>
 
-    <h1>View Order Submissions</h1>
+    <h1>View and Manage Order Submissions</h1>
 
     <div class="controls">
       <input type="text" id="searchInput" placeholder="Search by name or order ID">
@@ -367,7 +372,7 @@ $result = $conn->query($sql);
         <option value="All">All Status</option>
         <option value="New">New</option>
         <option value="Processing">Processing</option>
-        <option value="Approved">Approved</option>
+        <option value="Delivered">Delivered</option>
         <option value="Rejected">Rejected</option>
       </select>
       <button id="exportBtn"><i class="fas fa-file-export"></i> Export CSV</button>
@@ -450,7 +455,7 @@ $result = $conn->query($sql);
         <label for="processStatus">Status:</label>
         <select id="processStatus" required>
           <option value="Processing">Processing</option>
-          <option value="Approved">Approved</option>
+          <option value="Delivered">Delivered</option>
           <option value="Rejected">Rejected</option>
         </select>
         <label for="remarks">Remarks:</label>
@@ -549,16 +554,28 @@ $result = $conn->query($sql);
 
       const status = document.getElementById('processStatus').value;
       const remarks = document.getElementById('remarks').value;
+      const orderId = currentProcessingRow.children[2].innerText.replace('#', '').trim();
 
-      // Update status text in the row
-      currentProcessingRow.children[4].innerHTML = `<span class="status-badge ${status.toLowerCase()}">${status}</span>`;
-      // Update data-status attribute for filtering
-      currentProcessingRow.dataset.status = status;
-
-      alert(`Order status updated to "${status}".`);
-
-      closeModal();
-      filterOrders();
+      fetch('update-order-status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `orderId=${encodeURIComponent(orderId)}&status=${encodeURIComponent(status)}`
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // Update status text in the row
+          currentProcessingRow.children[4].innerHTML =
+            `<span class="status-badge ${status.toLowerCase()}">${status}</span>`;
+          // Update data-status attribute for filtering
+          currentProcessingRow.dataset.status = status;
+          alert(`Order status updated to "${status}".`);
+          closeModal();
+          filterOrders();
+        } else {
+          alert('Failed to update order status.');
+        }
+      });
     }
 
     function filterOrders() {

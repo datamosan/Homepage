@@ -192,9 +192,9 @@ session_start();
     </div>
     <nav>
       <a href="adminhub.php"><i class="fas fa-home"></i>Home</a>
-      <a href="view-orders.php"><i class="fas fa-receipt"></i>View Orders</a>
+      <a href="view-orders.php"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
-      <a href="order-management.php"><i class="fas fa-box"></i>Manage Orders</a>
+      <a href="order-history.php"><i class="fas fa-box"></i>Orders History</a>
       <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
       <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
       <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
@@ -226,10 +226,10 @@ session_start();
         <i class="fas fa-utensils"></i>
       </div>
 
-      <div class="card" onclick="location.href='order-management.php'">
+      <div class="card" onclick="location.href='order-history.php'">
         <div>
-          <h3>Order Management</h3>
-          <p>Track, edit and filter existing customer orders.</p>
+          <h3>Orders History</h3>
+          <p>View all completed and rejected customer orders.</p>
         </div>
         <i class="fas fa-box"></i>
       </div>
