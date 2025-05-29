@@ -19,7 +19,7 @@ $cart_res = $conn->query("SELECT CartID FROM Cart WHERE UserID=$user_id AND Stat
 if ($cart_row = $cart_res->fetch_assoc()) {
     $cart_id = $cart_row['CartID'];
     $items_res = $conn->query(
-        "SELECT ci.CartItemID, ci.ProductID, p.ProductName, ci.CartQuantity, ci.UnitPrice
+        "SELECT ci.CartItemID, ci.ProductID, p.ProductName, ci.CartQuantity, ci.UnitPrice, ci.Size
          FROM CartItems ci
          JOIN Products p ON ci.ProductID = p.ProductID
          WHERE ci.CartID = $cart_id"
@@ -66,9 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($cart_items)) {
     $stmt->close();
 
     // 3. Insert each cart item into orderdetails (without UnitPrice)
-    $stmt = $conn->prepare("INSERT INTO orderdetails (OrderID, ProductID, OrderQuantity) VALUES (?, ?, ?)");
+    // Make sure your orderdetails table has a Size column (VARCHAR or similar)
+    $stmt = $conn->prepare("INSERT INTO orderdetails (OrderID, ProductID, OrderQuantity, Size) VALUES (?, ?, ?, ?)");
     foreach ($cart_items as $item) {
-        $stmt->bind_param('iii', $order_id, $item['ProductID'], $item['CartQuantity']);
+        $stmt->bind_param('iiis', $order_id, $item['ProductID'], $item['CartQuantity'], $item['Size']);
         $stmt->execute();
     }
     $stmt->close();
