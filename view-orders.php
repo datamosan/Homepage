@@ -2,7 +2,7 @@
 session_start();
 require_once 'connection.php';
 
-$sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline
+$sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof
         FROM orders o
         JOIN users u ON o.UserID = u.UserID
         ORDER BY o.OrderDate DESC";
@@ -245,11 +245,12 @@ $result = $conn->query($sql);
       padding: 2rem;
       border-radius: var(--radius);
       width: 90%;
-      max-width: 500px;
+      max-width: 900px;
       box-shadow: var(--shadow);
     }
     .modal-content h2 {
       font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
       margin-bottom: 1rem;
       color: var(--teal);
     }
@@ -283,6 +284,28 @@ $result = $conn->query($sql);
     #processForm textarea {
       min-height: 80px;
     }
+    
+    /* Center the order items table in the modal */
+    #modalOrderItems {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5em;
+    }
+
+    /* Make the info texts align with the table's left margin */
+    .modal-content .modal-info {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 0 0.5em 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .modal-content .modal-info p {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
     @media (max-width: 900px) {
       .sidebar { width: 100px; }
       .main-content { margin-left: 100px; width: calc(100% - 100px);}
@@ -366,17 +389,20 @@ $result = $conn->query($sql);
       <tbody>
         <?php if ($result && $result->num_rows > 0): ?>
           <?php while($row = $result->fetch_assoc()): ?>
-            <tr data-status="<?php echo htmlspecialchars($row['OrderStatus']); ?>">
+            <tr data-status="<?php echo ucfirst(strtolower(trim($row['OrderStatus']))); ?>">
               <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
               <td><?php echo htmlspecialchars($row['UserName']); ?></td>
               <td>#<?php echo htmlspecialchars($row['OrderID']); ?></td>
               <td>
-                <!-- You can update this to fetch actual proof if you have it -->
-                <span style="color:#aaa;">No Proof</span>
+                <?php if (!empty($row['PaymentProof'])): ?>
+                  <a href="<?php echo htmlspecialchars($row['PaymentProof']); ?>" target="_blank" style="color: var(--teal); font-weight: 600;">Show Image</a>
+                <?php else: ?>
+                  <span style="color:#aaa;">No Proof</span>
+                <?php endif; ?>
               </td>
               <td>
-                <span class="status-badge <?php echo strtolower($row['OrderStatus']); ?>">
-                  <?php echo htmlspecialchars($row['OrderStatus']); ?>
+                <span class="status-badge <?php echo strtolower(trim($row['OrderStatus'])); ?>">
+                  <?php echo ucfirst(strtolower(trim($row['OrderStatus']))); ?>
                 </span>
               </td>
               <td><?php echo htmlspecialchars($row['OrderDeadline']); ?></td>
@@ -400,13 +426,15 @@ $result = $conn->query($sql);
   <div id="viewModal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <h2>Order Details</h2>
-      <p><strong>Customer:</strong> <span id="modalCustomer"></span></p>
-      <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
-      <p><strong>Date:</strong> <span id="modalDate"></span></p>
-      <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
-      <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
-      <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-      
+      <div class="modal-info">
+        <p><strong>Customer:</strong> <span id="modalCustomer"></span></p>
+        <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+        <p><strong>Date:</strong> <span id="modalDate"></span></p>
+        <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
+        <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
+        <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+      </div>
+      <div id="modalOrderItems"></div>
       <div class="modal-buttons">
         <button class="btn" onclick="openModal('process')">Process Order</button>
         <button class="btn" onclick="closeModal()">Close</button>
@@ -450,10 +478,45 @@ $result = $conn->query($sql);
         document.getElementById('modalDate').innerText = row.children[0].innerText;
         document.getElementById('modalDeadline').innerText = row.children[5].innerText;
 
-        const proofLink = row.children[3].querySelector('a').href;
-        document.getElementById('modalProof').href = proofLink;
+        const proofAnchor = row.children[3].querySelector('a');
+        if (proofAnchor) {
+          document.getElementById('modalProof').href = proofAnchor.href;
+          document.getElementById('modalProof').style.display = '';
+        } else {
+          document.getElementById('modalProof').href = '#';
+          document.getElementById('modalProof').style.display = 'none';
+        }
 
         document.getElementById('modalStatus').innerText = row.children[4].innerText;
+
+        // --- Fetch and display order items ---
+        const orderId = row.children[2].innerText.replace('#', '').trim();
+        fetch('get-order-details.php?orderId=' + encodeURIComponent(orderId))
+          .then(res => res.json())
+          .then(data => {
+            let html = '';
+            if (data.products && data.products.length > 0) {
+              html += '<table style="width:100%;margin-top:1em;border-collapse:collapse;">';
+              html += '<tr><th style="text-align:left;">Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>';
+              data.products.forEach(item => {
+                html += `<tr>
+                  <td>${item.name}</td>
+                  <td style="text-align:left;">${item.size || '-'}</td>
+                  <td style="text-align:center;">${item.qty}</td>
+                  <td style="text-align:left;">₱${parseFloat(item.price).toFixed(2)}</td>
+                  <td style="text-align:left;">₱${parseFloat(item.subtotal).toFixed(2)}</td>
+                </tr>`;
+              });
+              html += `<tr>
+                <td colspan="4" style="text-align:right;font-weight:bold;">Total:</td>
+                <td style="text-align:left;font-weight:bold;">₱${parseFloat(data.total).toFixed(2)}</td>
+              </tr>`;
+              html += '</table>';
+            } else {
+              html = '<em>No products found for this order.</em>';
+            }
+            document.getElementById('modalOrderItems').innerHTML = html;
+          });
 
         document.getElementById('viewModal').style.display = 'flex';
       } else if (type === 'process') {

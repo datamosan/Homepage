@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($cart_items)) {
 
     // 2. Insert into orders table (save $receipt_path to PaymentProof)
     $shipping = $conn->real_escape_string($_POST['shipping'] ?? 'Self-Pickup');
-    $order_status = 'pending';
+    $order_status = 'New';
     $order_deadline = $_POST['order_deadline'] ?? null;
     $order_note = $conn->real_escape_string($_POST['order_note'] ?? '');
 
