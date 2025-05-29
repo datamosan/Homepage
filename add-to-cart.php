@@ -15,6 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'], $_POST[
     $conn = new mysqli('localhost', 'root', '', 'decadhen');
     if ($conn->connect_error) die(json_encode(['success' => false]));
 
+    // Check for an active cart
+    $cart_res = $conn->query("SELECT CartID FROM Cart WHERE UserID = $user_id AND Status = 'active' LIMIT 1");
+    if ($cart_row = $cart_res->fetch_assoc()) {
+        $cart_id = $cart_row['CartID'];
+    } else {
+        // Create a new active cart if none exists
+        $conn->query("INSERT INTO Cart (UserID, Status, CreatedDate) VALUES ($user_id, 'active', NOW())");
+        $cart_id = $conn->insert_id;
+    }
+
     // Check if item already in cart (optionally by size)
     $stmt = $conn->prepare("SELECT CartItemID, CartQuantity FROM CartItems WHERE CartID = ? AND ProductID = ? AND Size = ?");
     $stmt->bind_param('iis', $cart_id, $product_id, $size);

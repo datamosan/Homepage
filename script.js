@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Add to Cart AJAX (no need to re-attach)
+    // Add to Cart AJAX
     document.querySelectorAll('.add-to-cart-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -689,9 +689,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Helper to update cart DOM and re-attach handlers
     function updateCartDOM(cart_items, cart_total) {
         const cartItemsDiv = document.getElementById('cart-items');
+        const checkoutBtn = document.getElementById('checkout-button');
         if (!cart_items.length) {
             cartItemsDiv.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
             document.getElementById('cart-total-amount').textContent = '₱0.00';
+            if (checkoutBtn) {
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.5';
+                checkoutBtn.style.pointerEvents = 'none';
+            }
             return;
         }
         let html = `<table style="width:90%; max-width:600px; margin:auto; border-collapse:separate; border-spacing:0 8px; background:#fff;">
@@ -732,6 +738,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('cart-total-amount').textContent = '₱' + Number(cart_total).toLocaleString(undefined, {minimumFractionDigits:2});
         // Re-attach AJAX handlers for new forms
         attachCartHandlers();
+
+        // Enable checkout button
+        if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = '1';
+            checkoutBtn.style.pointerEvents = '';
+        }
     }
 
     // Initial attach on page load

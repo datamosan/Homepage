@@ -106,6 +106,18 @@ $products = $conn->query("SELECT * FROM products");
             $user_id = intval($_SESSION['user_id']);
             $cart_id = $user_id; // CartID is always the same as UserID
 
+            // Check for any cart (even completed)
+            $cart_res = $conn->query("SELECT CartID FROM Cart WHERE UserID = $user_id ORDER BY CartID DESC LIMIT 1");
+            if ($cart_row = $cart_res->fetch_assoc()) {
+                $cart_id = $cart_row['CartID'];
+                // Reactivate if not active
+                $conn->query("UPDATE Cart SET Status = 'active' WHERE CartID = $cart_id");
+            } else {
+                // Create new cart if none exists
+                $conn->query("INSERT INTO Cart (UserID, Status, CreatedDate) VALUES ($user_id, 'active', NOW())");
+                $cart_id = $conn->insert_id;
+            }
+
             $cart_items_query = $conn->query("
                 SELECT ci.CartItemID, ci.ProductID, ci.CartQuantity, ci.UnitPrice, p.ProductName
                 FROM CartItems ci
