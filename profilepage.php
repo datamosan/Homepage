@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id'])) {
 
 // Fetch user info from database
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT UserName, UserAddress FROM users WHERE UserID = ?";
+$sql = "SELECT UserName, UserAddress, UserEmail, UserPhone FROM users WHERE UserID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$stmt->bind_result($username, $address);
+$stmt->bind_result($username, $address, $email, $phone);
 $stmt->fetch();
 $stmt->close();
 ?>
@@ -67,6 +67,21 @@ $stmt->close();
     <div class="profile-box">
         <h1><?php echo htmlspecialchars($username); ?></h1>
         <hr class="profile-divider">
+        <div class="profile-info-row">
+            <span class="profile-info-label">Email:</span>
+            <span class="profile-info-text"><?php echo htmlspecialchars($email); ?></span>
+        </div>
+        <div class="profile-info-row" id="phoneRow">
+            <span class="profile-info-label">Phone:</span>
+            <span class="profile-info-text" id="phoneText"><?php echo htmlspecialchars($phone); ?></span>
+            <button class="profile-edit-btn" id="editPhoneBtn" type="button"><i class="fas fa-edit"></i> Edit</button>
+            <form id="phoneForm" style="display:none; margin:0;">
+                <input type="text" class="profile-phone-input" maxlength="10" id="phoneInput" value="<?php echo htmlspecialchars($phone); ?>">
+                <button class="profile-save-btn" type="submit">Save</button>
+                <button class="profile-cancel-btn" type="button" id="cancelPhoneEditBtn">Cancel</button>
+                <span class="profile-phone-msg" id="phoneMsg"></span>
+            </form>
+        </div>
         <div class="profile-address-row" id="addressRow">
             <span class="profile-address-label">Address:</span>
             <span class="profile-address-text" id="addressText"><?php echo htmlspecialchars($address); ?></span>
@@ -174,7 +189,7 @@ $stmt->close();
     };
     addressForm.onsubmit = function(e) {
         e.preventDefault();
-        fetch('update-address.php', {
+        fetch('update-profile.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: 'address=' + encodeURIComponent(addressInput.value)
@@ -199,6 +214,57 @@ $stmt->close();
         .catch(() => {
             addressMsg.textContent = 'Update failed.';
             addressMsg.classList.add('error');
+        });
+    };
+
+    // Phone edit logic
+    const phoneEditBtn = document.getElementById('editPhoneBtn');
+    const phoneText = document.getElementById('phoneText');
+    const phoneForm = document.getElementById('phoneForm');
+    const phoneInput = document.getElementById('phoneInput');
+    const cancelPhoneEditBtn = document.getElementById('cancelPhoneEditBtn');
+    const phoneMsg = document.getElementById('phoneMsg');
+
+    phoneEditBtn.onclick = function() {
+        phoneText.style.display = 'none';
+        phoneEditBtn.style.display = 'none';
+        phoneForm.style.display = 'flex';
+        phoneInput.value = phoneText.textContent;
+        phoneMsg.textContent = '';
+    };
+    cancelPhoneEditBtn.onclick = function() {
+        phoneForm.style.display = 'none';
+        phoneText.style.display = '';
+        phoneEditBtn.style.display = '';
+        phoneMsg.textContent = '';
+    };
+    phoneForm.onsubmit = function(e) {
+        e.preventDefault();
+        fetch('update-profile.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'phone=' + encodeURIComponent(phoneInput.value)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                phoneText.textContent = phoneInput.value;
+                phoneMsg.textContent = 'Phone number updated!';
+                phoneMsg.classList.remove('error');
+                setTimeout(() => {
+                    phoneForm.style.display = 'none';
+                    phoneText.style.display = '';
+                    phoneEditBtn.style.display = '';
+                    phoneMsg.textContent = '';
+                }, 1200);
+            } else {
+                phoneMsg.textContent = 'Update failed.';
+                phoneMsg.classList.add('error');
+            }
+        })
+        .catch(() => {
+            phoneMsg.textContent = 'Update failed.';
+            phoneMsg.classList.add('error');
         });
     };
     </script>

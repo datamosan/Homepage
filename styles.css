@@ -2243,6 +2243,38 @@ footer {
     width: 100%;
 }
 
+.profile-info-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.profile-info-label {
+    font-weight: 600;
+    color: var(--teal);
+    margin-right: 0.5rem;
+}
+
+.profile-info-text {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.profile-phone-input {
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1.1rem;
+    width: 180px;
+}
+
+.profile-phone-msg {
+    margin-left: 1rem;
+    color: var(--teal);
+    font-size: 1rem;
+}
+
 .profile-address-row {
     display: flex;
     align-items: center;
