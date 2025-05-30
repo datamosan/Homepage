@@ -63,22 +63,65 @@ $stmt->close();
         </nav>
     </header>
 
-    <!-- Profile Content -->
-    <main style="max-width: 500px; margin: 60px auto 40px; background: var(--white); box-shadow: var(--box-shadow); border-radius: 12px; padding: 40px 30px;">
-        <h2 style="color: var(--teal); margin-bottom: 30px; text-align: center;">My Profile</h2>
-        <div style="margin-bottom: 25px;">
-            <label style="font-weight: bold; color: var(--coral); font-size: 1.1rem;">User Name:</label>
-            <div style="color: var(--teal); font-size: 1.2rem; margin-top: 5px;">
-                <?php echo htmlspecialchars($username); ?>
-            </div>
+    <!-- Profile Info Box -->
+    <div class="profile-box">
+        <h1><?php echo htmlspecialchars($username); ?></h1>
+        <hr class="profile-divider">
+        <div class="profile-address-row" id="addressRow">
+            <span class="profile-address-label">Address:</span>
+            <span class="profile-address-text" id="addressText"><?php echo htmlspecialchars($address); ?></span>
+            <button class="profile-edit-btn" id="editAddressBtn" type="button"><i class="fas fa-edit"></i> Edit</button>
+            <form id="addressForm" style="display:none; margin:0;">
+                <textarea class="profile-address-input" id="addressInput" rows="2"><?php echo htmlspecialchars($address); ?></textarea>
+                <button class="profile-save-btn" type="submit">Save</button>
+                <button class="profile-cancel-btn" type="button" id="cancelEditBtn">Cancel</button>
+                <span class="profile-address-msg" id="addressMsg"></span>
+            </form>
         </div>
-        <div>
-            <label style="font-weight: bold; color: var(--coral); font-size: 1.1rem;">Address:</label>
-            <div style="color: var(--teal); font-size: 1.1rem; margin-top: 5px;">
-                <?php echo nl2br(htmlspecialchars($address)); ?>
-            </div>
-        </div>
-    </main>
+        <h2 class="orders-title">My Orders</h2>
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Proof of Payment</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            $ordersql = "SELECT OrderDate, PaymentProof, OrderStatus, OrderDeadline FROM orders WHERE UserID = ? ORDER BY OrderDate DESC";
+            $orderstmt = $conn->prepare($ordersql);
+            $orderstmt->bind_param("i", $user_id);
+            $orderstmt->execute();
+            $orderstmt->bind_result($odate, $proof, $ostatus, $odeadline);
+            $hasOrders = false;
+            while ($orderstmt->fetch()):
+                $hasOrders = true;
+            ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($odate); ?></td>
+                    <td>
+                        <?php if ($proof): ?>
+                            <a href="<?php echo htmlspecialchars($proof); ?>" target="_blank" class="order-proof-link">Show Image</a>
+                        <?php else: ?>
+                            <span class="order-no-proof">No Proof</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <span class="status-badge status-<?php echo strtolower($ostatus); ?>">
+                            <?php echo ucfirst($ostatus); ?>
+                        </span>
+                    </td>
+                    <td><?php echo htmlspecialchars($odeadline); ?></td>
+                </tr>
+            <?php endwhile; $orderstmt->close(); ?>
+            <?php if (!$hasOrders): ?>
+                <tr><td colspan="4" class="orders-none">No orders found.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -106,6 +149,59 @@ $stmt->close();
             </div>
         </div>
     </footer>
+    
+    <script>
+    // Address edit logic
+    const editBtn = document.getElementById('editAddressBtn');
+    const addressText = document.getElementById('addressText');
+    const addressForm = document.getElementById('addressForm');
+    const addressInput = document.getElementById('addressInput');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const addressMsg = document.getElementById('addressMsg');
+
+    editBtn.onclick = function() {
+        addressText.style.display = 'none';
+        editBtn.style.display = 'none';
+        addressForm.style.display = 'flex';
+        addressInput.value = addressText.textContent;
+        addressMsg.textContent = '';
+    };
+    cancelEditBtn.onclick = function() {
+        addressForm.style.display = 'none';
+        addressText.style.display = '';
+        editBtn.style.display = '';
+        addressMsg.textContent = '';
+    };
+    addressForm.onsubmit = function(e) {
+        e.preventDefault();
+        fetch('update-address.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'address=' + encodeURIComponent(addressInput.value)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                addressText.textContent = addressInput.value;
+                addressMsg.textContent = 'Address updated!';
+                addressMsg.classList.remove('error');
+                setTimeout(() => {
+                    addressForm.style.display = 'none';
+                    addressText.style.display = '';
+                    editBtn.style.display = '';
+                    addressMsg.textContent = '';
+                }, 1200);
+            } else {
+                addressMsg.textContent = 'Update failed.';
+                addressMsg.classList.add('error');
+            }
+        })
+        .catch(() => {
+            addressMsg.textContent = 'Update failed.';
+            addressMsg.classList.add('error');
+        });
+    };
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

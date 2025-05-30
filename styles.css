@@ -2220,4 +2220,141 @@ footer {
     background: none;
 }
 
+/* --- Profile Page Styles --- */
+.profile-box {
+    background: var(--light-gray);
+    border-radius: 1.25rem;
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 2rem auto 3rem auto;
+}
+
+.profile-box h1 {
+    color: var(--teal);
+    margin-bottom: 1rem;
+    font-size: 2.2rem;
+}
+
+.profile-divider {
+    border: none;
+    border-top: 2.5px solid var(--teal);
+    margin: 0 0 1.5rem 0;
+    width: 100%;
+}
+
+.profile-address-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-address-label {
+    font-weight: 600;
+    color: var(--teal);
+    margin-right: 0.5rem;
+}
+
+.profile-address-text {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.profile-edit-btn,
+.profile-save-btn,
+.profile-cancel-btn {
+    background: var(--teal);
+    max-height: 2rem;
+    max-width: 6rem;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.profile-edit-btn:hover,
+.profile-save-btn:hover {
+    background: var(--coral);
+}
+
+.profile-cancel-btn {
+    background: #d9534f;
+}
+
+.profile-cancel-btn:hover {
+    background: #c9302c;
+}
+
+.profile-address-input {
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1.1rem;
+    width: 260px;
+}
+
+.profile-address-msg {
+    margin-left: 1rem;
+    color: var(--teal);
+    font-size: 1rem;
+}
+
+.orders-title {
+    color: var(--teal);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.orders-table thead {
+    background: var(--teal);
+    color: #fff;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 0.8rem;
+    text-align: left;
+}
+
+.orders-table tr:not(:last-child) td {
+    border-bottom: 1px solid #eee;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.95em;
+    display: inline-block;
+}
+.status-new { background: var(--teal); }
+.status-received { background: #F4A261; }
+.status-processing { background: var(--lavender); }
+.status-delivering { background: var(--mint); }
+.status-completed { background: rgb(43,126,46); }
+.status-rejected { background: var(--coral); color: #333; }
+
+@media (max-width: 700px) {
+    .profile-box { padding: 1rem; }
+    .orders-table th, .orders-table td { padding: 0.5rem; }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap');
