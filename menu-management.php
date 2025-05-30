@@ -22,14 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
 
     // Insert into products table (if product doesn't exist)
     $product_check = mysqli_query($conn, "SELECT ProductID FROM products WHERE ProductName='$item' AND ProductCategory='$category'");
+    $description = mysqli_real_escape_string($conn, $_POST['description'] ?? '');
+
     if ($product_row = mysqli_fetch_assoc($product_check)) {
         $product_id = $product_row['ProductID'];
-        // Optionally update image if new image uploaded
+        // Optionally update image and description if new image uploaded
         if ($image_filename) {
-            mysqli_query($conn, "UPDATE products SET Image='$image_filename' WHERE ProductID='$product_id'");
+            mysqli_query($conn, "UPDATE products SET Image='$image_filename', ProductDescription='$description' WHERE ProductID='$product_id'");
+        } else {
+            mysqli_query($conn, "UPDATE products SET ProductDescription='$description' WHERE ProductID='$product_id'");
         }
     } else {
-        mysqli_query($conn, "INSERT INTO products (ProductName, ProductCategory, Image) VALUES ('$item', '$category', '$image_filename')");
+        mysqli_query($conn, "INSERT INTO products (ProductName, ProductCategory, Image, ProductDescription) VALUES ('$item', '$category', '$image_filename', '$description')");
         $product_id = mysqli_insert_id($conn);
     }
 
@@ -49,17 +53,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_item'])) {
     $item = mysqli_real_escape_string($conn, $_POST['edit_item']);
     $variation = mysqli_real_escape_string($conn, $_POST['edit_variation']);
     $price = floatval($_POST['edit_price']);
+    $edit_description = mysqli_real_escape_string($conn, $_POST['edit_description'] ?? '');
 
     // Handle image upload
     if (isset($_FILES['edit_image']) && $_FILES['edit_image']['error'] === UPLOAD_ERR_OK) {
         $ext = pathinfo($_FILES['edit_image']['name'], PATHINFO_EXTENSION);
         $image_filename = uniqid('menu_', true) . '.' . $ext;
         move_uploaded_file($_FILES['edit_image']['tmp_name'], 'images/' . $image_filename);
-        // Update all fields including image
-        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', Image='$image_filename' WHERE ProductID='$edit_id'");
+        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', Image='$image_filename', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
     } else {
-        // Update all fields except image
-        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category' WHERE ProductID='$edit_id'");
+        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
     }
 
     // Update product_attributes (assumes one attribute per product for simplicity)
@@ -100,7 +103,7 @@ $edit_row = null;
 if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     $edit_id = intval($_GET['edit']);
     $edit_query = "
-        SELECT p.ProductID, p.ProductCategory, p.ProductName, pa.SizeID, pa.Size, pa.Price, p.Image
+        SELECT p.ProductID, p.ProductCategory, p.ProductName, pa.SizeID, pa.Size, pa.Price, p.Image, p.ProductDescription
         FROM products p
         LEFT JOIN product_attributes pa ON p.ProductID = pa.ProductID
         WHERE p.ProductID = $edit_id
@@ -421,6 +424,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       border: none;
       padding: 0.6rem 1.2rem;
       border-radius: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
     }
@@ -486,6 +491,74 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       box-shadow: var(--shadow);
       z-index: 2000;
     }
+
+    /* Style for description textarea in modal and add form */
+    textarea[name="edit_description"],
+    textarea[name="description"] {
+      width: 100%;
+      min-height: 60px;
+      max-height: 180px;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      resize: vertical;
+      box-sizing: border-box;
+      background: #fafbfc;
+      transition: border-color 0.2s;
+    }
+
+    textarea[name="edit_description"]:focus,
+    textarea[name="description"]:focus {
+      border-color: var(--teal);
+      outline: none;
+      background: #fff;
+    }
+
+    /* Make textarea placeholder font match input placeholder font */
+    textarea::placeholder,
+    input::placeholder {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: #888;
+      opacity: 1;
+    }
+    .add-form select,
+    .modal-content select {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background: #fafbfc;
+      transition: border-color 0.2s;
+    }
+    .add-form select:focus,
+    .modal-content select:focus {
+      border-color: var(--teal);
+      outline: none;
+      background: #fff;
+    }
+    .add-form input[type="file"],
+.modal-content input[type="file"] {
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  background: #fafbfc;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 1rem;
+}
+.add-form input[type="file"]:focus,
+.modal-content input[type="file"]:focus {
+  border-color: var(--teal);
+  outline: none;
+  background: #fff;
+}
   </style>
 </head>
 <body>
@@ -573,6 +646,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
             <option>Pasta and Noodles</option>
           </select>
           <input type="text" name="item" placeholder="Item Name" required>
+          <textarea name="description" placeholder="Description" rows="2" required></textarea>
           <input type="text" name="variation" placeholder="Variation">
           <input type="number" step="0.01" name="price" placeholder="Price" required>
           <input type="file" name="image" accept="image/*" required>
@@ -595,6 +669,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
               <option <?= $edit_row['ProductCategory'] == 'Pasta and Noodles' ? 'selected' : '' ?>>Pasta and Noodles</option>
             </select>
             <input type="text" name="edit_item" value="<?= htmlspecialchars($edit_row['ProductName']) ?>" required>
+            <textarea name="edit_description" rows="2" required><?= htmlspecialchars($edit_row['ProductDescription'] ?? '') ?></textarea>
             <input type="text" name="edit_variation" value="<?= htmlspecialchars($edit_row['Size']) ?>">
             <input type="number" step="0.01" name="edit_price" value="<?= htmlspecialchars($edit_row['Price']) ?>" required>
             <label for="edit_image">Image</label>
