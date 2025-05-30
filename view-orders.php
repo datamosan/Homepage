@@ -22,6 +22,7 @@ $result = $conn->query($sql);
       --coral: #f48a8a;
       --mint: #8cd3a9;
       --teal: #1d4b53;
+      --orange: #F4A261;
       --lavender: #b0b4ff;
       --white: #ffffff;
       --light-gray: #f5f5f5;
@@ -202,8 +203,10 @@ $result = $conn->query($sql);
       display: inline-block;
     }
     .new { background: var(--teal); }
+    .received { background: var(--orange); }
     .processing { background: var(--lavender); }
-    .delivered { background: var(--mint); }
+    .delivering { background: var(--mint); }
+    .completed { background:rgb(43, 126, 46); color: white; }
     .rejected { background:var(--coral); color: #333; }
     .btn {
       padding: 0.5rem 1rem;
@@ -371,8 +374,10 @@ $result = $conn->query($sql);
       <select id="status" onchange="filterOrders()">
         <option value="All">All Status</option>
         <option value="New">New</option>
+        <option value="Received">Received</option>
         <option value="Processing">Processing</option>
-        <option value="Delivered">Delivered</option>
+        <option value="Delivering">Delivering</option>
+        <option value="Completed">Completed</option>
         <option value="Rejected">Rejected</option>
       </select>
       <button id="exportBtn"><i class="fas fa-file-export"></i> Export CSV</button>
@@ -392,32 +397,41 @@ $result = $conn->query($sql);
         </tr>
       </thead>
       <tbody>
-        <?php if ($result && $result->num_rows > 0): ?>
-          <?php while($row = $result->fetch_assoc()): ?>
-            <tr data-status="<?php echo ucfirst(strtolower(trim($row['OrderStatus']))); ?>">
-              <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
-              <td><?php echo htmlspecialchars($row['UserName']); ?></td>
-              <td>#<?php echo htmlspecialchars($row['OrderID']); ?></td>
-              <td>
-                <?php if (!empty($row['PaymentProof'])): ?>
-                  <a href="<?php echo htmlspecialchars($row['PaymentProof']); ?>" target="_blank" style="color: var(--teal); font-weight: 600;">Show Image</a>
-                <?php else: ?>
-                  <span style="color:#aaa;">No Proof</span>
-                <?php endif; ?>
-              </td>
-              <td>
-                <span class="status-badge <?php echo strtolower(trim($row['OrderStatus'])); ?>">
-                  <?php echo ucfirst(strtolower(trim($row['OrderStatus']))); ?>
-                </span>
-              </td>
-              <td><?php echo htmlspecialchars($row['OrderDeadline']); ?></td>
-              <td>
-                <button class="btn" onclick="openModal('view', this)">View</button>
-                <button class="btn" onclick="openModal('process', this)">Process</button>
-              </td>
-            </tr>
-          <?php endwhile; ?>
-        <?php else: ?>
+        <?php
+          $hasOrders = false;
+          if ($result && $result->num_rows > 0):
+            while($row = $result->fetch_assoc()):
+              $status = strtolower(trim($row['OrderStatus']));
+              if ($status === 'completed' || $status === 'rejected') continue;
+              $hasOrders = true;
+        ?>
+          <tr data-status="<?php echo ucfirst($status); ?>">
+            <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
+            <td><?php echo htmlspecialchars($row['UserName']); ?></td>
+            <td>#<?php echo htmlspecialchars($row['OrderID']); ?></td>
+            <td>
+              <?php if (!empty($row['PaymentProof'])): ?>
+                <a href="<?php echo htmlspecialchars($row['PaymentProof']); ?>" target="_blank" style="color: var(--teal); font-weight: 600;">Show Image</a>
+              <?php else: ?>
+                <span style="color:#aaa;">No Proof</span>
+              <?php endif; ?>
+            </td>
+            <td>
+              <span class="status-badge <?php echo $status; ?>">
+                <?php echo ucfirst($status); ?>
+              </span>
+            </td>
+            <td><?php echo htmlspecialchars($row['OrderDeadline']); ?></td>
+            <td>
+              <button class="btn" onclick="openModal('view', this)">View</button>
+              <button class="btn" onclick="openModal('process', this)">Process</button>
+            </td>
+          </tr>
+        <?php
+            endwhile;
+          endif;
+          if (!$hasOrders):
+        ?>
           <tr><td colspan="7" style="text-align:center;">No orders found.</td></tr>
         <?php endif; ?>
       </tbody>
@@ -454,8 +468,10 @@ $result = $conn->query($sql);
       <form id="processForm" onsubmit="submitProcess(event)">
         <label for="processStatus">Status:</label>
         <select id="processStatus" required>
+          <option value="Received">Received</option>
           <option value="Processing">Processing</option>
-          <option value="Delivered">Delivered</option>
+          <option value="Delivering">Delivering</option>
+          <option value="Completed">Completed</option>
           <option value="Rejected">Rejected</option>
         </select>
         <label for="remarks">Remarks:</label>
@@ -571,7 +587,12 @@ $result = $conn->query($sql);
           currentProcessingRow.dataset.status = status;
           alert(`Order status updated to "${status}".`);
           closeModal();
-          filterOrders();
+          // Hide the row immediately if status is Completed or Rejected
+          if (status === 'Completed' || status === 'Rejected') {
+            currentProcessingRow.style.display = 'none';
+          } else {
+            filterOrders();
+          }
         } else {
           alert('Failed to update order status.');
         }

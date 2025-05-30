@@ -1,5 +1,14 @@
 <?php
 session_start();
+require_once 'connection.php';
+
+// Fetch only completed or rejected orders
+$sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof
+        FROM orders o
+        JOIN users u ON o.UserID = u.UserID
+        WHERE o.OrderStatus IN ('Completed', 'Rejected')
+        ORDER BY o.OrderDate DESC";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -194,15 +203,34 @@ session_start();
       font-size: 0.9em;
       display: inline-block;
     }
-    .preparing { background: #ff9800; }
-    .out-for-delivery { background: #2196f3; }
-    .delivered { background: #4caf50; }
-    button.delete-btn {
-      background-color: var(--coral);
-      color: white;
-      padding: 6px 12px;
+    .new { background: var(--teal); }
+    .received { background: var(--orange); }
+    .processing { background: var(--lavender); }
+    .delivering { background: var(--mint); }
+    .completed { background:rgb(43, 126, 46); color: white; }
+    .rejected { background:var(--coral); color: #333; }
+    
+    .btn {
+      padding: 0.5rem 1rem;
       border: none;
-      border-radius: 6px;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      background-color: var(--teal);
+      color: white;
+      margin-right: 0.5rem;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: var(--coral);
+    }
+    
+    button.delete-btn {
+      background-color: #d9534f;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
       cursor: pointer;
       font-weight: 600;
       transition: background 0.3s;
@@ -242,6 +270,129 @@ session_start();
         min-width: 90px;
         max-width: 120px;
         flex-basis: 90px;
+      }
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 900px;
+      box-shadow: var(--shadow);
+    }
+
+    #processModal .modal-content {
+      max-width: 400px;
+    }
+
+    .modal-content h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--teal);
+    }
+    .modal-content p {
+      margin: 0.5rem 0;
+      color: var(--dark-gray);
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .modal-buttons .btn {
+      flex: 1;
+    }
+    #processForm label {
+      display: block;
+      margin: 0.75rem 0 0.3rem;
+      font-weight: 600;
+      color: var(--teal);
+    }
+    #processForm select,
+    #processForm textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+    }
+    #processForm textarea {
+      min-height: 80px;
+    }
+    
+    #modalOrderItems {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5em;
+    }
+
+    .modal-content .modal-info {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 0 0.5em 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .modal-content .modal-info p {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    /* Responsive adjustments for modals */
+    @media (max-width: 900px) {
+      .modal-content {
+        width: 90%;
+        padding: 15px;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .modal-buttons button {
+        width: 100%;
+        padding: 0.7rem;
+        font-size: 0.95rem;
       }
     }
   </style>
@@ -294,126 +445,289 @@ session_start();
       <thead>
         <tr>
           <th>Date</th>
-          <th>Name</th>
+          <th>Customer Name</th>
           <th>Order ID</th>
-          <th>Proof</th>
-          <th>Deadline</th>
+          <th>Proof of Payment</th>
           <th>Status</th>
-          <th>Update</th>
+          <th>Deadline</th>
           <th>Action</th>
         </tr>
       </thead>
-      <tbody id="orderTableBody"></tbody>
+      <tbody id="orderTableBody">
+        <?php if ($result && $result->num_rows > 0): ?>
+          <?php while($row = $result->fetch_assoc()): ?>
+            <tr>
+              <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
+              <td><?php echo htmlspecialchars($row['UserName']); ?></td>
+              <td>#<?php echo htmlspecialchars($row['OrderID']); ?></td>
+              <td>
+                <?php if (!empty($row['PaymentProof'])): ?>
+                  <a href="<?php echo htmlspecialchars($row['PaymentProof']); ?>" target="_blank" style="color: var(--teal); font-weight: 600;">View</a>
+                <?php else: ?>
+                  <span style="color:#aaa;">No Proof</span>
+                <?php endif; ?>
+              </td>
+              <td>
+                <span class="status-badge <?php echo strtolower(trim($row['OrderStatus'])); ?>">
+                  <?php echo ucfirst(strtolower(trim($row['OrderStatus']))); ?>
+                </span>
+              </td>
+              <td><?php echo htmlspecialchars($row['OrderDeadline']); ?></td>
+              <td>
+                <button class="btn" onclick="openModal('view', this)">View</button>
+                <button class="btn" onclick="openModal('process', this)">Process</button>
+                <button class="delete-btn" onclick="deleteOrder(<?php echo $row['OrderID']; ?>)">Delete</button>
+              </td>
+            </tr>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <tr><td colspan="7" style="text-align:center;">No completed or rejected orders found.</td></tr>
+        <?php endif; ?>
+      </tbody>
     </table>
     <footer>
       &copy; 2025 Dhen's Kitchen. All rights reserved.
     </footer>
   </div>
 
+  <!-- View Modal -->
+<div id="viewModal" class="modal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h2>Order Details</h2>
+    <div class="modal-info">
+      <p><strong>Customer:</strong> <span id="modalCustomer"></span></p>
+      <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+      <p><strong>Date:</strong> <span id="modalDate"></span></p>
+      <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
+      <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
+      <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+    </div>
+    <div id="modalOrderItems"></div>
+    <div class="modal-buttons">
+      <button class="btn" onclick="openModal('process')">Process Order</button>
+      <button class="btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Process Modal -->
+<div id="processModal" class="modal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h2>Process Order</h2>
+    <form id="processForm" onsubmit="submitProcess(event)">
+      <label for="processStatus">Status:</label>
+      <select id="processStatus" required>
+        <option value="Received">Received</option>
+        <option value="Processing">Processing</option>
+        <option value="Delivering">Delivering</option>
+        <option value="Completed">Completed</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+      <label for="remarks">Remarks:</label>
+      <textarea id="remarks" placeholder="Enter remarks here..."></textarea>
+      <div class="modal-buttons">
+        <button type="submit" class="btn">Submit</button>
+        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
   <script>
-    const tableBody = document.getElementById('orderTableBody');
-    const searchInput = document.getElementById('searchInput');
-    const startDate = document.getElementById('startDate');
-    const endDate = document.getElementById('endDate');
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const sortField = document.getElementById('sortField');
+  const sortOrder = document.getElementById('sortOrder');
+  const orderTableBody = document.getElementById('orderTableBody');
 
-    function loadOrders() {
-      const orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
-      tableBody.innerHTML = '';
-      orders.forEach((o, i) => {
-        const badgeClass = o.status === 'Preparing' ? 'preparing' :
-                           o.status === 'Out for Delivery' ? 'out-for-delivery' : 'delivered';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${o.date}</td>
-          <td>${o.name}</td>
-          <td>${o.orderId}</td>
-          <td><a href="${o.proof}" target="_blank">View</a></td>
-          <td>${o.deadline}</td>
-          <td><span class="status-badge ${badgeClass}">${o.status}</span></td>
-          <td>
-            <select onchange="updateStatus(${i}, this.value)">
-              <option value="Preparing" ${o.status==='Preparing'?'selected':''}>Preparing</option>
-              <option value="Out for Delivery" ${o.status==='Out for Delivery'?'selected':''}>Out for Delivery</option>
-              <option value="Delivered" ${o.status==='Delivered'?'selected':''}>Delivered</option>
-            </select>
-          </td>
-          <td><button class="delete-btn" onclick="deleteOrder(${i})">Delete</button></td>
-        `;
-        tableBody.appendChild(tr);
-      });
-      applyFilters();
-    }
+  function filterAndSortTable() {
+    const search = searchInput.value.trim().toLowerCase();
+    const field = sortField.value;
+    const order = sortOrder.value;
 
-    function updateStatus(index, newStatus) {
-      const orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
-      orders[index].status = newStatus;
-      localStorage.setItem('approvedOrders', JSON.stringify(orders));
-      loadOrders();
-    }
+    // Convert rows to array for sorting/filtering
+    let rows = Array.from(orderTableBody.querySelectorAll('tr'));
 
-    function deleteOrder(index) {
-      let orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
-      if (confirm('Delete this order?')) {
-        orders.splice(index, 1);
-        localStorage.setItem('approvedOrders', JSON.stringify(orders));
-        loadOrders();
+    // Filter by search (name or order ID)
+    rows.forEach(row => {
+      const name = row.children[1]?.textContent.toLowerCase() || '';
+      const orderId = row.children[2]?.textContent.toLowerCase() || '';
+      if (name.includes(search) || orderId.includes(search) || !search) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
       }
+    });
+
+    // Sort visible rows
+    rows = rows.filter(row => row.style.display !== 'none');
+    rows.sort((a, b) => {
+      let aVal, bVal;
+      if (field === 'deadline') {
+        aVal = a.children[5]?.textContent || '';
+        bVal = b.children[5]?.textContent || '';
+      } else if (field === 'status') {
+        aVal = a.children[4]?.textContent || '';
+        bVal = b.children[4]?.textContent || '';
+      } else {
+        aVal = '';
+        bVal = '';
+      }
+      if (order === 'asc') {
+        return aVal.localeCompare(bVal, undefined, {numeric: true});
+      } else {
+        return bVal.localeCompare(aVal, undefined, {numeric: true});
+      }
+    });
+
+    // Re-append sorted rows
+    rows.forEach(row => orderTableBody.appendChild(row));
+  }
+
+  searchInput.addEventListener('input', filterAndSortTable);
+  sortField.addEventListener('change', filterAndSortTable);
+  sortOrder.addEventListener('change', filterAndSortTable);
+
+  // Optional: sort button
+  document.getElementById('sortBtn').addEventListener('click', filterAndSortTable);
+
+  // Initial sort/filter
+  filterAndSortTable();
+});
+
+function deleteOrder(orderId) {
+  if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
+  fetch('delete-order.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: 'orderId=' + encodeURIComponent(orderId)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      // Remove the row from the table
+      const row = Array.from(orderTableBody.querySelectorAll('tr')).find(tr =>
+        tr.children[2] && tr.children[2].textContent.replace('#', '').trim() == orderId
+      );
+      if (row) row.remove();
+      alert('Order deleted successfully.');
+    } else {
+      alert('Failed to delete order.');
+    }
+  });
+}
+
+let currentProcessingRow = null;
+let currentViewRow = null;
+
+function openModal(type, btn = null) {
+  if (type === 'view') {
+    if (!btn) return;
+    const row = btn.closest('tr');
+    currentViewRow = row;
+
+    document.getElementById('modalCustomer').innerText = row.children[1].innerText;
+    document.getElementById('modalOrderId').innerText = row.children[2].innerText;
+    document.getElementById('modalDate').innerText = row.children[0].innerText;
+    document.getElementById('modalDeadline').innerText = row.children[5].innerText;
+
+    const proofAnchor = row.children[3].querySelector('a');
+    if (proofAnchor) {
+      document.getElementById('modalProof').href = proofAnchor.href;
+      document.getElementById('modalProof').style.display = '';
+    } else {
+      document.getElementById('modalProof').href = '#';
+      document.getElementById('modalProof').style.display = 'none';
     }
 
-    function exportToCSV() {
-      const orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
-      let csv = 'Date,Name,Order ID,Deadline,Status\n';
-      orders.forEach(o => {
-        csv += `${o.date},${o.name},${o.orderId},${o.deadline},${o.status}\n`;
+    document.getElementById('modalStatus').innerText = row.children[4].innerText;
+
+    // --- Fetch and display order items ---
+    const orderId = row.children[2].innerText.replace('#', '').trim();
+    fetch('get-order-details.php?orderId=' + encodeURIComponent(orderId))
+      .then(res => res.json())
+      .then(data => {
+        let html = '';
+        if (data.products && data.products.length > 0) {
+          html += '<table style="width:100%;margin-top:1em;border-collapse:collapse;">';
+          html += '<tr><th style="text-align:left;">Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>';
+          data.products.forEach(item => {
+            html += `<tr>
+              <td>${item.name}</td>
+              <td style="text-align:left;">${item.size || '-'}</td>
+              <td style="text-align:center;">${item.qty}</td>
+              <td style="text-align:left;">₱${parseFloat(item.price).toFixed(2)}</td>
+              <td style="text-align:left;">₱${parseFloat(item.subtotal).toFixed(2)}</td>
+            </tr>`;
+          });
+          html += `<tr>
+            <td colspan="4" style="text-align:right;font-weight:bold;">Total:</td>
+            <td style="text-align:left;font-weight:bold;">₱${parseFloat(data.total).toFixed(2)}</td>
+          </tr>`;
+          html += '</table>';
+        } else {
+          html = '<em>No products found for this order.</em>';
+        }
+        document.getElementById('modalOrderItems').innerHTML = html;
       });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'approved_orders.csv';
-      link.click();
+
+    document.getElementById('viewModal').style.display = 'flex';
+  } else if (type === 'process') {
+    if (btn) {
+      currentProcessingRow = btn.closest('tr');
+    } else if (currentViewRow) {
+      currentProcessingRow = currentViewRow;
+      closeModal();
     }
+    if (!currentProcessingRow) return alert('No order selected.');
 
-    function printPDF() {
-      window.print();
+    // Pre-select current status
+    const currentStatus = currentProcessingRow.children[4].innerText.replace(/<[^>]*>?/gm, '').trim();
+    document.getElementById('processStatus').value = currentStatus;
+    document.getElementById('remarks').value = '';
+
+    document.getElementById('processModal').style.display = 'flex';
+  }
+}
+
+function closeModal(event) {
+  if (event && event.target !== event.currentTarget) return;
+  document.getElementById('viewModal').style.display = 'none';
+  document.getElementById('processModal').style.display = 'none';
+}
+
+function submitProcess(event) {
+  event.preventDefault();
+  if (!currentProcessingRow) return alert('No order selected.');
+
+  const status = document.getElementById('processStatus').value;
+  const remarks = document.getElementById('remarks').value;
+  const orderId = currentProcessingRow.children[2].innerText.replace('#', '').trim();
+
+  fetch('update-order-status.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `orderId=${encodeURIComponent(orderId)}&status=${encodeURIComponent(status)}`
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      // Update status text in the row
+      currentProcessingRow.children[4].innerHTML =
+        `<span class="status-badge ${status.toLowerCase()}">${status}</span>`;
+      // Optionally update data-status attribute for filtering
+      currentProcessingRow.dataset.status = status;
+      alert(`Order status updated to "${status}".`);
+      closeModal();
+      // Optionally, remove the row if status is no longer Completed/Rejected
+      if (status !== 'Completed' && status !== 'Rejected') {
+        currentProcessingRow.remove();
+      }
+    } else {
+      alert('Failed to update order status.');
     }
-
-    function applyFilters() {
-      const q = searchInput.value.toLowerCase();
-      const sd = startDate.value;
-      const ed = endDate.value;
-      Array.from(tableBody.rows).forEach(row => {
-        const name = row.cells[1].innerText.toLowerCase();
-        const id = row.cells[2].innerText.toLowerCase();
-        const dl = row.cells[4].innerText;
-        let visible = (name.includes(q) || id.includes(q));
-        if (visible && sd) visible = dl >= sd;
-        if (visible && ed) visible = dl <= ed;
-        row.style.display = visible ? '' : 'none';
-      });
-    }
-
-    function sortTable() {
-      const field = document.getElementById('sortField').value;
-      const order = document.getElementById('sortOrder').value;
-      let orders = JSON.parse(localStorage.getItem('approvedOrders') || '[]');
-      orders.sort((a, b) => {
-        let v1 = field === 'deadline' ? new Date(a.deadline) : a.status;
-        let v2 = field === 'deadline' ? new Date(b.deadline) : b.status;
-        if (v1 < v2) return order === 'asc' ? -1 : 1;
-        if (v1 > v2) return order === 'asc' ? 1 : -1;
-        return 0;
-      });
-      localStorage.setItem('approvedOrders', JSON.stringify(orders));
-      loadOrders();
-    }
-
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-    document.getElementById('filterDateBtn').addEventListener('click', applyFilters);
-    document.getElementById('sortBtn').addEventListener('click', sortTable);
-    document.getElementById('exportBtn').addEventListener('click', exportToCSV);
-    document.getElementById('printBtn').addEventListener('click', printPDF);
-
-    window.addEventListener('DOMContentLoaded', loadOrders);
+  });
+}
   </script>
 </body>
 </html>
