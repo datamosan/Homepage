@@ -498,7 +498,6 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       <a href="view-orders.php"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php" class="active"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-history.php"><i class="fas fa-box"></i>Orders History</a>
-      <a href="messages.php"><i class="fas fa-envelope"></i>Messages</a>
       <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
       <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
     </nav>
