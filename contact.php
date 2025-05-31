@@ -65,10 +65,10 @@ require 'vendor/autoload.php'; // Load Composer's autoloader
         <!-- Map Section -->
         <div class="map-container">
             <h3>Our Location</h3>
-            <div class="map-placeholder">
-                <i class="fas fa-map-marker-alt fa-3x"></i>
-                <p>123 Filipino Street, Manila, Philippines</p>
-                <p>Interactive map will be displayed here</p>
+            <div class="map-responsive" style="overflow:hidden; padding-bottom:56.25%; position:relative; height:0;">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15443.83472976007!2d120.99835239989395!3d14.601429587988173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9e733373ea3%3A0xed9f039f94a0752b!2sSanta%20Mesa%2C%20City%20Of%20Manila%2C%201016%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1748703953348!5m2!1sen!2sph"
+                    width="100%" height="100%" style="border:0; position:absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
 
