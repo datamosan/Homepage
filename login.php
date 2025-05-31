@@ -56,7 +56,7 @@
                 </div>
                <button type="submit" name="login" class="auth-button">Login</button>
                 <div class="auth-links">
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <a href="password-reset.php" class="forgot-password">Forgot Password?</a>
                 </div>
             </form>
             <div class="auth-redirect">
