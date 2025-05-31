@@ -55,7 +55,7 @@ session_start();
                 <div class="custom-card card">
                     <div class="custom-card-header">
                         <img src="logo.png" alt="Logo" class="logo mb-2">
-                        <h4 class="mb-0">Reset Password</h4>
+                        <h4 class="mb-0 font-weight-bold">Reset Password</h4>
                     </div>
                     <div class="card-body p-4">
                         <?php

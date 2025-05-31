@@ -74,7 +74,7 @@ session_start();
                 <div class="card change-card">
                     <div class="change-card-header">
                         <img src="logo.png" alt="Logo" class="change-logo mb-2">
-                        <h4 class="change-title mb-0">Change Password</h4>
+                        <h4 class="change-title mb-0 font-weight-bold">Change Password</h4>
                     </div>
                     <div class="card-body p-4">
                         <?php

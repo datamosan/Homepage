@@ -1501,6 +1501,12 @@ footer {
     font-weight: bold;
 }
 
+.readonly-input {
+    background-color: #f1f1f1 !important;
+    color: #888 !important;
+    cursor: not-allowed;
+}
+
 .contact-form input,
 .contact-form textarea,
 .contact-form select {

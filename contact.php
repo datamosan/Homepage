@@ -1,5 +1,12 @@
 <?php
 session_start();
+include 'connection.php'; // Include your database connection file
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require 'vendor/autoload.php'; // Load Composer's autoloader
 ?>
 
 <!DOCTYPE html>
@@ -65,31 +72,59 @@ session_start();
             </div>
         </div>
 
+        <?php
+        $name = $email = $phone = '';
+        if (isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+            $stmt = $conn->prepare("SELECT UserName, UserEmail, UserPhone FROM users WHERE UserID = ?");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $stmt->bind_result($name, $email, $phone);
+            $stmt->fetch();
+            $stmt->close();
+        }
+        ?>
+
         <!-- Contact Form -->
         <div class="contact-form-container">
             <h3 class="form-title">Send Us a Message</h3>
-            <form id="contactForm" class="contact-form">
+            <?php if (isset($_SESSION['status'])): ?>
+                <div class="alert alert-success text-center mx-auto" style="max-width:800px; font-size:1.1em; font-weight: bold; margin-bottom:20px; text-align: center;">
+                    <?php echo htmlspecialchars($_SESSION['status']); ?>
+                </div>
+                <?php unset($_SESSION['status']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger text-center mx-auto" style="max-width:800px; font-size:1.1em; font-weight: bold; margin-bottom:20px; text-align: center;">
+                    <?php echo htmlspecialchars($_SESSION['error']); ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+
+            <form id="contactForm" class="contact-form" action="contact-form-handler.php" method="POST">
                 <div class="form-group">
                     <label for="name">Your Name *</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" required value="<?php echo htmlspecialchars($name); ?>"
+                    <?php if ($name) echo 'readonly class="readonly-input"'; ?>>
                 </div>
                 <div class="form-group">
                     <label for="email">Your Email *</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($email); ?>" <?php if ($email) echo 'readonly class="readonly-input"'; ?>>
                 </div>
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone">
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>" <?php if ($phone) echo 'readonly class="readonly-input"'; ?>>
                 </div>
                 <div class="form-group">
                     <label for="subject">Subject *</label>
                     <select id="subject" name="subject" required>
                         <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="order">Order Status</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="catering">Custom Order/Catering</option>
-                        <option value="other">Other</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Order Status">Order Status</option>
+                        <option value="Feedback">Feedback</option>
+                        <option value="Custom Order/Catering">Custom Order/Catering</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -138,6 +173,6 @@ session_start();
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
 </body>
 </html>
