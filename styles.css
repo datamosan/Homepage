@@ -226,7 +226,7 @@ header {
 footer {
     background-color: var(--teal);
     padding: 30px 0 15px;
-    margin-top: 40px;
+    /* margin-top: 40px; */
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     color: var(--white);
 }
@@ -1306,16 +1306,29 @@ footer {
 .footer-links {
     display: flex;
     flex-wrap: nowrap;
-    gap: 10px;
     justify-content: center;
     align-items: center;
     white-space: nowrap;
+    gap: 0;
 }
 
 .footer-links a {
     color: var(--white);
-    margin-bottom: 10px;
+    padding: 0 16px;
+    position: relative;
+    font-size: 1rem;
     white-space: nowrap;
+    font-weight: 500;
+}
+
+.footer-links a:not(:last-child)::after {
+    color: #b0d8c2;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-weight: normal;
+    padding-left: 16px;
+    pointer-events: none;
 }
 
 /* FAQ Page Styles */

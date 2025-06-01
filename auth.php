@@ -18,7 +18,7 @@ if ($res && $row = $res->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Dhen's Kitchen</title>
+    <title>Login/Register - Dhen's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -45,62 +45,28 @@ if ($res && $row = $res->fetch_assoc()) {
         </nav>
     </header>
 
-    <!-- Sign Up Main -->
+    <!-- Auth Main -->
     <div class="auth-main">
-        <h2 class="auth-subtitle">Create an Account</h2>
-        <br>
-        <div class="auth-flex-row">
-            <div class="auth-form-container">
-                <form id="signupForm" class="auth-form" action="reg.php" method="post">
-                    <label for="fullName">Name:</label>
-                    <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
-
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" placeholder="Address" required>
-
-                    <label for="email">Email Address:</label>
-                    <input type="email" id="email" name="email" placeholder="Email Address" required>
-
-                    <label for="phone">Mobile Number:</label>
-                    <div class="phone-group">
-                        <span class="country-code">+63</span>
-                        <input type="tel" id="phone" name="phone" maxlength="10" placeholder="Mobile Number" required>
-                    </div>
-
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Password" required>
-
-                    <div class="terms">
-                        <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">I agree to the <a href="terms.php">Terms & Conditions</a> and <a href="privacy-policy.php">Privacy Policy</a></label>
-                    </div>
-                    <div class="newsletter">
-                        <input type="checkbox" id="newsletter" name="newsletter">
-                        <label for="newsletter">Subscribe to our newsletter</label>
-                    </div>
-                    <button type="submit" name="signUp" class="auth-button">Create Account</button>
-                </form>
-                <div class="auth-redirect">
-                    <p>Already have an account? <a href="login.php">Login</a></p>
-                </div>
+        <div class="auth-container">
+            <div class="logo-large">
+                <img src="logo.png" alt="Dhen's Kitchen Logo">
             </div>
-            <div class="auth-benefits">
-                <h3>Benefits of Creating an Account</h3>
-                <ul>
-                    <li>Track your orders in real-time</li>
-                    <li>Save your favorite items for quick reordering</li>
-                    <li>Receive exclusive offers and promotions</li>
-                    <li>Faster checkout process</li>
-                    <li>Access to order history</li>
-                </ul>
+            <div class="welcome-message">
+                <h2>Welcome to Dhen's Kitchen</h2>
+                <p>Sign in to your account to order your favorite Filipino dishes, track your orders, and more.</p>
+            </div>
+            <div class="auth-buttons">
+                <a href="login.php" class="auth-button">Login</a>
+                <a href="signup.php" class="auth-button">Create an Account</a>
+            </div>
+            <div class="guest-option">
+                <p>Just browsing? You can continue as a guest.</p>
+                <a href="index.php" class="guest-button">Continue as Guest</a>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+<!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-info">

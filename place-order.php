@@ -1,7 +1,18 @@
 <?php
 session_start();
+require_once "connection.php";
+$page_title = "Sparkle up your day with goodness!"; // fallback
+$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = $res->fetch_assoc()) {
+    $announcement = $row['ContentDescription'];
+}
+$featuredImage = 'images/dhens1.jpg'; // fallback
+$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
+if ($res && $row = $res->fetch_assoc()) {
+    $featuredImage = $row['ContentDescription'];
+}
 if (!isset($_SESSION['user_id'])) {
-    header('Location: auth.html');
+    header('Location: auth.php');
     exit;
 }
 
@@ -96,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($cart_items)) {
     <!-- Header -->
     <header>
         <div class="header-bar">
-            <div class="page-title">About Us</div>
+            <div class="page-title"><?php echo htmlspecialchars($announcement); ?></div>
         </div>
         <nav class="main-nav">
             <div class="nav-links">
@@ -121,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($cart_items)) {
                         </div>
                     </div>
                 <?php else: ?>
-                    <a href="auth.html" class="nav-item">Login</a>
+                    <a href="auth.php" class="nav-item">Login</a>
                 <?php endif; ?>
             </div>
         </nav>

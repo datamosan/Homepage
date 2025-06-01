@@ -55,7 +55,7 @@ if ($res && $row = $res->fetch_assoc()) {
                         </div>
                     </div>
                 <?php else: ?>
-                    <a href="auth.html" class="nav-item">Login</a>
+                    <a href="auth.php" class="nav-item">Login</a>
                 <?php endif; ?>
             </div>
         </nav>
@@ -117,23 +117,24 @@ if ($res && $row = $res->fetch_assoc()) {
         <div class="footer-content">
             <div class="footer-info">
                 <h3>Dhen's Kitchen</h3>
-                <p>123 Filipino Street</p>
-                <p>Manila, Philippines</p>
-                <p>Phone: (02) 8123-4567</p>
-                <p>Email: info@dhenskitchen.com</p>
+                <p>Sta. Mesa, Manila, Philippines 1016</p>
+                <p>Phone: 0949 348 2110 | 0915 007 7783</p>
+                <p>Email: dhenskitchen@gmail.com</p>
             </div>
             <div class="copyright">
             <div class="footer-links">
                 <br>
-                <a href="delivery-policy.php">Delivery Policy</a> | <a href="privacy-policy.php">Privacy Policy</a> | <a href="terms.php">Terms & Conditions</a>
+                <a href="delivery-policy.php">Delivery Policy</a> | 
+                <a href="privacy-policy.php">Privacy Policy</a> | 
+                <a href="terms.php">Terms & Conditions</a>
             </div>
-            <p>&copy; 2023 Dhen's Kitchen. All rights reserved.</p>
+            <p>&copy; 2025 Dhen's Kitchen. All rights reserved.</p>
             </div>
             <div class="footer-social">
                 <h3>Follow Us</h3>
                 <div class="social-icons">
-                    <a href="https://web.facebook.com/dhenskitchen?mibextid=wwXIfr&rdid=4NGrYasRkC4yQ3iE&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F1BdBoZHYRb%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/dhenskitchen/?igsh=azgxNndtd2E0ZHN1#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/dhenskitchen" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/dhenskitchen" class="social-icon"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
