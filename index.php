@@ -1,5 +1,11 @@
 <?php
 session_start();
+require_once "connection.php";
+$page_title = "About Us"; // fallback
+$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = $res->fetch_assoc()) {
+    $announcement = $row['ContentDescription'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +21,7 @@ session_start();
     <!-- Header -->
     <header>
         <div class="header-bar">
-            <div class="page-title">About Us</div>
+            <div class="page-title"><?php echo htmlspecialchars($announcement); ?></div>
         </div>
         <nav class="main-nav">
             <div class="nav-links">

@@ -13,6 +13,7 @@ $result = $conn->query($sql);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,13 +32,20 @@ $result = $conn->query($sql);
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       --radius: 1.25rem;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background: var(--light-gray);
       color: var(--dark-gray);
       display: flex;
     }
+
     .sidebar {
       width: 240px;
       background-color: var(--teal);
@@ -50,6 +58,7 @@ $result = $conn->query($sql);
       gap: 1rem;
       box-shadow: var(--shadow);
     }
+
     .sidebar .logo {
       font-family: 'DM Serif Display', serif;
       font-size: 1.7rem;
@@ -59,6 +68,7 @@ $result = $conn->query($sql);
       justify-content: center;
       margin-bottom: 1rem;
     }
+
     .sidebar .logo img {
       max-width: 150px;
       max-height: 150px;
@@ -69,11 +79,13 @@ $result = $conn->query($sql);
       border-radius: 50%;
       object-fit: contain;
     }
+
     .sidebar nav {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
+
     .sidebar nav a {
       display: flex;
       align-items: center;
@@ -85,13 +97,16 @@ $result = $conn->query($sql);
       border-radius: 0.5rem;
       transition: background 0.3s;
     }
+
     .sidebar nav a:hover,
     .sidebar nav a.active {
       background-color: rgba(255, 255, 255, 0.1);
     }
+
     .sidebar nav a i {
       color: var(--mint);
     }
+
     .main-content {
       margin-left: 240px;
       width: calc(100% - 240px);
@@ -100,6 +115,7 @@ $result = $conn->query($sql);
       min-height: 100vh;
       padding: 0;
     }
+
     header {
       background-color: var(--teal);
       color: var(--light-gray);
@@ -109,14 +125,17 @@ $result = $conn->query($sql);
       align-items: center;
       box-shadow: var(--shadow);
     }
+
     .icons {
       display: flex;
       gap: 1.5rem;
     }
+
     .icons i {
       font-size: 1.3rem;
       cursor: pointer;
     }
+
     h1 {
       font-family: 'DM Serif Display', serif;
       color: var(--teal);
@@ -124,27 +143,33 @@ $result = $conn->query($sql);
       margin-top: 2rem;
       margin-left: 2rem;
     }
+
     .controls {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 1rem;
-      margin-left: 2rem;   /* Match table's margin */
-      margin-right: 2rem;  /* Match table's margin */
+      margin-left: 2rem;
+      /* Match table's margin */
+      margin-right: 2rem;
+      /* Match table's margin */
       flex-wrap: nowrap;
       overflow-x: visible;
       white-space: nowrap;
       font-size: 0.97rem;
     }
+
     .controls input,
     .controls select,
     .controls button {
-      padding: 0.5rem 1rem; /* Match customers.php */
+      padding: 0.5rem 1rem;
+      /* Match customers.php */
       border-radius: var(--radius);
       border: 1px solid #ccc;
       min-width: 0;
       flex-shrink: 1;
       max-width: 140px;
     }
+
     .controls button {
       background-color: var(--teal);
       color: var(--white);
@@ -156,19 +181,23 @@ $result = $conn->query($sql);
       align-items: center;
       gap: 0.5rem;
     }
+
     .controls button:hover {
       background-color: var(--coral);
     }
+
     .controls #searchInput {
       min-width: 220px;
       max-width: 320px;
       flex-basis: 220px;
     }
+
     .controls #sortField {
       min-width: 160px;
       max-width: 220px;
       flex-basis: 160px;
     }
+
     table {
       width: calc(100% - 4rem);
       margin-left: 2rem;
@@ -179,22 +208,28 @@ $result = $conn->query($sql);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
+
     thead {
       background-color: var(--teal);
       color: var(--white);
     }
-    th, td {
+
+    th,
+    td {
       padding: 1rem 1.2rem;
       text-align: left;
       border-bottom: 1px solid #ddd;
       cursor: default;
     }
+
     th {
       font-weight: 600;
     }
+
     tr:last-child td {
       border-bottom: none;
     }
+
     .status-badge {
       padding: 6px 12px;
       border-radius: 12px;
@@ -203,13 +238,33 @@ $result = $conn->query($sql);
       font-size: 0.9em;
       display: inline-block;
     }
-    .new { background: var(--teal); }
-    .received { background: var(--orange); }
-    .processing { background: var(--lavender); }
-    .delivering { background: var(--mint); }
-    .completed { background:rgb(43, 126, 46); color: white; }
-    .rejected { background:var(--coral); color: #333; }
-    
+
+    .new {
+      background: var(--teal);
+    }
+
+    .received {
+      background: var(--orange);
+    }
+
+    .processing {
+      background: var(--lavender);
+    }
+
+    .delivering {
+      background: var(--mint);
+    }
+
+    .completed {
+      background: rgb(43, 126, 46);
+      color: white;
+    }
+
+    .rejected {
+      background: var(--coral);
+      color: #333;
+    }
+
     .btn {
       padding: 0.5rem 1rem;
       border: none;
@@ -221,10 +276,11 @@ $result = $conn->query($sql);
       margin-right: 0.5rem;
       transition: background 0.3s;
     }
+
     .btn:hover {
       background-color: var(--coral);
     }
-    
+
     button.delete-btn {
       background-color: #d9534f;
       color: white;
@@ -235,10 +291,12 @@ $result = $conn->query($sql);
       font-weight: 600;
       transition: background 0.3s;
     }
+
     button.delete-btn:hover {
       background-color: #a94444;
     }
-    .main-content > footer {
+
+    .main-content>footer {
       margin-top: auto;
       text-align: center;
       padding: 1rem;
@@ -246,14 +304,28 @@ $result = $conn->query($sql);
       font-size: 0.9rem;
       color: #555;
     }
+
     @media (max-width: 900px) {
-      .sidebar { width: 100px; }
-      .main-content { margin-left: 100px; width: calc(100% - 100px);}
-      table, .controls { margin-left: 1rem; margin-right: 1rem; }
+      .sidebar {
+        width: 100px;
+      }
+
+      .main-content {
+        margin-left: 100px;
+        width: calc(100% - 100px);
+      }
+
+      table,
+      .controls {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+
       .controls {
         gap: 0.3rem;
         font-size: 0.92rem;
       }
+
       .controls input,
       .controls select,
       .controls button {
@@ -261,11 +333,13 @@ $result = $conn->query($sql);
         font-size: 0.92rem;
         max-width: 90px;
       }
+
       .controls #searchInput {
         min-width: 110px;
         max-width: 180px;
         flex-basis: 110px;
       }
+
       .controls #sortField {
         min-width: 90px;
         max-width: 120px;
@@ -306,24 +380,29 @@ $result = $conn->query($sql);
       margin-bottom: 1rem;
       color: var(--teal);
     }
+
     .modal-content p {
       margin: 0.5rem 0;
       color: var(--dark-gray);
     }
+
     .modal-buttons {
       display: flex;
       gap: 1rem;
       margin-top: 1.5rem;
     }
+
     .modal-buttons .btn {
       flex: 1;
     }
+
     #processForm label {
       display: block;
       margin: 0.75rem 0 0.3rem;
       font-weight: 600;
       color: var(--teal);
     }
+
     #processForm select,
     #processForm textarea {
       width: 100%;
@@ -333,10 +412,11 @@ $result = $conn->query($sql);
       resize: vertical;
       font-family: 'Inter', sans-serif;
     }
+
     #processForm textarea {
       min-height: 80px;
     }
-    
+
     #modalOrderItems {
       display: flex;
       justify-content: center;
@@ -351,6 +431,7 @@ $result = $conn->query($sql);
       flex-direction: column;
       align-items: flex-start;
     }
+
     .modal-content .modal-info p {
       margin-left: 0;
       margin-right: 0;
@@ -395,8 +476,56 @@ $result = $conn->query($sql);
         font-size: 0.95rem;
       }
     }
+
+    .admin-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .admin-dropdown .fas.fa-user-circle {
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--mint);
+      transition: color 0.2s;
+    }
+
+    .admin-dropdown .fas.fa-user-circle:hover,
+    .admin-dropdown .fas.fa-user-circle:focus {
+      color: var(--coral);
+    }
+
+    .admin-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      border-radius: 0.5rem;
+      z-index: 100;
+      margin-top: 0.7rem;
+      padding: 0.5rem 0;
+    }
+
+    .admin-dropdown-content a {
+      color: var(--teal);
+      padding: 0.7rem 1.2rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 500;
+      border-radius: 0.3rem;
+      transition: background 0.2s;
+    }
+
+    .admin-dropdown-content a:hover {
+      background: var(--mint);
+      color: #fff;
+    }
   </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="logo">
@@ -407,8 +536,8 @@ $result = $conn->query($sql);
       <a href="view-orders.php"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-history.php" class="active"><i class="fas fa-box"></i>Orders History</a>
-      <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
-      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
+      <a href="customers.php"><i class="fas fa-address-card"></i>Customer Data</a>
+      <a href="contenteditor.php"><i class="fas fa-pen"></i>Contents Editor</a>
     </nav>
   </aside>
 
@@ -416,7 +545,13 @@ $result = $conn->query($sql);
     <header>
       <div class="icons">
         <i class="fas fa-bell"></i>
-        <i class="fas fa-user-circle"></i>
+        <div class="admin-dropdown">
+          <i class="fas fa-user-circle" id="adminDropdownBtn" tabindex="0"></i>
+          <div class="admin-dropdown-content" id="adminDropdownMenu">
+            <a href="index.php"><i class="fas fa-file"></i> Check Website</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -454,7 +589,7 @@ $result = $conn->query($sql);
       </thead>
       <tbody id="orderTableBody">
         <?php if ($result && $result->num_rows > 0): ?>
-          <?php while($row = $result->fetch_assoc()): ?>
+          <?php while ($row = $result->fetch_assoc()): ?>
             <tr>
               <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
               <td><?php echo htmlspecialchars($row['UserName']); ?></td>
@@ -480,7 +615,9 @@ $result = $conn->query($sql);
             </tr>
           <?php endwhile; ?>
         <?php else: ?>
-          <tr><td colspan="7" style="text-align:center;">No completed or rejected orders found.</td></tr>
+          <tr>
+            <td colspan="7" style="text-align:center;">No completed or rejected orders found.</td>
+          </tr>
         <?php endif; ?>
       </tbody>
     </table>
@@ -490,243 +627,270 @@ $result = $conn->query($sql);
   </div>
 
   <!-- View Modal -->
-<div id="viewModal" class="modal" onclick="closeModal(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <h2>Order Details</h2>
-    <div class="modal-info">
-      <p><strong>Customer:</strong> <span id="modalCustomer"></span></p>
-      <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
-      <p><strong>Date:</strong> <span id="modalDate"></span></p>
-      <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
-      <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
-      <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-    </div>
-    <div id="modalOrderItems"></div>
-    <div class="modal-buttons">
-      <button class="btn" onclick="openModal('process')">Process Order</button>
-      <button class="btn" onclick="closeModal()">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- Process Modal -->
-<div id="processModal" class="modal" onclick="closeModal(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <h2>Process Order</h2>
-    <form id="processForm" onsubmit="submitProcess(event)">
-      <label for="processStatus">Status:</label>
-      <select id="processStatus" required>
-        <option value="Received">Received</option>
-        <option value="Processing">Processing</option>
-        <option value="Delivering">Delivering</option>
-        <option value="Completed">Completed</option>
-        <option value="Rejected">Rejected</option>
-      </select>
-      <label for="remarks">Remarks:</label>
-      <textarea id="remarks" placeholder="Enter remarks here..."></textarea>
-      <div class="modal-buttons">
-        <button type="submit" class="btn">Submit</button>
-        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+  <div id="viewModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h2>Order Details</h2>
+      <div class="modal-info">
+        <p><strong>Customer:</strong> <span id="modalCustomer"></span></p>
+        <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+        <p><strong>Date:</strong> <span id="modalDate"></span></p>
+        <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
+        <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
+        <p><strong>Status:</strong> <span id="modalStatus"></span></p>
       </div>
-    </form>
+      <div id="modalOrderItems"></div>
+      <div class="modal-buttons">
+        <button class="btn" onclick="openModal('process')">Process Order</button>
+        <button class="btn" onclick="closeModal()">Close</button>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- Process Modal -->
+  <div id="processModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h2>Process Order</h2>
+      <form id="processForm" onsubmit="submitProcess(event)">
+        <label for="processStatus">Status:</label>
+        <select id="processStatus" required>
+          <option value="Received">Received</option>
+          <option value="Processing">Processing</option>
+          <option value="Delivering">Delivering</option>
+          <option value="Completed">Completed</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+        <label for="remarks">Remarks:</label>
+        <textarea id="remarks" placeholder="Enter remarks here..."></textarea>
+        <div class="modal-buttons">
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('searchInput');
-  const sortField = document.getElementById('sortField');
-  const sortOrder = document.getElementById('sortOrder');
-  const orderTableBody = document.getElementById('orderTableBody');
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchInput');
+      const sortField = document.getElementById('sortField');
+      const sortOrder = document.getElementById('sortOrder');
+      const orderTableBody = document.getElementById('orderTableBody');
 
-  function filterAndSortTable() {
-    const search = searchInput.value.trim().toLowerCase();
-    const field = sortField.value;
-    const order = sortOrder.value;
+      function filterAndSortTable() {
+        const search = searchInput.value.trim().toLowerCase();
+        const field = sortField.value;
+        const order = sortOrder.value;
 
-    // Convert rows to array for sorting/filtering
-    let rows = Array.from(orderTableBody.querySelectorAll('tr'));
+        // Convert rows to array for sorting/filtering
+        let rows = Array.from(orderTableBody.querySelectorAll('tr'));
 
-    // Filter by search (name or order ID)
-    rows.forEach(row => {
-      const name = row.children[1]?.textContent.toLowerCase() || '';
-      const orderId = row.children[2]?.textContent.toLowerCase() || '';
-      if (name.includes(search) || orderId.includes(search) || !search) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
+        // Filter by search (name or order ID)
+        rows.forEach(row => {
+          const name = row.children[1]?.textContent.toLowerCase() || '';
+          const orderId = row.children[2]?.textContent.toLowerCase() || '';
+          if (name.includes(search) || orderId.includes(search) || !search) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Sort visible rows
+        rows = rows.filter(row => row.style.display !== 'none');
+        rows.sort((a, b) => {
+          let aVal, bVal;
+          if (field === 'deadline') {
+            aVal = a.children[5]?.textContent || '';
+            bVal = b.children[5]?.textContent || '';
+          } else if (field === 'status') {
+            aVal = a.children[4]?.textContent || '';
+            bVal = b.children[4]?.textContent || '';
+          } else {
+            aVal = '';
+            bVal = '';
+          }
+          if (order === 'asc') {
+            return aVal.localeCompare(bVal, undefined, {
+              numeric: true
+            });
+          } else {
+            return bVal.localeCompare(aVal, undefined, {
+              numeric: true
+            });
+          }
+        });
+
+        // Re-append sorted rows
+        rows.forEach(row => orderTableBody.appendChild(row));
       }
+
+      searchInput.addEventListener('input', filterAndSortTable);
+      sortField.addEventListener('change', filterAndSortTable);
+      sortOrder.addEventListener('change', filterAndSortTable);
+
+      // Optional: sort button
+      document.getElementById('sortBtn').addEventListener('click', filterAndSortTable);
+
+      // Initial sort/filter
+      filterAndSortTable();
     });
 
-    // Sort visible rows
-    rows = rows.filter(row => row.style.display !== 'none');
-    rows.sort((a, b) => {
-      let aVal, bVal;
-      if (field === 'deadline') {
-        aVal = a.children[5]?.textContent || '';
-        bVal = b.children[5]?.textContent || '';
-      } else if (field === 'status') {
-        aVal = a.children[4]?.textContent || '';
-        bVal = b.children[4]?.textContent || '';
-      } else {
-        aVal = '';
-        bVal = '';
-      }
-      if (order === 'asc') {
-        return aVal.localeCompare(bVal, undefined, {numeric: true});
-      } else {
-        return bVal.localeCompare(aVal, undefined, {numeric: true});
-      }
-    });
-
-    // Re-append sorted rows
-    rows.forEach(row => orderTableBody.appendChild(row));
-  }
-
-  searchInput.addEventListener('input', filterAndSortTable);
-  sortField.addEventListener('change', filterAndSortTable);
-  sortOrder.addEventListener('change', filterAndSortTable);
-
-  // Optional: sort button
-  document.getElementById('sortBtn').addEventListener('click', filterAndSortTable);
-
-  // Initial sort/filter
-  filterAndSortTable();
-});
-
-function deleteOrder(orderId) {
-  if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
-  fetch('delete-order.php', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: 'orderId=' + encodeURIComponent(orderId)
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      // Remove the row from the table
-      const row = Array.from(orderTableBody.querySelectorAll('tr')).find(tr =>
-        tr.children[2] && tr.children[2].textContent.replace('#', '').trim() == orderId
-      );
-      if (row) row.remove();
-      alert('Order deleted successfully.');
-    } else {
-      alert('Failed to delete order.');
-    }
-  });
-}
-
-let currentProcessingRow = null;
-let currentViewRow = null;
-
-function openModal(type, btn = null) {
-  if (type === 'view') {
-    if (!btn) return;
-    const row = btn.closest('tr');
-    currentViewRow = row;
-
-    document.getElementById('modalCustomer').innerText = row.children[1].innerText;
-    document.getElementById('modalOrderId').innerText = row.children[2].innerText;
-    document.getElementById('modalDate').innerText = row.children[0].innerText;
-    document.getElementById('modalDeadline').innerText = row.children[5].innerText;
-
-    const proofAnchor = row.children[3].querySelector('a');
-    if (proofAnchor) {
-      document.getElementById('modalProof').href = proofAnchor.href;
-      document.getElementById('modalProof').style.display = '';
-    } else {
-      document.getElementById('modalProof').href = '#';
-      document.getElementById('modalProof').style.display = 'none';
+    function deleteOrder(orderId) {
+      if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
+      fetch('delete-order.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'orderId=' + encodeURIComponent(orderId)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            // Remove the row from the table
+            const row = Array.from(orderTableBody.querySelectorAll('tr')).find(tr =>
+              tr.children[2] && tr.children[2].textContent.replace('#', '').trim() == orderId
+            );
+            if (row) row.remove();
+            alert('Order deleted successfully.');
+          } else {
+            alert('Failed to delete order.');
+          }
+        });
     }
 
-    document.getElementById('modalStatus').innerText = row.children[4].innerText;
+    let currentProcessingRow = null;
+    let currentViewRow = null;
 
-    // --- Fetch and display order items ---
-    const orderId = row.children[2].innerText.replace('#', '').trim();
-    fetch('get-order-details.php?orderId=' + encodeURIComponent(orderId))
-      .then(res => res.json())
-      .then(data => {
-        let html = '';
-        if (data.products && data.products.length > 0) {
-          html += '<table style="width:100%;margin-top:1em;border-collapse:collapse;">';
-          html += '<tr><th style="text-align:left;">Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>';
-          data.products.forEach(item => {
-            html += `<tr>
+    function openModal(type, btn = null) {
+      if (type === 'view') {
+        if (!btn) return;
+        const row = btn.closest('tr');
+        currentViewRow = row;
+
+        document.getElementById('modalCustomer').innerText = row.children[1].innerText;
+        document.getElementById('modalOrderId').innerText = row.children[2].innerText;
+        document.getElementById('modalDate').innerText = row.children[0].innerText;
+        document.getElementById('modalDeadline').innerText = row.children[5].innerText;
+
+        const proofAnchor = row.children[3].querySelector('a');
+        if (proofAnchor) {
+          document.getElementById('modalProof').href = proofAnchor.href;
+          document.getElementById('modalProof').style.display = '';
+        } else {
+          document.getElementById('modalProof').href = '#';
+          document.getElementById('modalProof').style.display = 'none';
+        }
+
+        document.getElementById('modalStatus').innerText = row.children[4].innerText;
+
+        // --- Fetch and display order items ---
+        const orderId = row.children[2].innerText.replace('#', '').trim();
+        fetch('get-order-details.php?orderId=' + encodeURIComponent(orderId))
+          .then(res => res.json())
+          .then(data => {
+            let html = '';
+            if (data.products && data.products.length > 0) {
+              html += '<table style="width:100%;margin-top:1em;border-collapse:collapse;">';
+              html += '<tr><th style="text-align:left;">Product</th><th>Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>';
+              data.products.forEach(item => {
+                html += `<tr>
               <td>${item.name}</td>
               <td style="text-align:left;">${item.size || '-'}</td>
               <td style="text-align:center;">${item.qty}</td>
               <td style="text-align:left;">₱${parseFloat(item.price).toFixed(2)}</td>
               <td style="text-align:left;">₱${parseFloat(item.subtotal).toFixed(2)}</td>
             </tr>`;
-          });
-          html += `<tr>
+              });
+              html += `<tr>
             <td colspan="4" style="text-align:right;font-weight:bold;">Total:</td>
             <td style="text-align:left;font-weight:bold;">₱${parseFloat(data.total).toFixed(2)}</td>
           </tr>`;
-          html += '</table>';
-        } else {
-          html = '<em>No products found for this order.</em>';
+              html += '</table>';
+            } else {
+              html = '<em>No products found for this order.</em>';
+            }
+            document.getElementById('modalOrderItems').innerHTML = html;
+          });
+
+        document.getElementById('viewModal').style.display = 'flex';
+      } else if (type === 'process') {
+        if (btn) {
+          currentProcessingRow = btn.closest('tr');
+        } else if (currentViewRow) {
+          currentProcessingRow = currentViewRow;
+          closeModal();
         }
-        document.getElementById('modalOrderItems').innerHTML = html;
-      });
+        if (!currentProcessingRow) return alert('No order selected.');
 
-    document.getElementById('viewModal').style.display = 'flex';
-  } else if (type === 'process') {
-    if (btn) {
-      currentProcessingRow = btn.closest('tr');
-    } else if (currentViewRow) {
-      currentProcessingRow = currentViewRow;
-      closeModal();
-    }
-    if (!currentProcessingRow) return alert('No order selected.');
+        // Pre-select current status
+        const currentStatus = currentProcessingRow.children[4].innerText.replace(/<[^>]*>?/gm, '').trim();
+        document.getElementById('processStatus').value = currentStatus;
+        document.getElementById('remarks').value = '';
 
-    // Pre-select current status
-    const currentStatus = currentProcessingRow.children[4].innerText.replace(/<[^>]*>?/gm, '').trim();
-    document.getElementById('processStatus').value = currentStatus;
-    document.getElementById('remarks').value = '';
-
-    document.getElementById('processModal').style.display = 'flex';
-  }
-}
-
-function closeModal(event) {
-  if (event && event.target !== event.currentTarget) return;
-  document.getElementById('viewModal').style.display = 'none';
-  document.getElementById('processModal').style.display = 'none';
-}
-
-function submitProcess(event) {
-  event.preventDefault();
-  if (!currentProcessingRow) return alert('No order selected.');
-
-  const status = document.getElementById('processStatus').value;
-  const remarks = document.getElementById('remarks').value;
-  const orderId = currentProcessingRow.children[2].innerText.replace('#', '').trim();
-
-  fetch('update-order-status.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `orderId=${encodeURIComponent(orderId)}&status=${encodeURIComponent(status)}`
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      // Update status text in the row
-      currentProcessingRow.children[4].innerHTML =
-        `<span class="status-badge ${status.toLowerCase()}">${status}</span>`;
-      // Optionally update data-status attribute for filtering
-      currentProcessingRow.dataset.status = status;
-      alert(`Order status updated to "${status}".`);
-      closeModal();
-      // Optionally, remove the row if status is no longer Completed/Rejected
-      if (status !== 'Completed' && status !== 'Rejected') {
-        currentProcessingRow.remove();
+        document.getElementById('processModal').style.display = 'flex';
       }
-    } else {
-      alert('Failed to update order status.');
     }
-  });
-}
+
+    function closeModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('viewModal').style.display = 'none';
+      document.getElementById('processModal').style.display = 'none';
+    }
+
+    function submitProcess(event) {
+      event.preventDefault();
+      if (!currentProcessingRow) return alert('No order selected.');
+
+      const status = document.getElementById('processStatus').value;
+      const remarks = document.getElementById('remarks').value;
+      const orderId = currentProcessingRow.children[2].innerText.replace('#', '').trim();
+
+      fetch('update-order-status.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `orderId=${encodeURIComponent(orderId)}&status=${encodeURIComponent(status)}`
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            // Update status text in the row
+            currentProcessingRow.children[4].innerHTML =
+              `<span class="status-badge ${status.toLowerCase()}">${status}</span>`;
+            // Optionally update data-status attribute for filtering
+            currentProcessingRow.dataset.status = status;
+            alert(`Order status updated to "${status}".`);
+            closeModal();
+            // Optionally, remove the row if status is no longer Completed/Rejected
+            if (status !== 'Completed' && status !== 'Rejected') {
+              currentProcessingRow.remove();
+            }
+          } else {
+            alert('Failed to update order status.');
+          }
+        });
+    }
+
+    const adminBtn = document.getElementById('adminDropdownBtn');
+    const adminMenu = document.getElementById('adminDropdownMenu');
+
+    adminBtn.addEventListener('click', function(e) {
+      adminMenu.style.display = adminMenu.style.display === 'block' ? 'none' : 'block';
+      e.stopPropagation();
+    });
+    adminBtn.addEventListener('blur', function() {
+      setTimeout(() => {
+        adminMenu.style.display = 'none';
+      }, 150);
+    });
+    document.addEventListener('click', function(e) {
+      if (!adminBtn.contains(e.target)) {
+        adminMenu.style.display = 'none';
+      }
+    });
   </script>
 </body>
+
 </html>

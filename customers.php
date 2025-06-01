@@ -8,6 +8,7 @@ require 'connection.php';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,13 +27,20 @@ require 'connection.php';
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       --radius: 1.25rem;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background: var(--light-gray);
       color: var(--dark-gray);
       display: flex;
     }
+
     .sidebar {
       width: 240px;
       background-color: var(--teal);
@@ -45,6 +53,7 @@ require 'connection.php';
       gap: 1rem;
       box-shadow: var(--shadow);
     }
+
     .sidebar .logo {
       font-family: 'DM Serif Display', serif;
       font-size: 1.7rem;
@@ -54,6 +63,7 @@ require 'connection.php';
       justify-content: center;
       margin-bottom: 1rem;
     }
+
     .sidebar .logo img {
       max-width: 150px;
       max-height: 150px;
@@ -64,11 +74,13 @@ require 'connection.php';
       border-radius: 50%;
       object-fit: contain;
     }
+
     .sidebar nav {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
+
     .sidebar nav a {
       display: flex;
       align-items: center;
@@ -80,13 +92,16 @@ require 'connection.php';
       border-radius: 0.5rem;
       transition: background 0.3s;
     }
+
     .sidebar nav a:hover,
     .sidebar nav a.active {
       background-color: rgba(255, 255, 255, 0.1);
     }
+
     .sidebar nav a i {
       color: var(--mint);
     }
+
     .main-content {
       margin-left: 240px;
       width: calc(100% - 240px);
@@ -95,6 +110,7 @@ require 'connection.php';
       min-height: 100vh;
       padding: 0;
     }
+
     header {
       background-color: var(--teal);
       color: var(--light-gray);
@@ -104,14 +120,17 @@ require 'connection.php';
       align-items: center;
       box-shadow: var(--shadow);
     }
+
     .icons {
       display: flex;
       gap: 1.5rem;
     }
+
     .icons i {
       font-size: 1.3rem;
       cursor: pointer;
     }
+
     h1 {
       font-family: 'DM Serif Display', serif;
       color: var(--teal);
@@ -119,6 +138,7 @@ require 'connection.php';
       margin-top: 2rem;
       margin-left: 2rem;
     }
+
     .controls {
       display: flex;
       gap: 1rem;
@@ -127,6 +147,7 @@ require 'connection.php';
       margin-left: 2rem;
       margin-right: 2rem;
     }
+
     .controls input[type="text"] {
       flex: 1;
       padding: 0.5rem 1rem;
@@ -134,6 +155,7 @@ require 'connection.php';
       border: 1px solid #ccc;
       font-size: 1rem;
     }
+
     .controls button {
       background-color: var(--teal);
       color: var(--white);
@@ -147,9 +169,11 @@ require 'connection.php';
       align-items: center;
       gap: 0.5rem;
     }
+
     .controls button:hover {
       background-color: var(--coral);
     }
+
     table {
       width: calc(100% - 4rem);
       margin-left: 2rem;
@@ -160,33 +184,42 @@ require 'connection.php';
       box-shadow: var(--shadow);
       overflow: hidden;
     }
+
     thead {
       background-color: var(--teal);
       color: var(--white);
     }
-    th, td {
+
+    th,
+    td {
       padding: 1rem 1.2rem;
       text-align: left;
       border-bottom: 1px solid #ddd;
       cursor: default;
     }
+
     th.sortable {
       cursor: pointer;
       user-select: none;
     }
+
     th.sortable:hover {
-      background-color: rgba(255,255,255,0.15);
+      background-color: rgba(255, 255, 255, 0.15);
     }
+
     th.sortable.active {
       background-color: var(--mint) !important;
       color: var(--teal);
     }
+
     th.sortable.active i {
       color: var(--teal);
     }
+
     tbody tr:hover {
       background-color: rgba(255, 255, 255, 0.3);
     }
+
     .pagination {
       margin-top: 1rem;
       display: flex;
@@ -194,6 +227,7 @@ require 'connection.php';
       gap: 0.5rem;
       flex-wrap: wrap;
     }
+
     .pagination button {
       border: none;
       background-color: var(--teal);
@@ -204,13 +238,16 @@ require 'connection.php';
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     .pagination button:disabled {
       background-color: #999;
       cursor: default;
     }
+
     .pagination button.active {
       background-color: var(--coral);
     }
+
     footer {
       text-align: center;
       padding: 1rem;
@@ -218,11 +255,60 @@ require 'connection.php';
       font-size: 0.9rem;
       color: #555;
     }
-    .main-content > footer {
+
+    .main-content>footer {
       margin-top: auto;
+    }
+
+    .admin-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .admin-dropdown .fas.fa-user-circle {
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--mint);
+      transition: color 0.2s;
+    }
+
+    .admin-dropdown .fas.fa-user-circle:hover,
+    .admin-dropdown .fas.fa-user-circle:focus {
+      color: var(--coral);
+    }
+
+    .admin-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      border-radius: 0.5rem;
+      z-index: 100;
+      margin-top: 0.7rem;
+      padding: 0.5rem 0;
+    }
+
+    .admin-dropdown-content a {
+      color: var(--teal);
+      padding: 0.7rem 1.2rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 500;
+      border-radius: 0.3rem;
+      transition: background 0.2s;
+    }
+
+    .admin-dropdown-content a:hover {
+      background: var(--mint);
+      color: #fff;
     }
   </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="logo">
@@ -233,8 +319,8 @@ require 'connection.php';
       <a href="view-orders.php"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-history.php"><i class="fas fa-box"></i>Orders History</a>
-      <a href="customers.php" class="active"><i class="fas fa-users"></i>Customer Data</a>
-      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
+      <a href="customers.php" class="active"><i class="fas fa-address-card"></i>Customer Data</a>
+      <a href="contenteditor.php"><i class="fas fa-pen"></i>Contents Editor</a>
     </nav>
   </aside>
 
@@ -242,7 +328,13 @@ require 'connection.php';
     <header>
       <div class="icons">
         <i class="fas fa-bell"></i>
-        <i class="fas fa-user-circle"></i>
+        <div class="admin-dropdown">
+          <i class="fas fa-user-circle" id="adminDropdownBtn" tabindex="0"></i>
+          <div class="admin-dropdown-content" id="adminDropdownMenu">
+            <a href="index.php"><i class="fas fa-file"></i> Check Website</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -298,7 +390,10 @@ require 'connection.php';
     const searchInput = document.getElementById('searchInput');
     const exportBtn = document.getElementById('exportBtn');
     let rows = Array.from(table.querySelectorAll('tbody tr'));
-    let currentSort = { key: null, asc: true };
+    let currentSort = {
+      key: null,
+      asc: true
+    };
 
     // Filter by name or email
     searchInput.addEventListener('input', function() {
@@ -394,6 +489,25 @@ require 'connection.php';
 
     // Initial sort icon state
     updateSortIcons();
+
+    const adminBtn = document.getElementById('adminDropdownBtn');
+    const adminMenu = document.getElementById('adminDropdownMenu');
+
+    adminBtn.addEventListener('click', function(e) {
+      adminMenu.style.display = adminMenu.style.display === 'block' ? 'none' : 'block';
+      e.stopPropagation();
+    });
+    adminBtn.addEventListener('blur', function() {
+      setTimeout(() => {
+        adminMenu.style.display = 'none';
+      }, 150);
+    });
+    document.addEventListener('click', function(e) {
+      if (!adminBtn.contains(e.target)) {
+        adminMenu.style.display = 'none';
+      }
+    });
   </script>
 </body>
+
 </html>

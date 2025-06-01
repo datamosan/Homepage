@@ -7,86 +7,86 @@ include 'connection.php';
 
 // Handle Add New Item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
-    $category = mysqli_real_escape_string($conn, $_POST['category']);
-    $item = mysqli_real_escape_string($conn, $_POST['item']);
-    $variation = mysqli_real_escape_string($conn, $_POST['variation']);
-    $price = floatval($_POST['price']);
+  $category = mysqli_real_escape_string($conn, $_POST['category']);
+  $item = mysqli_real_escape_string($conn, $_POST['item']);
+  $variation = mysqli_real_escape_string($conn, $_POST['variation']);
+  $price = floatval($_POST['price']);
 
-    // Handle image upload
-    $image_filename = '';
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $image_filename = uniqid('menu_', true) . '.' . $ext;
-        move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $image_filename);
-    }
+  // Handle image upload
+  $image_filename = '';
+  if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+    $image_filename = uniqid('menu_', true) . '.' . $ext;
+    move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $image_filename);
+  }
 
-    // Insert into products table (if product doesn't exist)
-    $product_check = mysqli_query($conn, "SELECT ProductID FROM products WHERE ProductName='$item' AND ProductCategory='$category'");
-    $description = mysqli_real_escape_string($conn, $_POST['description'] ?? '');
+  // Insert into products table (if product doesn't exist)
+  $product_check = mysqli_query($conn, "SELECT ProductID FROM products WHERE ProductName='$item' AND ProductCategory='$category'");
+  $description = mysqli_real_escape_string($conn, $_POST['description'] ?? '');
 
-    if ($product_row = mysqli_fetch_assoc($product_check)) {
-        $product_id = $product_row['ProductID'];
-        // Optionally update image and description if new image uploaded
-        if ($image_filename) {
-            mysqli_query($conn, "UPDATE products SET Image='$image_filename', ProductDescription='$description' WHERE ProductID='$product_id'");
-        } else {
-            mysqli_query($conn, "UPDATE products SET ProductDescription='$description' WHERE ProductID='$product_id'");
-        }
+  if ($product_row = mysqli_fetch_assoc($product_check)) {
+    $product_id = $product_row['ProductID'];
+    // Optionally update image and description if new image uploaded
+    if ($image_filename) {
+      mysqli_query($conn, "UPDATE products SET Image='$image_filename', ProductDescription='$description' WHERE ProductID='$product_id'");
     } else {
-        mysqli_query($conn, "INSERT INTO products (ProductName, ProductCategory, Image, ProductDescription) VALUES ('$item', '$category', '$image_filename', '$description')");
-        $product_id = mysqli_insert_id($conn);
+      mysqli_query($conn, "UPDATE products SET ProductDescription='$description' WHERE ProductID='$product_id'");
     }
+  } else {
+    mysqli_query($conn, "INSERT INTO products (ProductName, ProductCategory, Image, ProductDescription) VALUES ('$item', '$category', '$image_filename', '$description')");
+    $product_id = mysqli_insert_id($conn);
+  }
 
-    // Insert into product_attributes
-    if ($variation || $price) {
-        mysqli_query($conn, "INSERT INTO product_attributes (ProductID, Size, Price) VALUES ('$product_id', '$variation', '$price')");
-    }
+  // Insert into product_attributes
+  if ($variation || $price) {
+    mysqli_query($conn, "INSERT INTO product_attributes (ProductID, Size, Price) VALUES ('$product_id', '$variation', '$price')");
+  }
 
-    header("Location: menu-management.php?success=1");
-    exit;
+  header("Location: menu-management.php?success=1");
+  exit;
 }
 
 // Handle Edit Item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_item'])) {
-    $edit_id = intval($_POST['edit_id']);
-    $category = mysqli_real_escape_string($conn, $_POST['edit_category']);
-    $item = mysqli_real_escape_string($conn, $_POST['edit_item']);
-    $variation = mysqli_real_escape_string($conn, $_POST['edit_variation']);
-    $price = floatval($_POST['edit_price']);
-    $edit_description = mysqli_real_escape_string($conn, $_POST['edit_description'] ?? '');
+  $edit_id = intval($_POST['edit_id']);
+  $category = mysqli_real_escape_string($conn, $_POST['edit_category']);
+  $item = mysqli_real_escape_string($conn, $_POST['edit_item']);
+  $variation = mysqli_real_escape_string($conn, $_POST['edit_variation']);
+  $price = floatval($_POST['edit_price']);
+  $edit_description = mysqli_real_escape_string($conn, $_POST['edit_description'] ?? '');
 
-    // Handle image upload
-    if (isset($_FILES['edit_image']) && $_FILES['edit_image']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['edit_image']['name'], PATHINFO_EXTENSION);
-        $image_filename = uniqid('menu_', true) . '.' . $ext;
-        move_uploaded_file($_FILES['edit_image']['tmp_name'], 'images/' . $image_filename);
-        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', Image='$image_filename', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
-    } else {
-        mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
-    }
+  // Handle image upload
+  if (isset($_FILES['edit_image']) && $_FILES['edit_image']['error'] === UPLOAD_ERR_OK) {
+    $ext = pathinfo($_FILES['edit_image']['name'], PATHINFO_EXTENSION);
+    $image_filename = uniqid('menu_', true) . '.' . $ext;
+    move_uploaded_file($_FILES['edit_image']['tmp_name'], 'images/' . $image_filename);
+    mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', Image='$image_filename', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
+  } else {
+    mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
+  }
 
-    // Update product_attributes (assumes one attribute per product for simplicity)
-    $attr_check = mysqli_query($conn, "SELECT SizeID FROM product_attributes WHERE ProductID='$edit_id'");
-    if ($attr_row = mysqli_fetch_assoc($attr_check)) {
-        $size_id = $attr_row['SizeID'];
-        mysqli_query($conn, "UPDATE product_attributes SET Size='$variation', Price='$price' WHERE SizeID='$size_id'");
-    } else {
-        mysqli_query($conn, "INSERT INTO product_attributes (ProductID, Size, Price) VALUES ('$edit_id', '$variation', '$price')");
-    }
+  // Update product_attributes (assumes one attribute per product for simplicity)
+  $attr_check = mysqli_query($conn, "SELECT SizeID FROM product_attributes WHERE ProductID='$edit_id'");
+  if ($attr_row = mysqli_fetch_assoc($attr_check)) {
+    $size_id = $attr_row['SizeID'];
+    mysqli_query($conn, "UPDATE product_attributes SET Size='$variation', Price='$price' WHERE SizeID='$size_id'");
+  } else {
+    mysqli_query($conn, "INSERT INTO product_attributes (ProductID, Size, Price) VALUES ('$edit_id', '$variation', '$price')");
+  }
 
-    header("Location: menu-management.php?edited=1");
-    exit;
+  header("Location: menu-management.php?edited=1");
+  exit;
 }
 
 // Handle Delete Item
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $delete_id = intval($_GET['delete']);
-    // Delete product attributes first (to avoid foreign key issues)
-    mysqli_query($conn, "DELETE FROM product_attributes WHERE ProductID='$delete_id'");
-    // Delete product
-    mysqli_query($conn, "DELETE FROM products WHERE ProductID='$delete_id'");
-    header("Location: menu-management.php?deleted=1");
-    exit;
+  $delete_id = intval($_GET['delete']);
+  // Delete product attributes first (to avoid foreign key issues)
+  mysqli_query($conn, "DELETE FROM product_attributes WHERE ProductID='$delete_id'");
+  // Delete product
+  mysqli_query($conn, "DELETE FROM products WHERE ProductID='$delete_id'");
+  header("Location: menu-management.php?deleted=1");
+  exit;
 }
 
 // Fetch all menu items
@@ -101,23 +101,24 @@ $result = mysqli_query($conn, $query);
 // For Edit Modal
 $edit_row = null;
 if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
-    $edit_id = intval($_GET['edit']);
-    $edit_query = "
+  $edit_id = intval($_GET['edit']);
+  $edit_query = "
         SELECT p.ProductID, p.ProductCategory, p.ProductName, pa.SizeID, pa.Size, pa.Price, p.Image, p.ProductDescription
         FROM products p
         LEFT JOIN product_attributes pa ON p.ProductID = pa.ProductID
         WHERE p.ProductID = $edit_id
         LIMIT 1
     ";
-    $edit_result = mysqli_query($conn, $edit_query);
-    $edit_row = mysqli_fetch_assoc($edit_result);
+  $edit_result = mysqli_query($conn, $edit_query);
+  $edit_row = mysqli_fetch_assoc($edit_result);
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu Management - DecaDhen Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -134,7 +135,11 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       --radius: 1.25rem;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -241,7 +246,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       margin-left: 2rem;
     }
 
-    .controls, .filter-bar {
+    .controls,
+    .filter-bar {
       display: flex;
       gap: 1rem;
       margin-bottom: 1rem;
@@ -250,7 +256,9 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       margin-right: 2rem;
     }
 
-    .controls input[type="text"], .filter-bar input[type="text"], .filter-bar select {
+    .controls input[type="text"],
+    .filter-bar input[type="text"],
+    .filter-bar select {
       flex: 1;
       padding: 0.5rem 1rem;
       border-radius: var(--radius);
@@ -292,7 +300,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       color: var(--white);
     }
 
-    th, td {
+    th,
+    td {
       padding: 1rem 1.2rem;
       text-align: left;
       border-bottom: 1px solid #ddd;
@@ -305,7 +314,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     }
 
     th.sortable:hover {
-      background-color: rgba(255,255,255,0.15);
+      background-color: rgba(255, 255, 255, 0.15);
     }
 
     th.sortable.active {
@@ -357,7 +366,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       color: #555;
     }
 
-    .main-content > footer, .main > footer {
+    .main-content>footer,
+    .main>footer {
       margin-top: auto;
     }
 
@@ -371,7 +381,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       vertical-align: middle;
     }
 
-    .actions a, .actions button {
+    .actions a,
+    .actions button {
       margin-right: 0.5rem;
       border: none;
       padding: 0.4rem 0.8rem;
@@ -410,7 +421,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       margin-right: 2rem;
     }
 
-    .add-form input, .add-form select {
+    .add-form input,
+    .add-form select {
       width: 100%;
       padding: 0.6rem 1rem;
       margin-bottom: 1rem;
@@ -438,8 +450,10 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.5);
       justify-content: center;
       align-items: center;
@@ -455,7 +469,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       box-shadow: var(--shadow);
     }
 
-    .modal-content input, .modal-content select {
+    .modal-content input,
+    .modal-content select {
       width: 100%;
       padding: 0.6rem 1rem;
       margin-bottom: 1rem;
@@ -525,6 +540,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       color: #888;
       opacity: 1;
     }
+
     .add-form select,
     .modal-content select {
       width: 100%;
@@ -537,30 +553,81 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       background: #fafbfc;
       transition: border-color 0.2s;
     }
+
     .add-form select:focus,
     .modal-content select:focus {
       border-color: var(--teal);
       outline: none;
       background: #fff;
     }
+
     .add-form input[type="file"],
-.modal-content input[type="file"] {
-  padding: 0.4rem 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ccc;
-  background: #fafbfc;
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
-  margin-bottom: 1rem;
-}
-.add-form input[type="file"]:focus,
-.modal-content input[type="file"]:focus {
-  border-color: var(--teal);
-  outline: none;
-  background: #fff;
-}
+    .modal-content input[type="file"] {
+      padding: 0.4rem 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      background: #fafbfc;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1rem;
+    }
+
+    .add-form input[type="file"]:focus,
+    .modal-content input[type="file"]:focus {
+      border-color: var(--teal);
+      outline: none;
+      background: #fff;
+    }
+
+    .admin-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .admin-dropdown .fas.fa-user-circle {
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--mint);
+      transition: color 0.2s;
+    }
+
+    .admin-dropdown .fas.fa-user-circle:hover,
+    .admin-dropdown .fas.fa-user-circle:focus {
+      color: var(--coral);
+    }
+
+    .admin-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      border-radius: 0.5rem;
+      z-index: 100;
+      margin-top: 0.7rem;
+      padding: 0.5rem 0;
+    }
+
+    .admin-dropdown-content a {
+      color: var(--teal);
+      padding: 0.7rem 1.2rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 500;
+      border-radius: 0.3rem;
+      transition: background 0.2s;
+    }
+
+    .admin-dropdown-content a:hover {
+      background: var(--mint);
+      color: #fff;
+    }
   </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="logo">
@@ -571,8 +638,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       <a href="view-orders.php"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php" class="active"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-history.php"><i class="fas fa-box"></i>Orders History</a>
-      <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
-      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
+      <a href="customers.php"><i class="fas fa-address-card"></i>Customer Data</a>
+      <a href="contenteditor.php"><i class="fas fa-pen"></i>Contents Editor</a>
     </nav>
   </aside>
 
@@ -580,7 +647,13 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     <header>
       <div class="icons">
         <i class="fas fa-bell"></i>
-        <i class="fas fa-user-circle"></i>
+        <div class="admin-dropdown">
+          <i class="fas fa-user-circle" id="adminDropdownBtn" tabindex="0"></i>
+          <div class="admin-dropdown-content" id="adminDropdownMenu">
+            <a href="index.php"><i class="fas fa-file"></i> Check Website</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -615,8 +688,8 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
         <tbody>
           <?php while ($row = mysqli_fetch_assoc($result)): ?>
             <?php
-              $img = !empty($row['Image']) ? htmlspecialchars($row['Image']) : 'placeholder.jpg';
-              $edit_link = 'menu-management.php?edit=' . $row['ProductID'];
+            $img = !empty($row['Image']) ? htmlspecialchars($row['Image']) : 'placeholder.jpg';
+            $edit_link = 'menu-management.php?edit=' . $row['ProductID'];
             ?>
             <tr data-category="<?= htmlspecialchars($row['ProductCategory']) ?>">
               <td><?= htmlspecialchars($row['ProductCategory']) ?></td>
@@ -656,32 +729,32 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
 
       <!-- Edit Modal -->
       <?php if ($edit_row): ?>
-      <div class="modal" style="display:flex;">
-        <div class="modal-content">
-          <h3>Edit Menu Item</h3> <br>
-          <form method="post" enctype="multipart/form-data">
-            <input type="hidden" name="edit_id" value="<?= $edit_row['ProductID'] ?>">
-            <select name="edit_category" required>
-              <option <?= $edit_row['ProductCategory'] == 'Featured' ? 'selected' : '' ?>>Featured</option>
-              <option <?= $edit_row['ProductCategory'] == 'Pinoy Pride' ? 'selected' : '' ?>>Pinoy Pride</option>
-              <option <?= $edit_row['ProductCategory'] == 'Special Cakes' ? 'selected' : '' ?>>Special Cakes</option>
-              <option <?= $edit_row['ProductCategory'] == 'Bicol Specialties' ? 'selected' : '' ?>>Bicol Specialties</option>
-              <option <?= $edit_row['ProductCategory'] == 'Pasta and Noodles' ? 'selected' : '' ?>>Pasta and Noodles</option>
-            </select>
-            <input type="text" name="edit_item" value="<?= htmlspecialchars($edit_row['ProductName']) ?>" required>
-            <textarea name="edit_description" rows="2" required><?= htmlspecialchars($edit_row['ProductDescription'] ?? '') ?></textarea>
-            <input type="text" name="edit_variation" value="<?= htmlspecialchars($edit_row['Size']) ?>">
-            <input type="number" step="0.01" name="edit_price" value="<?= htmlspecialchars($edit_row['Price']) ?>" required>
-            <label for="edit_image">Image</label>
-            <input type="file" name="edit_image" accept="image/*">
-            <div style="margin-bottom:1rem;">
-              <img src="images/<?= $edit_row['Image'] ? htmlspecialchars($edit_row['Image']) : 'placeholder.jpg' ?>" alt="Image preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 0.5rem;">
-            </div>
-            <button type="submit" name="edit_item">Save Changes</button>
-            <a href="menu-management.php" style="margin-left:1rem;">Cancel</a>
-          </form>
+        <div class="modal" style="display:flex;">
+          <div class="modal-content">
+            <h3>Edit Menu Item</h3> <br>
+            <form method="post" enctype="multipart/form-data">
+              <input type="hidden" name="edit_id" value="<?= $edit_row['ProductID'] ?>">
+              <select name="edit_category" required>
+                <option <?= $edit_row['ProductCategory'] == 'Featured' ? 'selected' : '' ?>>Featured</option>
+                <option <?= $edit_row['ProductCategory'] == 'Pinoy Pride' ? 'selected' : '' ?>>Pinoy Pride</option>
+                <option <?= $edit_row['ProductCategory'] == 'Special Cakes' ? 'selected' : '' ?>>Special Cakes</option>
+                <option <?= $edit_row['ProductCategory'] == 'Bicol Specialties' ? 'selected' : '' ?>>Bicol Specialties</option>
+                <option <?= $edit_row['ProductCategory'] == 'Pasta and Noodles' ? 'selected' : '' ?>>Pasta and Noodles</option>
+              </select>
+              <input type="text" name="edit_item" value="<?= htmlspecialchars($edit_row['ProductName']) ?>" required>
+              <textarea name="edit_description" rows="2" required><?= htmlspecialchars($edit_row['ProductDescription'] ?? '') ?></textarea>
+              <input type="text" name="edit_variation" value="<?= htmlspecialchars($edit_row['Size']) ?>">
+              <input type="number" step="0.01" name="edit_price" value="<?= htmlspecialchars($edit_row['Price']) ?>" required>
+              <label for="edit_image">Image</label>
+              <input type="file" name="edit_image" accept="image/*">
+              <div style="margin-bottom:1rem;">
+                <img src="images/<?= $edit_row['Image'] ? htmlspecialchars($edit_row['Image']) : 'placeholder.jpg' ?>" alt="Image preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 0.5rem;">
+              </div>
+              <button type="submit" name="edit_item">Save Changes</button>
+              <a href="menu-management.php" style="margin-left:1rem;">Cancel</a>
+            </form>
+          </div>
         </div>
-      </div>
       <?php endif; ?>
 
       <?php if (isset($_GET['success'])): ?>
@@ -718,7 +791,25 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
       const toast = document.getElementById('toast');
       if (toast) toast.style.opacity = 0;
     }, 2000);
+
+    const adminBtn = document.getElementById('adminDropdownBtn');
+    const adminMenu = document.getElementById('adminDropdownMenu');
+
+    adminBtn.addEventListener('click', function(e) {
+      adminMenu.style.display = adminMenu.style.display === 'block' ? 'none' : 'block';
+      e.stopPropagation();
+    });
+    adminBtn.addEventListener('blur', function() {
+      setTimeout(() => {
+        adminMenu.style.display = 'none';
+      }, 150);
+    });
+    document.addEventListener('click', function(e) {
+      if (!adminBtn.contains(e.target)) {
+        adminMenu.style.display = 'none';
+      }
+    });
   </script>
 </body>
-</html>
 
+</html>

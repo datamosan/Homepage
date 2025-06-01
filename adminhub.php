@@ -4,12 +4,14 @@ session_start();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Hub - DecaDhen: Dhen's Kitchen</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="adminstyle.css">
   <style>
     :root {
       --coral: #f48a8a;
@@ -19,7 +21,7 @@ session_start();
       --white: #ffffff;
       --light-gray: #f5f5f5;
       --dark-gray: #333333;
-      
+
       --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       --radius: 1.25rem;
     }
@@ -57,7 +59,8 @@ session_start();
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem; /* Reduce space below logo */
+      margin-bottom: 1rem;
+      /* Reduce space below logo */
     }
 
     .sidebar .logo img {
@@ -137,10 +140,11 @@ session_start();
       padding: 2rem;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      transition: 
-        transform 0.3s ease, 
-        box-shadow 0.3s ease, 
-        background-color 0.3s ease; /* Add background-color transition */
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
+      /* Add background-color transition */
       display: flex;
       justify-content: space-between;
       gap: 0.5rem;
@@ -151,7 +155,8 @@ session_start();
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-      background-color: var(--coral); /* Change color on hover */
+      background-color: var(--coral);
+      /* Change color on hover */
     }
 
     .card h3 {
@@ -179,11 +184,59 @@ session_start();
       color: #555;
     }
 
-    .main-content > footer {
+    .main-content>footer {
       margin-top: auto;
+    }
+
+    .admin-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .admin-dropdown .fas.fa-user-circle {
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--mint);
+      transition: color 0.2s;
+    }
+
+    .admin-dropdown .fas.fa-user-circle:hover,
+    .admin-dropdown .fas.fa-user-circle:focus {
+      color: var(--coral);
+    }
+
+    .admin-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      border-radius: 0.5rem;
+      z-index: 100;
+      margin-top: 0.7rem;
+      padding: 0.5rem 0;
+    }
+
+    .admin-dropdown-content a {
+      color: var(--teal);
+      padding: 0.7rem 1.2rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 500;
+      border-radius: 0.3rem;
+      transition: background 0.2s;
+    }
+
+    .admin-dropdown-content a:hover {
+      background: var(--mint);
+      color: #fff;
     }
   </style>
 </head>
+
 <body>
 
   <aside class="sidebar">
@@ -195,8 +248,8 @@ session_start();
       <a href="view-orders.php"><i class="fas fa-receipt"></i>Manage Orders</a>
       <a href="menu-management.php"><i class="fas fa-utensils"></i> Manage Menu</a>
       <a href="order-history.php"><i class="fas fa-box"></i>Orders History</a>
-      <a href="customers.php"><i class="fas fa-users"></i>Customer Data</a>
-      <a href="logout.php"><i class="fas fa-user"></i>Logout</a>
+      <a href="customers.php"><i class="fas fa-address-card"></i>Customer Data</a>
+      <a href="contenteditor.php"><i class="fas fa-pen"></i>Contents Editor</a>
     </nav>
   </aside>
 
@@ -204,7 +257,13 @@ session_start();
     <header>
       <div class="icons">
         <i class="fas fa-bell"></i>
-        <i class="fas fa-user-circle"></i>
+        <div class="admin-dropdown">
+          <i class="fas fa-user-circle" id="adminDropdownBtn" tabindex="0"></i>
+          <div class="admin-dropdown-content" id="adminDropdownMenu">
+            <a href="index.php"><i class="fas fa-file"></i> Check Website</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -238,7 +297,15 @@ session_start();
           <h3>Customer Data</h3>
           <p>View registered customer details.</p>
         </div>
-        <i class="fas fa-users"></i>
+        <i class="fas fa-address-card"></i>
+      </div>
+
+      <div class="card" onclick="location.href='contenteditor.php'">
+        <div>
+          <h3>Contents Editor </h3>
+          <p>Edit the announcement and pictures on the homepage.</p>
+        </div>
+        <i class="fas fa-pen"></i>
       </div>
     </section>
 
@@ -246,6 +313,26 @@ session_start();
       &copy; 2025 Dhen's Kitchen. All rights reserved.
     </footer>
   </div>
-</body>
-</html>
 
+  <script>
+    const adminBtn = document.getElementById('adminDropdownBtn');
+    const adminMenu = document.getElementById('adminDropdownMenu');
+
+    adminBtn.addEventListener('click', function(e) {
+      adminMenu.style.display = adminMenu.style.display === 'block' ? 'none' : 'block';
+      e.stopPropagation();
+    });
+    adminBtn.addEventListener('blur', function() {
+      setTimeout(() => {
+        adminMenu.style.display = 'none';
+      }, 150);
+    });
+    document.addEventListener('click', function(e) {
+      if (!adminBtn.contains(e.target)) {
+        adminMenu.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+
+</html>
