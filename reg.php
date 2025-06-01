@@ -79,6 +79,7 @@ if(isset($_POST['login'])) {
         $firstName = explode(' ', trim($userName))[0];
         $_SESSION['first_name'] = $firstName;
         $_SESSION['user_id'] = $userID; // Store UserID in session
+        $_SESSION['user_roles_id'] = $userRolesID; // Store UserRolesID in session
 
         $stmt->close(); // <-- Move this here before running a new query
 

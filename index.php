@@ -46,7 +46,11 @@ if ($res && $row = $res->fetch_assoc()) {
                             Hi, <?php echo htmlspecialchars($_SESSION['first_name']); ?> <i class="fas fa-caret-down"></i>
                         </button>
                         <div class="nav-dropdown-content">
-                            <a href="profilepage.php">Profile</a>
+                            <?php if (isset($_SESSION['user_roles_id']) && $_SESSION['user_roles_id'] == 1): ?>
+                                <a href="adminhub.php">Admin Hub</a>
+                            <?php elseif (isset($_SESSION['user_roles_id']) && $_SESSION['user_roles_id'] == 2): ?>
+                                <a href="profilepage.php">Profile</a>
+                            <?php endif; ?>
                             <a href="logout.php">Logout</a>
                         </div>
                     </div>
