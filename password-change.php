@@ -88,11 +88,15 @@ session_start();
                             <input type="hidden" name="token" value="<?php echo htmlspecialchars($_GET['token'] ?? ''); ?>">
                             <div class="form-group">
                                 <label for="new_password">New Password</label>
-                                <input type="password" name="new_password" class="form-control" required placeholder="Enter new password">
+                                <input type="password" name="new_password" id="new_password" class="form-control" required placeholder="Enter new password">
                             </div>
                             <div class="form-group">
                                 <label for="confirm_password">Confirm New Password</label>
-                                <input type="password" name="confirm_password" class="form-control" required placeholder="Confirm new password">
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" required placeholder="Confirm new password">
+                            </div>
+                            <div class="form-group" style="text-align: right; color: #6c757d;">
+                                <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+                                <label for="showPassword" style="cursor:pointer;">Show Password</label>
                             </div>
                             <button type="submit" name="changePassword" class="btn btn-coral btn-block">Change Password</button>
                         </form>
@@ -104,5 +108,19 @@ session_start();
             </div>
         </div>
     </div>
+
+    <script>
+    function togglePasswordVisibility() {
+        var pw1 = document.getElementById("new_password");
+        var pw2 = document.getElementById("confirm_password");
+        if (pw1.type === "password") {
+            pw1.type = "text";
+            pw2.type = "text";
+        } else {
+            pw1.type = "password";
+            pw2.type = "password";
+        }
+    }
+    </script>
 </body>
 </html>
