@@ -240,6 +240,34 @@ require_once "connection.php";
             font-size: 0.9rem;
             color: var(--coral);
         }
+
+        .carousel-edit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .carousel-edit-item {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .carousel-edit-item label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .feature-image img,
+        .carousel-thumb {
+            width: 220px;
+            max-width: 100%;
+            border-radius: 0.5rem;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 
@@ -275,7 +303,7 @@ require_once "connection.php";
         <h1> Contents Editor</h1>
 
         <div class="content-edit-section">
-            <h2>Edit Home Page Title</h2>
+            <h2>Edit Announcement</h2>
             <form id="pageTitleForm">
                 <?php
                 $res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
@@ -292,6 +320,54 @@ require_once "connection.php";
         
         <div class="content-edit-section">
             <h2>Edit Carousel</h2>
+            <form id="carouselForm" method="post" enctype="multipart/form-data" action="update-content.php">
+                <div class="carousel-edit-list">
+                    <?php
+                    // Fetch carousel images from indexcontents
+                    $carouselImages = [];
+                    $res = $conn->query("SELECT ContentName, ContentDescription FROM indexcontents WHERE ContentName LIKE 'Carousel%' ORDER BY ContentName ASC");
+                    if ($res) {
+                        while ($row = $res->fetch_assoc()) {
+                            $carouselImages[] = $row;
+                        }
+                    }
+                    // Show 3 slots by default
+                    for ($i = 1; $i <= 3; $i++):
+                        $name = "Carousel$i";
+                        $img = '';
+                        foreach ($carouselImages as $ci) {
+                            if ($ci['ContentName'] === $name) $img = $ci['ContentDescription'];
+                        }
+                    ?>
+                    <div class="carousel-edit-item">
+                        <label>Image <?php echo $i; ?>:</label><br>
+                        <?php if ($img): ?>
+                            <img src="<?php echo htmlspecialchars($img); ?>" class="carousel-thumb" alt="Carousel <?php echo $i; ?>">
+                        <?php else: ?>
+                            <span style="color:#aaa;">No image</span>
+                        <?php endif; ?>
+                        <input type="file" name="carousel_<?php echo $i; ?>" accept="image/*">
+                    </div>
+                    <?php endfor; ?>
+                </div>
+                <button type="submit" class="content-save-btn" name="save_carousel">Save Carousel Images</button>
+            </form>
+        </div>
+        
+        <div class="content-edit-section">
+            <h2>Edit Index Feautured Item</h2>
+            <form method="post" enctype="multipart/form-data" action="update-content.php">
+                <?php
+                $featuredImage = 'images/dhens1.jpg';
+                $res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
+                if ($res && $row = $res->fetch_assoc()) {
+                    $featuredImage = $row['ContentDescription'];
+                }
+                ?>
+                <img src="<?php echo htmlspecialchars($featuredImage); ?>" class="carousel-thumb" style="width:220px;max-width:100%;" alt="Featured Image"><br>
+                <input type="file" name="featured_image" accept="image/*">
+                <button type="submit" class="content-save-btn" name="save_featured_image">Save Featured Image</button>
+            </form>
         </div>
 
         <footer>
@@ -323,7 +399,7 @@ require_once "connection.php";
             e.preventDefault();
             var input = document.getElementById('pageTitleInput');
             var msg = document.getElementById('pageTitleMsg');
-            fetch('update-page-title.php', {
+            fetch('update-content.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'

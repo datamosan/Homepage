@@ -1,10 +1,15 @@
 <?php
 session_start();
 require_once "connection.php";
-$page_title = "About Us"; // fallback
+$page_title = "Sparkle up your day with goodness!"; // fallback
 $res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
 if ($res && $row = $res->fetch_assoc()) {
     $announcement = $row['ContentDescription'];
+}
+$featuredImage = 'images/dhens1.jpg'; // fallback
+$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
+if ($res && $row = $res->fetch_assoc()) {
+    $featuredImage = $row['ContentDescription'];
 }
 ?>
 
@@ -54,7 +59,7 @@ if ($res && $row = $res->fetch_assoc()) {
 
     <!-- Hero Section -->
     <section class="hero">
-        <iframe src="carousel.html" width="101%" height="500" class="carouselContainer" scrolling="no"></iframe> 
+        <iframe src="carousel.php" width="101%" height="500" class="carouselContainer" scrolling="no"></iframe> 
         <div class="hero-content">
             <h1 class="hero-title">Dhen's Kitchen</h1>
             <h2 class="hero-subtitle">Authentic Filipino Cuisine</h2>
@@ -80,7 +85,7 @@ if ($res && $row = $res->fetch_assoc()) {
                 </div>
             </div>
             <div class="feature-image">
-                <img src="images/dhens1.jpg" alt="Dhen's Kitchen Specialty Dish">
+                <img src="<?php echo htmlspecialchars($featuredImage); ?>" alt="Dhen's Kitchen Specialty Dish">
             </div>
         </div>
     </section>
