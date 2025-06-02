@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (!isLoggedIn) {
                 // Redirect to login with redirect to place-order.php
-                window.location.href = 'auth.html?redirect=place-order.php';
+                window.location.href = 'auth.php?redirect=place-order.php';
             } else {
                 window.location.href = 'place-order.php';
             }
@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     updateCartDOM(data.cart_items, data.cart_total);
                 } else if (data.message === 'Not logged in') {
-                    window.location.href = 'auth.html'; // Redirect to login
+                    window.location.href = 'auth.php'; // Redirect to login
                 } else {
                     alert('Failed to add to cart.');
                 }
