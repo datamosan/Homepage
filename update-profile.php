@@ -14,18 +14,14 @@ $success = false;
 if (isset($_POST['address'])) {
     $address = trim($_POST['address']);
     if ($address) {
-        $stmt = $conn->prepare("UPDATE users SET UserAddress = ? WHERE UserID = ?");
-        $stmt->bind_param("si", $address, $user_id);
-        $success = $stmt->execute();
-        $stmt->close();
+        $stmt = sqlsrv_query($conn, "UPDATE decadhen.users SET UserAddress = ? WHERE UserID = ?", [$address, $user_id]);
+        $success = $stmt ? true : false;
     }
 } elseif (isset($_POST['phone'])) {
     $phone = trim($_POST['phone']);
     if ($phone) {
-        $stmt = $conn->prepare("UPDATE users SET UserPhone = ? WHERE UserID = ?");
-        $stmt->bind_param("si", $phone, $user_id);
-        $success = $stmt->execute();
-        $stmt->close();
+        $stmt = sqlsrv_query($conn, "UPDATE decadhen.users SET UserPhone = ? WHERE UserID = ?", [$phone, $user_id]);
+        $success = $stmt ? true : false;
     }
 }
 

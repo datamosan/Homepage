@@ -7,10 +7,9 @@ $status = isset($_POST['status']) ? trim($_POST['status']) : '';
 $response = ['success' => false];
 
 if ($orderId > 0 && $status) {
-    $sql = "UPDATE orders SET OrderStatus = ? WHERE OrderID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $status, $orderId);
-    if ($stmt->execute()) {
+    $sql = "UPDATE decadhen.orders SET OrderStatus = ? WHERE OrderID = ?";
+    $stmt = sqlsrv_query($conn, $sql, [$status, $orderId]);
+    if ($stmt) {
         $response['success'] = true;
     }
 }

@@ -1,16 +1,14 @@
 <?php
 session_start();
-?>
-
-<?php
-include 'connection.php';
+require_once 'connection.php';
 
 // Handle Add New Item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
-  $category = mysqli_real_escape_string($conn, $_POST['category']);
-  $item = mysqli_real_escape_string($conn, $_POST['item']);
-  $variation = mysqli_real_escape_string($conn, $_POST['variation']);
+  $category = $_POST['category'];
+  $item = $_POST['item'];
+  $variation = $_POST['variation'];
   $price = floatval($_POST['price']);
+  $description = $_POST['description'] ?? '';
 
   // Handle image upload
   $image_filename = '';
@@ -20,26 +18,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
     move_uploaded_file($_FILES['image']['tmp_name'], 'images/' . $image_filename);
   }
 
-  // Insert into products table (if product doesn't exist)
-  $product_check = mysqli_query($conn, "SELECT ProductID FROM products WHERE ProductName='$item' AND ProductCategory='$category'");
-  $description = mysqli_real_escape_string($conn, $_POST['description'] ?? '');
+  // Check if product exists
+  $product_check = sqlsrv_query($conn, "SELECT ProductID FROM decadhen.products WHERE ProductName=? AND ProductCategory=?", [$item, $category]);
+  $product_row = sqlsrv_fetch_array($product_check, SQLSRV_FETCH_ASSOC);
 
-  if ($product_row = mysqli_fetch_assoc($product_check)) {
+  if ($product_row) {
     $product_id = $product_row['ProductID'];
-    // Optionally update image and description if new image uploaded
+    // Update image and description if new image uploaded
     if ($image_filename) {
-      mysqli_query($conn, "UPDATE products SET Image='$image_filename', ProductDescription='$description' WHERE ProductID='$product_id'");
+      sqlsrv_query($conn, "UPDATE decadhen.products SET Image=?, ProductDescription=? WHERE ProductID=?", [$image_filename, $description, $product_id]);
     } else {
-      mysqli_query($conn, "UPDATE products SET ProductDescription='$description' WHERE ProductID='$product_id'");
+      sqlsrv_query($conn, "UPDATE decadhen.products SET ProductDescription=? WHERE ProductID=?", [$description, $product_id]);
     }
   } else {
-    mysqli_query($conn, "INSERT INTO products (ProductName, ProductCategory, Image, ProductDescription) VALUES ('$item', '$category', '$image_filename', '$description')");
-    $product_id = mysqli_insert_id($conn);
+    $insert_product = sqlsrv_query($conn, "INSERT INTO decadhen.products (ProductName, ProductCategory, Image, ProductDescription) OUTPUT INSERTED.ProductID VALUES (?, ?, ?, ?)", [$item, $category, $image_filename, $description]);
+    $inserted = sqlsrv_fetch_array($insert_product, SQLSRV_FETCH_ASSOC);
+    $product_id = $inserted['ProductID'];
   }
 
   // Insert into product_attributes
   if ($variation || $price) {
-    mysqli_query($conn, "INSERT INTO product_attributes (ProductID, Size, Price) VALUES ('$product_id', '$variation', '$price')");
+    sqlsrv_query($conn, "INSERT INTO decadhen.product_attributes (ProductID, Size, Price) VALUES (?, ?, ?)", [$product_id, $variation, $price]);
   }
 
   header("Location: menu-management.php?success=1");
@@ -49,29 +48,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
 // Handle Edit Item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_item'])) {
   $edit_id = intval($_POST['edit_id']);
-  $category = mysqli_real_escape_string($conn, $_POST['edit_category']);
-  $item = mysqli_real_escape_string($conn, $_POST['edit_item']);
-  $variation = mysqli_real_escape_string($conn, $_POST['edit_variation']);
+  $category = $_POST['edit_category'];
+  $item = $_POST['edit_item'];
+  $variation = $_POST['edit_variation'];
   $price = floatval($_POST['edit_price']);
-  $edit_description = mysqli_real_escape_string($conn, $_POST['edit_description'] ?? '');
+  $edit_description = $_POST['edit_description'] ?? '';
 
   // Handle image upload
   if (isset($_FILES['edit_image']) && $_FILES['edit_image']['error'] === UPLOAD_ERR_OK) {
     $ext = pathinfo($_FILES['edit_image']['name'], PATHINFO_EXTENSION);
     $image_filename = uniqid('menu_', true) . '.' . $ext;
     move_uploaded_file($_FILES['edit_image']['tmp_name'], 'images/' . $image_filename);
-    mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', Image='$image_filename', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
+    sqlsrv_query($conn, "UPDATE decadhen.products SET ProductName=?, ProductCategory=?, Image=?, ProductDescription=? WHERE ProductID=?", [$item, $category, $image_filename, $edit_description, $edit_id]);
   } else {
-    mysqli_query($conn, "UPDATE products SET ProductName='$item', ProductCategory='$category', ProductDescription='$edit_description' WHERE ProductID='$edit_id'");
+    sqlsrv_query($conn, "UPDATE decadhen.products SET ProductName=?, ProductCategory=?, ProductDescription=? WHERE ProductID=?", [$item, $category, $edit_description, $edit_id]);
   }
 
   // Update product_attributes (assumes one attribute per product for simplicity)
-  $attr_check = mysqli_query($conn, "SELECT SizeID FROM product_attributes WHERE ProductID='$edit_id'");
-  if ($attr_row = mysqli_fetch_assoc($attr_check)) {
+  $attr_check = sqlsrv_query($conn, "SELECT SizeID FROM decadhen.product_attributes WHERE ProductID=?", [$edit_id]);
+  $attr_row = sqlsrv_fetch_array($attr_check, SQLSRV_FETCH_ASSOC);
+  if ($attr_row) {
     $size_id = $attr_row['SizeID'];
-    mysqli_query($conn, "UPDATE product_attributes SET Size='$variation', Price='$price' WHERE SizeID='$size_id'");
+    sqlsrv_query($conn, "UPDATE decadhen.product_attributes SET Size=?, Price=? WHERE SizeID=?", [$variation, $price, $size_id]);
   } else {
-    mysqli_query($conn, "INSERT INTO product_attributes (ProductID, Size, Price) VALUES ('$edit_id', '$variation', '$price')");
+    sqlsrv_query($conn, "INSERT INTO decadhen.product_attributes (ProductID, Size, Price) VALUES (?, ?, ?)", [$edit_id, $variation, $price]);
   }
 
   header("Location: menu-management.php?edited=1");
@@ -81,10 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_item'])) {
 // Handle Delete Item
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
   $delete_id = intval($_GET['delete']);
-  // Delete product attributes first (to avoid foreign key issues)
-  mysqli_query($conn, "DELETE FROM product_attributes WHERE ProductID='$delete_id'");
-  // Delete product
-  mysqli_query($conn, "DELETE FROM products WHERE ProductID='$delete_id'");
+  sqlsrv_query($conn, "DELETE FROM decadhen.product_attributes WHERE ProductID=?", [$delete_id]);
+  sqlsrv_query($conn, "DELETE FROM decadhen.products WHERE ProductID=?", [$delete_id]);
   header("Location: menu-management.php?deleted=1");
   exit;
 }
@@ -92,11 +90,11 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
 // Fetch all menu items
 $query = "
     SELECT p.ProductID, p.ProductCategory, p.ProductName, pa.SizeID, pa.Size, pa.Price, p.Image
-    FROM products p
-    LEFT JOIN product_attributes pa ON p.ProductID = pa.ProductID
+    FROM decadhen.products p
+    LEFT JOIN decadhen.product_attributes pa ON p.ProductID = pa.ProductID
     ORDER BY p.ProductCategory, p.ProductName, pa.Size
 ";
-$result = mysqli_query($conn, $query);
+$result = sqlsrv_query($conn, $query);
 
 // For Edit Modal
 $edit_row = null;
@@ -104,13 +102,12 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
   $edit_id = intval($_GET['edit']);
   $edit_query = "
         SELECT p.ProductID, p.ProductCategory, p.ProductName, pa.SizeID, pa.Size, pa.Price, p.Image, p.ProductDescription
-        FROM products p
-        LEFT JOIN product_attributes pa ON p.ProductID = pa.ProductID
-        WHERE p.ProductID = $edit_id
-        LIMIT 1
+        FROM decadhen.products p
+        LEFT JOIN decadhen.product_attributes pa ON p.ProductID = pa.ProductID
+        WHERE p.ProductID = ?
     ";
-  $edit_result = mysqli_query($conn, $edit_query);
-  $edit_row = mysqli_fetch_assoc($edit_result);
+  $edit_result = sqlsrv_query($conn, $edit_query, [$edit_id]);
+  $edit_row = sqlsrv_fetch_array($edit_result, SQLSRV_FETCH_ASSOC);
 }
 ?>
 <!DOCTYPE html>
@@ -686,7 +683,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
           </tr>
         </thead>
         <tbody>
-          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+          <?php while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)): ?>
             <?php
             $img = !empty($row['Image']) ? htmlspecialchars($row['Image']) : 'placeholder.jpg';
             $edit_link = 'menu-management.php?edit=' . $row['ProductID'];

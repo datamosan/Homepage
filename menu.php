@@ -2,14 +2,12 @@
 session_start();
 require_once "connection.php";
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
+
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $announcement = $row['ContentDescription'];
-}
-$featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
-    $featuredImage = $row['ContentDescription'];
 }
 ?>
 
@@ -24,8 +22,6 @@ if ($res && $row = $res->fetch_assoc()) {
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <?php include 'connection.php';?>
 
     <!-- Header -->
     <header>
@@ -65,37 +61,38 @@ if ($res && $row = $res->fetch_assoc()) {
     <section class="menu-categories">
         <?php
         // Fetch all unique categories from the products table
-        $cat_query = "SELECT DISTINCT ProductCategory FROM products";
-        $cat_result = mysqli_query($conn, $cat_query);
+        $cat_query = "
+            SELECT ProductCategory
+            FROM decadhen.products
+            GROUP BY ProductCategory
+            ORDER BY MIN(ProductID)
+        ";
+        $cat_result = sqlsrv_query($conn, $cat_query);
 
-        if ($cat_result && mysqli_num_rows($cat_result) > 0) {
+        if ($cat_result && sqlsrv_has_rows($cat_result)) {
             echo '<div class="category-nav">';
             // Build the category navigation dynamically
             $cat_nav = [];
-            while ($cat_row = mysqli_fetch_assoc($cat_result)) {
+            $categories = [];
+            while ($cat_row = sqlsrv_fetch_array($cat_result, SQLSRV_FETCH_ASSOC)) {
                 $cat_id = strtolower(str_replace(' ', '-', $cat_row['ProductCategory']));
                 $cat_name = htmlspecialchars($cat_row['ProductCategory']);
                 $cat_nav[] = '<a href="#' . $cat_id . '" class="category-item">' . $cat_name . '</a>';
+                $categories[] = $cat_row['ProductCategory'];
             }
             echo implode("\n", $cat_nav);
             echo '</div>';
 
-            // Reset pointer and fetch categories again for sections
-            mysqli_data_seek($cat_result, 0);
-            while ($cat_row = mysqli_fetch_assoc($cat_result)) {
-                $category = $cat_row['ProductCategory'];
+            // Fetch categories again for sections
+            foreach ($categories as $category) {
                 $cat_id = strtolower(str_replace(' ', '-', $category));
                 echo '<div id="' . $cat_id . '" class="menu-section">';
                 echo '  <h2 class="category-title">' . htmlspecialchars($category) . '</h2>';
                 echo '  <div class="menu-grid">';
-                // Fetch all products for this category
-                $prod_query = "
-                    SELECT * FROM products
-                    WHERE ProductCategory = '" . mysqli_real_escape_string($conn, $category) . "'
-                    ORDER BY ProductID
-                ";
-                $prod_result = mysqli_query($conn, $prod_query);
-                while ($row = mysqli_fetch_assoc($prod_result)) {
+                // Fetch all products for this category (parameterized)
+                $prod_query = "SELECT * FROM decadhen.products WHERE ProductCategory = ? ORDER BY ProductID";
+                $prod_result = sqlsrv_query($conn, $prod_query, [$category]);
+                while ($row = sqlsrv_fetch_array($prod_result, SQLSRV_FETCH_ASSOC)) {
                     echo '<div class="menu-item" data-id="' . htmlspecialchars($row['ProductID']) . '">';
                     echo '  <div class="item-color"></div>';
                     echo '  <div class="item-image">';
@@ -115,13 +112,6 @@ if ($res && $row = $res->fetch_assoc()) {
             echo '<p>No categories found.</p>';
         }
         ?>
-
-        <!-- Pagination
-        <div class="pagination">
-            <a href="#" class="page-prev">Previous</a>
-            <div class="page-number">1/3</div>
-            <a href="#" class="page-next">Next</a>
-        </div> -->
     </section>
 
     <!-- Footer -->

@@ -2,27 +2,22 @@
 session_start();
 require_once "connection.php";
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
-    $announcement = $row['ContentDescription'];
-}
-$featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
-    $featuredImage = $row['ContentDescription'];
-}
-?>
 
-<?php
-// filepath: c:\xampp\htdocs\decadhen\Homepage\order.php
-$conn = new mysqli("localhost", "root", "", "decadhen");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
+    $announcement = $row['ContentDescription'];
 }
 
 // Fetch all products
-$products = $conn->query("SELECT * FROM products");
+$products = [];
+$product_stmt = sqlsrv_query($conn, "SELECT * FROM decadhen.products");
+while ($product = sqlsrv_fetch_array($product_stmt, SQLSRV_FETCH_ASSOC)) {
+    $products[] = $product;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,15 +73,15 @@ $products = $conn->query("SELECT * FROM products");
 
         <!-- Products Grid -->
         <div class="products-grid">
-            <?php while ($product = $products->fetch_assoc()): ?>
+            <?php foreach ($products as $product): ?>
                 <div class="product-card">
                     <div class="product-color"><i class="fas fa-image"></i></div>
                     <h3 class="product-title"><?php echo htmlspecialchars($product['ProductName']); ?></h3>
                     <p class="product-description"><?php echo htmlspecialchars($product['ProductDescription']); ?></p>
                     <?php
                         $pid = intval($product['ProductID']);
-                        $attr = $conn->query("SELECT * FROM product_attributes WHERE ProductID = $pid");
-                        $first = $attr->fetch_assoc();
+                        $attr_stmt = sqlsrv_query($conn, "SELECT * FROM decadhen.product_attributes WHERE ProductID = ?", [$pid]);
+                        $first = sqlsrv_fetch_array($attr_stmt, SQLSRV_FETCH_ASSOC);
                         $price = $first ? $first['Price'] : 0;
                     ?>
                     <div class="product-options">
@@ -96,8 +91,8 @@ $products = $conn->query("SELECT * FROM products");
                             <input type="hidden" name="unit_price" value="<?php echo $price; ?>" class="unit-price-input">
                             <select name="size" class="size-select" data-id="<?php echo $product['ProductID']; ?>" style="margin-bottom:5px;">
                                 <?php
-                                $attr = $conn->query("SELECT * FROM product_attributes WHERE ProductID = $pid");
-                                while ($row = $attr->fetch_assoc()) {
+                                $attr_stmt = sqlsrv_query($conn, "SELECT * FROM decadhen.product_attributes WHERE ProductID = ?", [$pid]);
+                                while ($row = sqlsrv_fetch_array($attr_stmt, SQLSRV_FETCH_ASSOC)) {
                                     echo '<option value="' . htmlspecialchars($row['Size']) . '" data-price="' . htmlspecialchars($row['Price']) . '">' . htmlspecialchars($row['Size']) . '</option>';
                                 }
                                 ?>
@@ -106,7 +101,7 @@ $products = $conn->query("SELECT * FROM products");
                         </form>
                     </div>
                 </div>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         </div>
 
         <?php
@@ -118,24 +113,24 @@ $products = $conn->query("SELECT * FROM products");
             $cart_id = $user_id; // CartID is always the same as UserID
 
             // Check for any cart (even completed)
-            $cart_res = $conn->query("SELECT CartID FROM Cart WHERE UserID = $user_id ORDER BY CartID DESC LIMIT 1");
-            if ($cart_row = $cart_res->fetch_assoc()) {
+            $cart_res = sqlsrv_query($conn, "SELECT TOP 1 CartID FROM decadhen.Cart WHERE UserID = ? ORDER BY CartID DESC", [$user_id]);
+            if ($cart_row = sqlsrv_fetch_array($cart_res, SQLSRV_FETCH_ASSOC)) {
                 $cart_id = $cart_row['CartID'];
                 // Reactivate if not active
-                $conn->query("UPDATE Cart SET Status = 'active' WHERE CartID = $cart_id");
+                sqlsrv_query($conn, "UPDATE decadhen.Cart SET Status = 'active' WHERE CartID = ?", [$cart_id]);
             } else {
                 // Create new cart if none exists
-                $conn->query("INSERT INTO Cart (UserID, Status, CreatedDate) VALUES ($user_id, 'active', NOW())");
-                $cart_id = $conn->insert_id;
+                $insert_cart = sqlsrv_query($conn, "INSERT INTO decadhen.Cart (UserID, Status, CreatedDate) OUTPUT INSERTED.CartID VALUES (?, 'active', GETDATE())", [$user_id]);
+                $cart_row = sqlsrv_fetch_array($insert_cart, SQLSRV_FETCH_ASSOC);
+                $cart_id = $cart_row['CartID'];
             }
 
-            $cart_items_query = $conn->query("
+            $cart_items_query = sqlsrv_query($conn, "
                 SELECT ci.CartItemID, ci.ProductID, ci.CartQuantity, ci.UnitPrice, p.ProductName
-                FROM CartItems ci
-                JOIN products p ON ci.ProductID = p.ProductID
-                WHERE ci.CartID = $cart_id
-            ");
-            while ($item = $cart_items_query->fetch_assoc()) {
+                FROM decadhen.CartItems ci
+                JOIN decadhen.products p ON ci.ProductID = p.ProductID
+                WHERE ci.CartID = ?", [$cart_id]);
+            while ($item = sqlsrv_fetch_array($cart_items_query, SQLSRV_FETCH_ASSOC)) {
                 $item['Subtotal'] = $item['UnitPrice'] * $item['CartQuantity'];
                 $cart_total += $item['Subtotal'];
                 $cart_items[] = $item;

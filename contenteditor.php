@@ -306,9 +306,9 @@ require_once "connection.php";
             <h2>Edit Announcement</h2>
             <form id="pageTitleForm">
                 <?php
-                $res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
+                $res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
                 $pageTitle = 'Sparkle up your day with goodness!';
-                if ($res && $row = $res->fetch_assoc()) {
+                if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
                     $pageTitle = $row['ContentDescription'];
                 }
                 ?>
@@ -325,9 +325,9 @@ require_once "connection.php";
                     <?php
                     // Fetch carousel images from indexcontents
                     $carouselImages = [];
-                    $res = $conn->query("SELECT ContentName, ContentDescription FROM indexcontents WHERE ContentName LIKE 'Carousel%' ORDER BY ContentName ASC");
+                    $res = sqlsrv_query($conn, "SELECT ContentName, ContentDescription FROM decadhen.indexcontents WHERE ContentName LIKE 'Carousel%' ORDER BY ContentName ASC");
                     if ($res) {
-                        while ($row = $res->fetch_assoc()) {
+                        while ($row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
                             $carouselImages[] = $row;
                         }
                     }
@@ -359,8 +359,8 @@ require_once "connection.php";
             <form method="post" enctype="multipart/form-data" action="update-content.php">
                 <?php
                 $featuredImage = 'images/dhens1.jpg';
-                $res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-                if ($res && $row = $res->fetch_assoc()) {
+                $res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='FeaturedImage'");
+                if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
                     $featuredImage = $row['ContentDescription'];
                 }
                 ?>

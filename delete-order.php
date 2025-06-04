@@ -6,8 +6,8 @@ $response = ['success' => false];
 
 if ($orderId > 0) {
     // Delete order details first if you have foreign key constraints
-    $conn->query("DELETE FROM orderdetails WHERE OrderID = $orderId");
-    $result = $conn->query("DELETE FROM orders WHERE OrderID = $orderId");
+    sqlsrv_query($conn, "DELETE FROM decadhen.orderdetails WHERE OrderID = ?", [$orderId]);
+    $result = sqlsrv_query($conn, "DELETE FROM decadhen.orders WHERE OrderID = ?", [$orderId]);
     if ($result) {
         $response['success'] = true;
     }

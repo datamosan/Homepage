@@ -6,10 +6,9 @@ require_once "connection.php";
 if (isset($_POST['page_title'])) {
     header('Content-Type: application/json');
     $title = trim($_POST['page_title']);
-    $stmt = $conn->prepare("UPDATE indexcontents SET ContentDescription=? WHERE ContentName='Announcement'");
-    $stmt->bind_param("s", $title);
-    $ok = $stmt->execute();
-    $stmt->close();
+    $ok = false;
+    $stmt = sqlsrv_query($conn, "UPDATE indexcontents SET ContentDescription=? WHERE ContentName='Announcement'", [$title]);
+    if ($stmt) $ok = true;
     echo json_encode(['success' => $ok]);
     exit();
 }
@@ -23,23 +22,13 @@ if (isset($_POST['save_carousel'])) {
             $name = basename($_FILES[$input]['name']);
             $target = "images/carousel_" . time() . "_$i" . strrchr($name, '.');
             if (move_uploaded_file($tmp, $target)) {
-                $stmt = $conn->prepare("SELECT ContentID FROM indexcontents WHERE ContentName=?");
                 $contentName = "Carousel$i";
-                $stmt->bind_param("s", $contentName);
-                $stmt->execute();
-                $stmt->store_result();
-                if ($stmt->num_rows > 0) {
-                    $stmt->close();
-                    $stmt = $conn->prepare("UPDATE indexcontents SET ContentDescription=? WHERE ContentName=?");
-                    $stmt->bind_param("ss", $target, $contentName);
-                    $stmt->execute();
-                    $stmt->close();
+                // Check if exists
+                $check = sqlsrv_query($conn, "SELECT ContentID FROM decadhen.indexcontents WHERE ContentName=?", [$contentName]);
+                if ($check && sqlsrv_fetch_array($check, SQLSRV_FETCH_ASSOC)) {
+                    sqlsrv_query($conn, "UPDATE decadhen.indexcontents SET ContentDescription=? WHERE ContentName=?", [$target, $contentName]);
                 } else {
-                    $stmt->close();
-                    $stmt = $conn->prepare("INSERT INTO indexcontents (ContentName, ContentDescription) VALUES (?, ?)");
-                    $stmt->bind_param("ss", $contentName, $target);
-                    $stmt->execute();
-                    $stmt->close();
+                    sqlsrv_query($conn, "INSERT INTO decadhen.indexcontents (ContentName, ContentDescription) VALUES (?, ?)", [$contentName, $target]);
                 }
             }
         }
@@ -54,21 +43,11 @@ if (isset($_POST['save_featured_image']) && isset($_FILES['featured_image']) && 
     $name = basename($_FILES['featured_image']['name']);
     $target = "images/featured_" . time() . strrchr($name, '.');
     if (move_uploaded_file($tmp, $target)) {
-        $stmt = $conn->prepare("SELECT ContentID FROM indexcontents WHERE ContentName='FeaturedImage'");
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $stmt->close();
-            $stmt = $conn->prepare("UPDATE indexcontents SET ContentDescription=? WHERE ContentName='FeaturedImage'");
-            $stmt->bind_param("s", $target);
-            $stmt->execute();
-            $stmt->close();
+        $check = sqlsrv_query($conn, "SELECT ContentID FROM decadhen.indexcontents WHERE ContentName='FeaturedImage'");
+        if ($check && sqlsrv_fetch_array($check, SQLSRV_FETCH_ASSOC)) {
+            sqlsrv_query($conn, "UPDATE decadhen.indexcontents SET ContentDescription=? WHERE ContentName='FeaturedImage'", [$target]);
         } else {
-            $stmt->close();
-            $stmt = $conn->prepare("INSERT INTO indexcontents (ContentName, ContentDescription) VALUES ('FeaturedImage', ?)");
-            $stmt->bind_param("s", $target);
-            $stmt->execute();
-            $stmt->close();
+            sqlsrv_query($conn, "INSERT INTO decadhen.indexcontents (ContentName, ContentDescription) VALUES (?, ?)", ['FeaturedImage', $target]);
         }
     }
     header("Location: contenteditor.php");

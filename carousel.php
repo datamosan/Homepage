@@ -39,8 +39,14 @@
     <?php
     require_once "connection.php";
     $carouselImages = [];
-    $res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName LIKE 'Carousel%' ORDER BY ContentName ASC");
-    while ($row = $res->fetch_assoc()) {
+    $sql = "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName LIKE 'Carousel%' ORDER BY ContentName ASC";
+    $res = sqlsrv_query($conn, $sql);
+
+    if ($res === false) {
+        die(print_r(sqlsrv_errors(), true)); // Show the real SQL error
+    }
+
+    while ($row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
         $carouselImages[] = $row['ContentDescription'];
     }
     ?>

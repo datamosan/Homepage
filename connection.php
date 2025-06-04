@@ -1,11 +1,16 @@
 <?php
 
-$host="localhost";
-$username="root";
-$password="";
-$database="decadhen";
-$conn=new mysqli($host,$username,$password,$database);
-if($conn->connect_error){
-    die("Connection failed: ".$conn->connect_error);
-}
+$serverName = "localhost";
+$database = "decadhen";
+
+$conn = sqlsrv_connect($serverName, [
+    "Database" => $database,
+    "CharacterSet" => "UTF-8",
+    "Authentication" => "ActiveDirectoryIntegrated",
+    "Encrypt" => 0
+]);
+
+if ($conn === false) {
+    die("Connection failed: " . print_r(sqlsrv_errors(), true));
+} 
 ?>

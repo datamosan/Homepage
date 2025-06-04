@@ -2,15 +2,14 @@
 session_start();
 require_once "connection.php";
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
+
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $announcement = $row['ContentDescription'];
 }
-$featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
-    $featuredImage = $row['ContentDescription'];
-}
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: auth.php');
     exit;
@@ -23,19 +22,18 @@ $cart_items = [];
 $cart_total = 0.0;
 $cart_id = null;
 
-$conn = new mysqli('localhost', 'root', '', 'decadhen');
-if ($conn->connect_error) die('DB error');
-
-$cart_res = $conn->query("SELECT CartID FROM Cart WHERE UserID=$user_id AND Status='active' LIMIT 1");
-if ($cart_row = $cart_res->fetch_assoc()) {
+$cart_res = sqlsrv_query($conn, "SELECT TOP 1 CartID FROM decadhen.Cart WHERE UserID = ? AND Status = 'active'", [$user_id]);
+if ($cart_row = sqlsrv_fetch_array($cart_res, SQLSRV_FETCH_ASSOC)) {
     $cart_id = $cart_row['CartID'];
-    $items_res = $conn->query(
+    $items_res = sqlsrv_query(
+        $conn,
         "SELECT ci.CartItemID, ci.ProductID, p.ProductName, ci.CartQuantity, ci.UnitPrice, ci.Size
-         FROM CartItems ci
-         JOIN Products p ON ci.ProductID = p.ProductID
-         WHERE ci.CartID = $cart_id"
+         FROM decadhen.CartItems ci
+         JOIN decadhen.Products p ON ci.ProductID = p.ProductID
+         WHERE ci.CartID = ?",
+        [$cart_id]
     );
-    while ($row = $items_res->fetch_assoc()) {
+    while ($row = sqlsrv_fetch_array($items_res, SQLSRV_FETCH_ASSOC)) {
         $row['Subtotal'] = $row['CartQuantity'] * $row['UnitPrice'];
         $cart_total += $row['Subtotal'];
         $cart_items[] = $row;
@@ -65,32 +63,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($cart_items)) {
     }
 
     // 2. Insert into orders table (save $receipt_path to PaymentProof)
-    $shipping = $conn->real_escape_string($_POST['shipping'] ?? 'Self-Pickup');
+    $shipping = $_POST['shipping'] ?? 'Self-Pickup';
     $order_status = 'New';
     $order_deadline = $_POST['order_deadline'] ?? null;
-    $order_note = $conn->real_escape_string($_POST['order_note'] ?? '');
+    $order_note = $_POST['order_note'] ?? '';
 
-    $stmt = $conn->prepare("INSERT INTO orders (UserID, OrderDate, OrderStatus, OrderTotal, ShippingMethod, PaymentProof, OrderDeadline, OrderNote) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param('ssdssss', $user_id, $order_status, $cart_total, $shipping, $receipt_path, $order_deadline, $order_note);
-    $stmt->execute();
-    $order_id = $stmt->insert_id;
-    $stmt->close();
+    $order_sql = "INSERT INTO decadhen.orders (UserID, OrderDate, OrderStatus, OrderTotal, ShippingMethod, PaymentProof, OrderDeadline, OrderNote)
+                  OUTPUT INSERTED.OrderID
+                  VALUES (?, GETDATE(), ?, ?, ?, ?, ?, ?)";
+    $order_params = [$user_id, $order_status, $cart_total, $shipping, $receipt_path, $order_deadline, $order_note];
+    $stmt = sqlsrv_query($conn, $order_sql, $order_params);
+    $order_id = null;
+    if ($stmt && $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $order_id = $row['OrderID'];
+    }
 
     // 3. Insert each cart item into orderdetails (without UnitPrice)
-    // Make sure your orderdetails table has a Size column (VARCHAR or similar)
-    $stmt = $conn->prepare("INSERT INTO orderdetails (OrderID, ProductID, OrderQuantity, Size) VALUES (?, ?, ?, ?)");
-    foreach ($cart_items as $item) {
-        $stmt->bind_param('iiis', $order_id, $item['ProductID'], $item['CartQuantity'], $item['Size']);
-        $stmt->execute();
+    if ($order_id) {
+        $orderdetails_sql = "INSERT INTO decadhen.orderdetails (OrderID, ProductID, OrderQuantity, Size) VALUES (?, ?, ?, ?)";
+        foreach ($cart_items as $item) {
+            sqlsrv_query($conn, $orderdetails_sql, [$order_id, $item['ProductID'], $item['CartQuantity'], $item['Size']]);
+        }
+
+        // 4. Mark cart as completed and clear cart items, with error checking
+        $update_cart = sqlsrv_query($conn, "UPDATE decadhen.Cart SET Status='completed' WHERE CartID = ?", [$cart_id]);
+        if ($update_cart === false) {
+            die('Failed to update cart status: ' . print_r(sqlsrv_errors(), true));
+        }
+        $delete_items = sqlsrv_query($conn, "DELETE FROM decadhen.CartItems WHERE CartID = ?", [$cart_id]);
+        if ($delete_items === false) {
+            die('Failed to delete cart items: ' . print_r(sqlsrv_errors(), true));
+        }
+
+        echo "<script>alert('Order placed! Please wait for confirmation.'); window.location='order.php';</script>";
+        exit;
     }
-    $stmt->close();
-
-    // 4. Mark cart as completed and clear cart items
-    $conn->query("UPDATE Cart SET Status='completed' WHERE CartID=$cart_id");
-    $conn->query("DELETE FROM CartItems WHERE CartID=$cart_id");
-
-    echo "<script>alert('Order placed! Please wait for confirmation.'); window.location='order.php';</script>";
-    exit;
 }
 ?>
 <!DOCTYPE html>

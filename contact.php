@@ -9,14 +9,31 @@ use PHPMailer\PHPMailer\SMTP;
 require 'vendor/autoload.php'; // Load Composer's autoloader
 
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
+
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $announcement = $row['ContentDescription'];
 }
+
+// Fetch featured image
 $featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='FeaturedImage'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $featuredImage = $row['ContentDescription'];
+}
+
+// Fetch user info if logged in
+$name = $email = $phone = '';
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $stmt = sqlsrv_query($conn, "SELECT UserName, UserEmail, UserPhone FROM decadhen.users WHERE UserID = ?", array($user_id));
+    if ($stmt && $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $name = $row['UserName'];
+        $email = $row['UserEmail'];
+        $phone = $row['UserPhone'];
+    }
 }
 ?>
 
@@ -82,19 +99,6 @@ if ($res && $row = $res->fetch_assoc()) {
                     width="100%" height="100%" style="border:0; position:absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
-
-        <?php
-        $name = $email = $phone = '';
-        if (isset($_SESSION['user_id'])) {
-            $user_id = $_SESSION['user_id'];
-            $stmt = $conn->prepare("SELECT UserName, UserEmail, UserPhone FROM users WHERE UserID = ?");
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-            $stmt->bind_result($name, $email, $phone);
-            $stmt->fetch();
-            $stmt->close();
-        }
-        ?>
 
         <!-- Contact Form -->
         <div class="contact-form-container">

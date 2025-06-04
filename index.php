@@ -2,13 +2,18 @@
 session_start();
 require_once "connection.php";
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
+
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $announcement = $row['ContentDescription'];
 }
+
+// Fetch featured image
 $featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='FeaturedImage'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $featuredImage = $row['ContentDescription'];
 }
 ?>

@@ -2,11 +2,12 @@
 session_start();
 require_once 'connection.php';
 
+// Use SQLSRV for MS SQL Server
 $sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof
-        FROM orders o
-        JOIN users u ON o.UserID = u.UserID
+        FROM decadhen.orders o
+        JOIN decadhen.users u ON o.UserID = u.UserID
         ORDER BY o.OrderDate DESC";
-$result = $conn->query($sql);
+$result = sqlsrv_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -528,14 +529,22 @@ $result = $conn->query($sql);
       <tbody>
         <?php
         $hasOrders = false;
-        if ($result && $result->num_rows > 0):
-          while ($row = $result->fetch_assoc()):
+        if ($result && sqlsrv_has_rows($result)):
+          while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)):
             $status = strtolower(trim($row['OrderStatus']));
             if ($status === 'completed' || $status === 'rejected') continue;
             $hasOrders = true;
         ?>
             <tr data-status="<?php echo ucfirst($status); ?>">
-              <td><?php echo htmlspecialchars($row['OrderDate']); ?></td>
+              <td>
+                <?php
+                  if ($row['OrderDate'] instanceof DateTime) {
+                      echo htmlspecialchars($row['OrderDate']->format('Y-m-d'));
+                  } else {
+                      echo htmlspecialchars((string)$row['OrderDate']);
+                  }
+                ?>
+              </td>
               <td><?php echo htmlspecialchars($row['UserName']); ?></td>
               <td>#<?php echo htmlspecialchars($row['OrderID']); ?></td>
               <td>
@@ -550,7 +559,15 @@ $result = $conn->query($sql);
                   <?php echo ucfirst($status); ?>
                 </span>
               </td>
-              <td><?php echo htmlspecialchars($row['OrderDeadline']); ?></td>
+              <td>
+                <?php
+                  if ($row['OrderDeadline'] instanceof DateTime) {
+                      echo htmlspecialchars($row['OrderDeadline']->format('Y-m-d'));
+                  } else {
+                      echo htmlspecialchars((string)$row['OrderDeadline']);
+                  }
+                ?>
+              </td>
               <td>
                 <button class="btn" onclick="openModal('view', this)">View</button>
                 <button class="btn" onclick="openModal('process', this)">Process</button>

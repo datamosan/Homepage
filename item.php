@@ -2,37 +2,27 @@
 session_start();
 require_once "connection.php";
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
-    $announcement = $row['ContentDescription'];
-}
-$featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
-    $featuredImage = $row['ContentDescription'];
-}
-?>
 
-<?php
-// Database connection
-$conn = new mysqli("localhost", "root", "", "decadhen");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
+    $announcement = $row['ContentDescription'];
 }
 
 // Get product ID from URL
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Fetch product details
-$sql = "SELECT * FROM products WHERE ProductID = $product_id";
-$result = $conn->query($sql);
-$product = $result->fetch_assoc();
+$sql = "SELECT * FROM decadhen.products WHERE ProductID = ?";
+$result = sqlsrv_query($conn, $sql, [$product_id]);
+$product = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
 // Fetch product sizes and prices
-$attr_sql = "SELECT * FROM product_attributes WHERE ProductID = $product_id";
-$attr_result = $conn->query($attr_sql);
+$attr_sql = "SELECT * FROM decadhen.product_attributes WHERE ProductID = ?";
+$attr_result = sqlsrv_query($conn, $attr_sql, [$product_id]);
 $sizes = [];
-while ($row = $attr_result->fetch_assoc()) {
+while ($row = sqlsrv_fetch_array($attr_result, SQLSRV_FETCH_ASSOC)) {
     $sizes[] = $row;
 }
 ?>
@@ -116,10 +106,10 @@ while ($row = $attr_result->fetch_assoc()) {
             <h2>You May Also Like</h2>
             <div class="related-items">
                 <?php
-                // Fetch other products except the current one
-                $related_sql = "SELECT * FROM products WHERE ProductID != $product_id LIMIT 4";
-                $related_result = $conn->query($related_sql);
-                while ($related = $related_result->fetch_assoc()):
+                // Fetch other products except the current one (TOP 4 for SQL Server)
+                $related_sql = "SELECT TOP 4 * FROM decadhen.products WHERE ProductID != ?";
+                $related_result = sqlsrv_query($conn, $related_sql, [$product_id]);
+                while ($related = sqlsrv_fetch_array($related_result, SQLSRV_FETCH_ASSOC)):
                 ?>
                     <div class="menu-item" data-id="<?php echo htmlspecialchars($related['ProductID']); ?>">
                         <div class="item-color"></div>

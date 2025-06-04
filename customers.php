@@ -357,12 +357,12 @@ require 'connection.php';
       </thead>
       <tbody>
         <?php
-        // Fetch customer data from the database
-        $sql = "SELECT UserID, UserName, UserEmail, UserPhone, UserAddress FROM users";
-        $result = $conn->query($sql);
+        // Fetch customer data from the database using SQLSRV
+        $sql = "SELECT UserID, UserName, UserEmail, UserPhone, UserAddress FROM decadhen.users";
+        $result = sqlsrv_query($conn, $sql);
         $customers = [];
-        if ($result && $result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
+        if ($result) {
+          while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             $customers[] = $row;
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['UserID']) . "</td>";

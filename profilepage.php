@@ -2,14 +2,12 @@
 session_start();
 require_once "connection.php";
 $page_title = "Sparkle up your day with goodness!"; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
-if ($res && $row = $res->fetch_assoc()) {
+
+// Fetch announcement
+$announcement = $page_title;
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
+if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $announcement = $row['ContentDescription'];
-}
-$featuredImage = 'images/dhens1.jpg'; // fallback
-$res = $conn->query("SELECT ContentDescription FROM indexcontents WHERE ContentName='FeaturedImage'");
-if ($res && $row = $res->fetch_assoc()) {
-    $featuredImage = $row['ContentDescription'];
 }
 
 // Check if user is logged in
@@ -20,13 +18,15 @@ if (!isset($_SESSION['user_id'])) {
 
 // Fetch user info from database
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT UserName, UserAddress, UserEmail, UserPhone FROM users WHERE UserID = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$stmt->bind_result($username, $address, $email, $phone);
-$stmt->fetch();
-$stmt->close();
+$sql = "SELECT UserName, UserAddress, UserEmail, UserPhone FROM decadhen.users WHERE UserID = ?";
+$user_stmt = sqlsrv_query($conn, $sql, [$user_id]);
+$username = $address = $email = $phone = '';
+if ($user_stmt && $row = sqlsrv_fetch_array($user_stmt, SQLSRV_FETCH_ASSOC)) {
+    $username = $row['UserName'];
+    $address = $row['UserAddress'];
+    $email = $row['UserEmail'];
+    $phone = $row['UserPhone'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -115,33 +115,49 @@ $stmt->close();
             </thead>
             <tbody>
             <?php
-            $ordersql = "SELECT OrderDate, PaymentProof, OrderStatus, OrderDeadline FROM orders WHERE UserID = ? ORDER BY OrderDate DESC";
-            $orderstmt = $conn->prepare($ordersql);
-            $orderstmt->bind_param("i", $user_id);
-            $orderstmt->execute();
-            $orderstmt->bind_result($odate, $proof, $ostatus, $odeadline);
+            $ordersql = "SELECT OrderDate, PaymentProof, OrderStatus, OrderDeadline FROM decadhen.orders WHERE UserID = ? ORDER BY OrderDate DESC";
+            $orderstmt = sqlsrv_query($conn, $ordersql, [$user_id]);
             $hasOrders = false;
-            while ($orderstmt->fetch()):
-                $hasOrders = true;
+            if ($orderstmt) {
+                while ($row = sqlsrv_fetch_array($orderstmt, SQLSRV_FETCH_ASSOC)):
+                    $hasOrders = true;
             ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($odate); ?></td>
                     <td>
-                        <?php if ($proof): ?>
-                            <a href="<?php echo htmlspecialchars($proof); ?>" target="_blank" class="order-proof-link">Show Image</a>
+                        <?php
+                        if ($row['OrderDate'] instanceof DateTime) {
+                            echo htmlspecialchars($row['OrderDate']->format('Y-m-d'));
+                        } else {
+                            echo htmlspecialchars((string)$row['OrderDate']);
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <?php if ($row['PaymentProof']): ?>
+                            <a href="<?php echo htmlspecialchars($row['PaymentProof']); ?>" target="_blank" class="order-proof-link">Show Image</a>
                         <?php else: ?>
                             <span class="order-no-proof">No Proof</span>
                         <?php endif; ?>
                     </td>
                     <td>
-                        <span class="status-badge status-<?php echo strtolower($ostatus); ?>">
-                            <?php echo ucfirst($ostatus); ?>
+                        <span class="status-badge status-<?php echo strtolower($row['OrderStatus']); ?>">
+                            <?php echo ucfirst($row['OrderStatus']); ?>
                         </span>
                     </td>
-                    <td><?php echo htmlspecialchars($odeadline); ?></td>
+                    <td>
+                        <?php
+                        if ($row['OrderDeadline'] instanceof DateTime) {
+                            echo htmlspecialchars($row['OrderDeadline']->format('Y-m-d'));
+                        } else {
+                            echo htmlspecialchars((string)$row['OrderDeadline']);
+                        }
+                        ?>
+                    </td>
                 </tr>
-            <?php endwhile; $orderstmt->close(); ?>
-            <?php if (!$hasOrders): ?>
+            <?php
+                endwhile;
+            }
+            if (!$hasOrders): ?>
                 <tr><td colspan="4" class="orders-none">No orders found.</td></tr>
             <?php endif; ?>
             </tbody>
