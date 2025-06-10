@@ -29,7 +29,7 @@ if(isset($_POST['signUp'])) {
         [$address, SQLSRV_PARAM_IN],
         [&$status_message, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_STRING('UTF-8')]
     ];
-    $stmt = sqlsrv_query($conn, "{CALL CreateUser(?, ?, ?, ?, ?, ?)}", $params);
+    $stmt = sqlsrv_query($conn, "{CALL decadhen.CreateUser(?, ?, ?, ?, ?, ?)}", $params);
 
     if ($stmt === false) {
         echo "<script>alert('Registration failed: " . addslashes(print_r(sqlsrv_errors(), true)) . "'); window.location.href='signup.php';</script>";
