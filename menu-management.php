@@ -2,6 +2,11 @@
 session_start();
 require_once 'connection.php';
 
+if (!isset($_SESSION['user_roles_id']) || $_SESSION['user_roles_id'] != 1) {
+    header("Location: index.php");
+    exit();
+}
+
 // Handle Add New Item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
   $category = $_POST['category'];

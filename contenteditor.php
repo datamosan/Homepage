@@ -1,6 +1,11 @@
 <?php
 session_start();
 require_once "connection.php";
+
+if (!isset($_SESSION['user_roles_id']) || $_SESSION['user_roles_id'] != 1) {
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -263,10 +268,12 @@ require_once "connection.php";
         .feature-image img,
         .carousel-thumb {
             width: 220px;
-            max-width: 100%;
+            max-width: 215px;
+            max-height: 160px;
             border-radius: 0.5rem;
             object-fit: cover;
             border: 1px solid #ccc;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
@@ -366,7 +373,7 @@ require_once "connection.php";
                 ?>
                 <img src="<?php echo htmlspecialchars($featuredImage); ?>" class="carousel-thumb" style="width:220px;max-width:100%;" alt="Featured Image"><br>
                 <input type="file" name="featured_image" accept="image/*">
-                <button type="submit" class="content-save-btn" name="save_featured_image">Save Featured Image</button>
+                <br><br><button type="submit" class="content-save-btn" name="save_featured_image">Save Featured Image</button>
             </form>
         </div>
 

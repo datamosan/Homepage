@@ -7,7 +7,7 @@ if (isset($_POST['page_title'])) {
     header('Content-Type: application/json');
     $title = trim($_POST['page_title']);
     $ok = false;
-    $stmt = sqlsrv_query($conn, "UPDATE indexcontents SET ContentDescription=? WHERE ContentName='Announcement'", [$title]);
+    $stmt = sqlsrv_query($conn, "UPDATE decadhen.indexcontents SET ContentDescription=? WHERE ContentName='Announcement'", [$title]);
     if ($stmt) $ok = true;
     echo json_encode(['success' => $ok]);
     exit();

@@ -1,9 +1,11 @@
 <?php
 session_start();
-?>
-
-<?php
 require 'connection.php';
+
+if (!isset($_SESSION['user_roles_id']) || $_SESSION['user_roles_id'] != 1) {
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,6 +2,11 @@
 session_start();
 require_once 'connection.php';
 
+if (!isset($_SESSION['user_roles_id']) || $_SESSION['user_roles_id'] != 1) {
+    header("Location: index.php");
+    exit();
+}
+
 // Use SQLSRV for MS SQL Server
 $sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof
         FROM decadhen.orders o

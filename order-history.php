@@ -2,6 +2,11 @@
 session_start();
 require_once 'connection.php';
 
+if (!isset($_SESSION['user_roles_id']) || $_SESSION['user_roles_id'] != 1) {
+    header("Location: index.php");
+    exit();
+}
+
 // Fetch only completed or rejected orders (MS SQL Server version)
 $sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof
         FROM decadhen.orders o
@@ -593,11 +598,11 @@ $result = sqlsrv_query($conn, $sql);
             <tr>
               <td>
                 <?php
-                  if ($row['OrderDate'] instanceof DateTime) {
-                      echo htmlspecialchars($row['OrderDate']->format('Y-m-d'));
-                  } else {
-                      echo htmlspecialchars((string)$row['OrderDate']);
-                  }
+                if ($row['OrderDate'] instanceof DateTime) {
+                  echo htmlspecialchars($row['OrderDate']->format('Y-m-d'));
+                } else {
+                  echo htmlspecialchars((string)$row['OrderDate']);
+                }
                 ?>
               </td>
               <td><?php echo htmlspecialchars($row['UserName']); ?></td>
@@ -616,11 +621,11 @@ $result = sqlsrv_query($conn, $sql);
               </td>
               <td>
                 <?php
-                  if ($row['OrderDeadline'] instanceof DateTime) {
-                      echo htmlspecialchars($row['OrderDeadline']->format('Y-m-d'));
-                  } else {
-                      echo htmlspecialchars((string)$row['OrderDeadline']);
-                  }
+                if ($row['OrderDeadline'] instanceof DateTime) {
+                  echo htmlspecialchars($row['OrderDeadline']->format('Y-m-d'));
+                } else {
+                  echo htmlspecialchars((string)$row['OrderDeadline']);
+                }
                 ?>
               </td>
               <td>
@@ -906,6 +911,12 @@ $result = sqlsrv_query($conn, $sql);
         adminMenu.style.display = 'none';
       }
     });
+
+    function printPDF() {
+      window.print();
+    }
+
+    document.getElementById('printBtn').addEventListener('click', printPDF);
   </script>
 </body>
 

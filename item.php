@@ -5,7 +5,7 @@ $page_title = "Sparkle up your day with goodness!"; // fallback
 
 // Fetch announcement
 $announcement = $page_title;
-$res = sqlsrv_query($conn, "SELECT ContentDescription FROM indexcontents WHERE ContentName='Announcement'");
+$res = sqlsrv_query($conn, "SELECT ContentDescription FROM decadhen.indexcontents WHERE ContentName='Announcement'");
 if ($res && $row = sqlsrv_fetch_array($res, SQLSRV_FETCH_ASSOC)) {
     $announcement = $row['ContentDescription'];
 }
