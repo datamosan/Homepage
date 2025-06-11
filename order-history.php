@@ -17,7 +17,7 @@ $result = sqlsrv_query($conn, $sql);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Order Management - DecaDhen</title>
+  <title>Order History - DecaDhen</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
@@ -555,7 +555,7 @@ $result = sqlsrv_query($conn, $sql);
       </div>
     </header>
 
-    <h1>Order Management</h1>
+    <h1>Order History</h1>
 
     <div class="controls">
       <input type="text" id="searchInput" placeholder="Search by name or order ID">
@@ -761,7 +761,7 @@ $result = sqlsrv_query($conn, $sql);
           body: 'orderId=' + encodeURIComponent(orderId)
         })
         .then(res => res.json())
-        .then data => {
+        .then(data => {
           if (data.success) {
             // Remove the row from the table
             const row = Array.from(orderTableBody.querySelectorAll('tr')).find(tr =>
