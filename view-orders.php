@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_roles_id']) || $_SESSION['user_roles_id'] != 1) {
 }
 
 // Use SQLSRV for MS SQL Server
-$sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof
+$sql = "SELECT o.OrderDate, u.UserName, o.OrderID, o.OrderStatus, o.OrderDeadline, o.PaymentProof, o.ShippingMethod
         FROM decadhen.orders o
         JOIN decadhen.users u ON o.UserID = u.UserID
         ORDER BY o.OrderDate DESC";
@@ -528,6 +528,7 @@ $result = sqlsrv_query($conn, $sql);
           <th>Proof of Payment</th>
           <th>Status</th>
           <th>Deadline</th>
+          <th>Shipping Method</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -574,6 +575,9 @@ $result = sqlsrv_query($conn, $sql);
                 ?>
               </td>
               <td>
+                <?php echo htmlspecialchars($row['ShippingMethod']); ?>
+              </td>
+              <td>
                 <button class="btn" onclick="openModal('view', this)">View</button>
                 <button class="btn" onclick="openModal('process', this)">Process</button>
               </td>
@@ -604,6 +608,7 @@ $result = sqlsrv_query($conn, $sql);
         <p><strong>Date:</strong> <span id="modalDate"></span></p>
         <p><strong>Deadline:</strong> <span id="modalDeadline"></span></p>
         <p><strong>Proof of Payment:</strong> <a href="#" target="_blank" id="modalProof" rel="noopener noreferrer">View Image</a></p>
+        <p><strong>Shipping Method:</strong> <span id="modalShippingMethod"></span></p>
         <p><strong>Status:</strong> <span id="modalStatus"></span></p>
       </div>
       <div id="modalOrderItems"></div>
@@ -651,6 +656,7 @@ $result = sqlsrv_query($conn, $sql);
         document.getElementById('modalOrderId').innerText = row.children[2].innerText;
         document.getElementById('modalDate').innerText = row.children[0].innerText;
         document.getElementById('modalDeadline').innerText = row.children[5].innerText;
+        document.getElementById('modalShippingMethod').innerText = row.children[6].innerText;
 
         const proofAnchor = row.children[3].querySelector('a');
         if (proofAnchor) {
